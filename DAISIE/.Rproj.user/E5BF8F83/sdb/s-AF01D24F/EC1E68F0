@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: DAISIE\nType: Package\nTitle: Dynamical Assembly of Islands by Speciation, Immigration and Extinction\nVersion: 1.2\nDate: 2016-11-09\nDepends: R (>= 3.0.0)\nImports: deSolve, grDevices, graphics, stats, utils, DDD (> 3.0), subplex\nAuthor: Rampal S. Etienne, Luis M. Valente, Albert B. Phillimore & Bart Haegeman\nMaintainer: Rampal S. Etienne <r.s.etienne@rug.nl>\nLicense: GPL-2\nDescription: Simulates and computes the (maximum) likelihood of a dynamical model of island biota assembly through speciation, immigration and extinction. See Valente et al. 2015. Ecology Letters 18: 844-852, <DOI:10.1111/ele.12461>.\n",
+    "created" : 1479114321513.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3555422742",
+    "id" : "EC1E68F0",
+    "lastKnownWriteTime" : 1479114773,
+    "last_content_update" : 1479114773270,
+    "path" : "D:/data/Ms/DAISIE/DAISIE/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}

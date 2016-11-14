@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "importFrom(\"deSolve\",\"ode\")\nimportFrom(\"grDevices\",\"dev.new\")\nimportFrom(\"graphics\",\"legend\", \"lines\", \"par\", \"plot\", \"polygon\")\nimportFrom(\"stats\",\"dbinom\", \"median\", \"quantile\", \"rexp\", \"uniroot\")\nimportFrom(\"utils\",\"flush.console\")\nimportFrom(\"DDD\",\"simplex\",\"optimizer\",\"sample2\",\"roundn\")\nimportFrom(\"subplex\",\"subplex\")\nexportPattern(\"^[[:alpha:]]+\")\n",
+    "created" : 1478701293486.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "823040269",
+    "id" : "8B79C035",
+    "lastKnownWriteTime" : 1447359709,
+    "last_content_update" : 1447359709,
+    "path" : "D:/data/Ms/DAISIE/DAISIE/NAMESPACE",
+    "project_path" : "NAMESPACE",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_namespace"
+}

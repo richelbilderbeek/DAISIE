@@ -1,0 +1,8 @@
+importFrom("deSolve","ode")
+importFrom("grDevices","dev.new")
+importFrom("graphics","legend", "lines", "par", "plot", "polygon")
+importFrom("stats","dbinom", "median", "quantile", "rexp", "uniroot")
+importFrom("utils","flush.console")
+importFrom("DDD","simplex","optimizer","sample2","roundn")
+importFrom("subplex","subplex")
+exportPattern("^[[:alpha:]]+")

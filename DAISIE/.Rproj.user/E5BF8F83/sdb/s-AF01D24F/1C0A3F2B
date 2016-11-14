@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\\name{DAISIE_convertprobdist}                               \n\\alias{DAISIE_convertprobdist}\n\\title{Converts the joint distribution of endemics and non-endemics under the DAISIE model to list format}\n\\description{ This function converts the joint distribution of the number of endemics and non-endemics from the matrix format of DAISIE_probdist to a list format}\n\\usage{\nDAISIE_convertprobdist(\n   pb\n   )\n}\n\n\\arguments{\n  \\item{pb}{ Probability distribution in matrix format as output by DAISIE_probdist}\n}\n\\value{\n A list of length nrow(pb) containing matrices of square dimensions of size sqrt(ncol - 1) containing the joint probabilities with endemics in the rows and non-endemics in the columns. The last element of the list is a vector a times at which the joint probability distribution is evaluated. \n}\n\\references{\nValente, L.M., A.B. Phillimore and R.S. Etienne (2015). Equilibrium and non-equilibrium dynamics simultaneously operate in the Galapagos islands. Ecology Letters 18: 844-852.}\n\\author{ Rampal S. Etienne }\n\\examples{\n### Compute the probability distribution at t = 4 and t = 8, for a mainland pool\n# size of 250 potential colonists and a vector of 5 parameters (cladogenesis, extinction,\n# clade-level carrying capacity, immigration, anagenesis) starting from an empty\n# island; output in list format\n\npb = DAISIE_probdist(\n   pars1 = c(0.3,0.35,Inf,0.75,0.012),\n   pars2 = c(100,250),\n   tvec = c(4,8),\n   initEI = c(0,0),\n   initprobs = NULL\n   )\nDAISIE_convertprobdist(pb)\n}\n\n\\keyword{models}",
+    "created" : 1478704323254.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "89245882",
+    "id" : "1C0A3F2B",
+    "lastKnownWriteTime" : 1459433517,
+    "last_content_update" : 1459433517,
+    "path" : "D:/data/Ms/DAISIE/DAISIE/man/DAISIE_convertprobdist.Rd",
+    "project_path" : "man/DAISIE_convertprobdist.Rd",
+    "properties" : {
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_doc"
+}

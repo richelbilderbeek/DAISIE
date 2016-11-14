@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "DAISIE_sim = function(time,M,pars,replicates,prop_type2_pool = NA,replicates_apply_type2 = TRUE,format = TRUE,sample_freq = 25,plot_sims = TRUE) \n{\n  island_replicates  = list()\n  \n  if(length(pars) == 5)\n  { \n    for(rep in 1:replicates)\n    {\n      island_replicates[[rep]] = list() \n      \n      \tfull_list = list()\n      \t\tfor(m_spec in 1:M) \n      \t\t{ \t\n      \t\tresult_one_spec = DAISIE_sim_core(time=time,mainland_n = 1,pars)\n      \t\tfull_list[[m_spec]] = result_one_spec$taxon_list\n      \t\t}\n      \n      island_replicates[[rep]] = full_list\n      print(paste(\"Island replicate \",rep,sep = \"\"))\t\n    } \n  }\n  \n  if(length(pars) == 10)\n \t{\n  \tif(replicates_apply_type2 == TRUE)\n    {\n  \t  island_replicates = DAISIE_sim_min_type2(time = time,M = M,pars = pars,replicates = replicates, prop_type2_pool = prop_type2_pool)\n  \t} else {\n      for(rep in 1:replicates)\n      {\n    \t\tpool2 = DDD::roundn(M * prop_type2_pool)\n    \t\tpool1 = M - pool2\n      \n      \tlac_1 = pars[1]\n    \t\tmu_1 = pars[2]\n    \t\tK_1 = pars[3]\n    \t\tgam_1 = pars[4]\n    \t\tlaa_1 = pars[5]\n    \n    \t\tlac_2 = pars[6]\n    \t\tmu_2 = pars[7]\n    \t\tK_2 = pars[8]\n    \t\tgam_2 = pars[9]\n    \t\tlaa_2 = pars[10]\n    \n    \t\tfull_list = list()\n    \n    \t\t#### species of pool1\n    \t\tfor(m_spec in 1:pool1) \n    \t\t{ \t\n    \t\t\tresult_one_spec = DAISIE_sim_core(time = time,mainland_n = 1,pars = c(lac_1,mu_1,K_1,gam_1,laa_1))\n    \t\t\tfull_list[[m_spec]] = result_one_spec$taxon_list\n    \t\t\tfull_list[[m_spec]]$type1or2  = 1\n    \t\t}\n    \n    \t\t#### species of pool2\n    \t\tfor(m_spec in (pool1 + 1):(pool1 + pool2)) \n    \t\t{ \t\n    \t\t\tresult_one_spec = DAISIE_sim_core(time = time,mainland_n = 1,pars = c(lac_2,mu_2,K_2,gam_2,laa_2))\n    \t\t\tfull_list[[m_spec]] = result_one_spec$taxon_list\n    \t\t\tfull_list[[m_spec]]$type1or2 = 2\n    \t\t}\n    \t  island_replicates[[rep]] = full_list\n    \t  print(paste(\"Island replicate \",rep,sep = \"\"))\t\n    \t}\n \t  }\n  }\n  \n  if(format == TRUE)\n  {\n    island_replicates = DAISIE_format_sim(island_replicates = island_replicates,time = time,M = M,sample_freq = sample_freq)\n  \n    if(plot_sims == TRUE)\n    { \n       DAISIE_plot_sims(island_replicates)\n    }\n  }\n  \n  return(island_replicates)\n}",
+    "created" : 1478701282591.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3573580869",
+    "id" : "3EA3AF98",
+    "lastKnownWriteTime" : 1447358939,
+    "last_content_update" : 1447358939,
+    "path" : "D:/data/Ms/DAISIE/DAISIE/R/DAISIE_sim.R",
+    "project_path" : "R/DAISIE_sim.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
