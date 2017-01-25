@@ -321,6 +321,12 @@ laa = pars1[5]
 abstol = 1e-16
 reltol = 1e-10
 brts = -sort(abs(as.numeric(brts)),decreasing = TRUE)
+if(length(brts) == 1 & sum(brts == 0) == 1)
+{
+   stop('The branching times contain only a 0. This means the island emerged at the present which is not allowed.');
+   loglik = -Inf
+   return(loglik)
+}
 if(sum(brts == 0) == 0)
 {
    brts[length(brts) + 1] = 0
@@ -336,96 +342,98 @@ S2 = S - (stac == 1) - (stac == 3) - (stac == 4)
 loglik = -lgamma(S2 + missnumspec + 1) + lgamma(S2 + 1) + lgamma(missnumspec + 1)
 if(min(pars1) < 0)
 {
+   cat('One or more parameters are negative.\n')
    loglik = -Inf
+   return(loglik)
+}
+if((ddep == 1 | ddep == 11) & ceiling(K) < (S + missnumspec))
+{
+   #cat('The value of K is inompatible with the number of species in the clade.\n')
+   loglik = -Inf
+   return(loglik)
+}
+if(lac == Inf & mu != Inf & missnumspec == 0)
+{
+  loglik = DAISIE_loglik_high_lambda(pars1,-brts,stac)        
 } else {
-   if((ddep == 1 | ddep == 11) & ceiling(K) < (S + missnumspec))
-   {
-      loglik = -Inf
-   } else {
-      if(lac == Inf & mu != Inf & missnumspec == 0)
-      {
-        loglik = DAISIE_loglik_high_lambda(pars1,-brts,stac)        
-      } else {
-        if(ddep == 1 | ddep == 11)
-        {
-           lx = min(max(1 + missnumspec,1 + ceiling(K)),round(pars2[1]) + missnumspec)
-        } else {
-           lx = roundn(pars2[1]) + missnumspec
-        }
-        if(loglik > -Inf)
-        { 
-           # in all cases we integrate from the origin of the island to the first branching point (stac > 1) or to the present (stac <= 1)
-           probs = rep(0,2 * lx + 1)
-           probs[1] = 1
-           k1 = 0
-           y = ode(probs,brts[1:2],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
-           probs = y[2,2:(2 * lx + 2)]
-           cp = checkprobs(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]      
-           if(stac == 0)
-           # for stac = 0, the integration is from the origin of the island until the present
-           # and we evaluate the probability of no clade being present and no immigrant species,
-           # but there can be missing species
-           {     
-              loglik = loglik + log(probs[1 + missnumspec])
-           } else {
-             if(stac == 1 || stac == 5)
-             # for stac = 1, the integration is from the maximum colonization time (usually the
-             # island age + tiny time unit) until the present, where we set all probabilities where
-             # the immigrant is already present to 0
-             # and we evaluate the probability of the immigrant species being present,
-             # but there can be missing species 
-             # for stac = 5, we do exactly the same, but we evaluate the probability of an endemic species being present alone.          
-             {         
-                probs[(lx + 1):(2 * lx)] = 0
-                y = ode(probs,brts[2:3],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
-                probs = y[2,2:(2 * lx + 2)]
-                cp = checkprobs(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]               
-                loglik = loglik + log(probs[(stac == 1) * lx + (stac == 5) + 1 + missnumspec])
-             } else {
-             # for stac > 1, but not 5, integration is then from the colonization event until the first branching time (stac = 2 and 3) or the present (stac = 4). We add a set of equations for Q_M,n, the probability that the process is compatible with the data, and speciation has not happened; during this time immigration is not allowed because it would alter the colonization time. After speciation, colonization is allowed again (re-immigration)
-             # all probabilities of states with the immigrant present are set to zero and all probabilities of states with endemics present are transported to the state with the colonist present waiting for speciation to happen. We also multiply by the (possibly diversity-dependent) immigration rate
-                gamvec = divdepvec(gam,K,lx,k1,ddep * (ddep == 11 | ddep == 21))
-                probs[(2 * lx + 1):(3 * lx)] = gamvec[1:lx] * probs[1:lx]
-                probs[1:(2 * lx)] = 0        
-                k1 = 1
-                y = ode(probs,c(brts[2:3]),DAISIE_loglik_rhs2,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
-                probs = y[2,2:(3 * lx + 1)]
-                cp = checkprobs2(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]
-                if(stac == 4)
-                # if stac = 4, we're done and we take an element from Q_M,n
-               	{
-                 	loglik = loglik + log(probs[2 * lx + 1 + missnumspec])
-                } else {         
-                # for stac = 2 and 3, at the first branching point all probabilities of states Q_M,n are transferred to probabilities where only endemics are present. Then go through the branching points.
-                  S1 = length(brts) - 1
-                	if(S1 >= 3)
-                  {
+  if(ddep == 1 | ddep == 11)
+  {
+     lx = min(max(1 + missnumspec,1 + ceiling(K)),round(pars2[1]) + missnumspec)
+  } else {
+     lx = roundn(pars2[1]) + missnumspec
+  }
+  if(loglik > -Inf)
+  { 
+     # in all cases we integrate from the origin of the island to the first branching point (stac > 1) or to the present (stac <= 1)
+     probs = rep(0,2 * lx + 1)
+     probs[1] = 1
+     k1 = 0
+     y = ode(probs,brts[1:2],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
+     probs = y[2,2:(2 * lx + 2)]
+     cp = checkprobs(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]      
+     if(stac == 0)
+     # for stac = 0, the integration is from the origin of the island until the present
+     # and we evaluate the probability of no clade being present and no immigrant species,
+     # but there can be missing species
+     {     
+        loglik = loglik + log(probs[1 + missnumspec])
+     } else {
+       if(stac == 1 || stac == 5)
+       # for stac = 1, the integration is from the maximum colonization time (usually the
+       # island age + tiny time unit) until the present, where we set all probabilities where
+       # the immigrant is already present to 0
+       # and we evaluate the probability of the immigrant species being present,
+       # but there can be missing species 
+       # for stac = 5, we do exactly the same, but we evaluate the probability of an endemic species being present alone.          
+       {         
+          probs[(lx + 1):(2 * lx)] = 0
+          y = ode(probs,brts[2:3],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
+          probs = y[2,2:(2 * lx + 2)]
+          cp = checkprobs(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]               
+          loglik = loglik + log(probs[(stac == 1) * lx + (stac == 5) + 1 + missnumspec])
+       } else {
+       # for stac > 1, but not 5, integration is then from the colonization event until the first branching time (stac = 2 and 3) or the present (stac = 4). We add a set of equations for Q_M,n, the probability that the process is compatible with the data, and speciation has not happened; during this time immigration is not allowed because it would alter the colonization time. After speciation, colonization is allowed again (re-immigration)
+       # all probabilities of states with the immigrant present are set to zero and all probabilities of states with endemics present are transported to the state with the colonist present waiting for speciation to happen. We also multiply by the (possibly diversity-dependent) immigration rate
+          gamvec = divdepvec(gam,K,lx,k1,ddep * (ddep == 11 | ddep == 21))
+          probs[(2 * lx + 1):(3 * lx)] = gamvec[1:lx] * probs[1:lx]
+          probs[1:(2 * lx)] = 0        
+          k1 = 1
+          y = ode(probs,c(brts[2:3]),DAISIE_loglik_rhs2,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
+          probs = y[2,2:(3 * lx + 1)]
+          cp = checkprobs2(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]
+          if(stac == 4)
+          # if stac = 4, we're done and we take an element from Q_M,n
+         	{
+           	loglik = loglik + log(probs[2 * lx + 1 + missnumspec])
+          } else {         
+          # for stac = 2 and 3, at the first branching point all probabilities of states Q_M,n are transferred to probabilities where only endemics are present. Then go through the branching points.
+            S1 = length(brts) - 1
+          	if(S1 >= 3)
+            {
+               lacvec = divdepvec(lac,K,lx,k1,ddep)
+               probs[1:lx] = lacvec[1:lx] * (probs[1:lx] + probs[(2 * lx + 1):(3 * lx)])
+               probs[(lx + 1):(2 * lx)] = lacvec[2:(lx + 1)] * probs[(lx + 1):(2 * lx)]
+               probs = probs[-c((2 * lx + 2):(3 * lx))]
+               probs[2 * lx + 1] = 0
+               for(k in 3:S1)
+       	       {
+        	        k1 = k - 1
+       		        y = ode(probs,brts[k:(k+1)],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
+                  probs = y[2,2:(2 * lx + 2)]
+       		        if(k < S1)
+        	        {
+                     # speciation event      
                      lacvec = divdepvec(lac,K,lx,k1,ddep)
-                     probs[1:lx] = lacvec[1:lx] * (probs[1:lx] + probs[(2 * lx + 1):(3 * lx)])
-                     probs[(lx + 1):(2 * lx)] = lacvec[2:(lx + 1)] * probs[(lx + 1):(2 * lx)]
-                     probs = probs[-c((2 * lx + 2):(3 * lx))]
-                     probs[2 * lx + 1] = 0
-                     for(k in 3:S1)
-             	       {
-              	        k1 = k - 1
-             		        y = ode(probs,brts[k:(k+1)],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
-                        probs = y[2,2:(2 * lx + 2)]
-             		        if(k < S1)
-              	        {
-                           # speciation event      
-                           lacvec = divdepvec(lac,K,lx,k1,ddep)
-          		             probs[1:(2 * lx)] = c(lacvec[1:lx],lacvec[2:(lx + 1)]) * probs[1:(2 * lx)]
-             		        }
-                     }            
-                  }
-                  # we evaluate the probability of the phylogeny with any missing species at the present without (stac = 2) or with (stac = 3) the immigrant species; there can be no missing species for stac = 4
-                 	loglik = loglik + log(probs[(stac == 3) * lx + 1 + missnumspec])
-                }   
-              }     
-           }           
-        }
-     }
-   }
+    		             probs[1:(2 * lx)] = c(lacvec[1:lx],lacvec[2:(lx + 1)]) * probs[1:(2 * lx)]
+       		        }
+               }            
+            }
+            # we evaluate the probability of the phylogeny with any missing species at the present without (stac = 2) or with (stac = 3) the immigrant species; there can be no missing species for stac = 4
+           	loglik = loglik + log(probs[(stac == 3) * lx + 1 + missnumspec])
+          }   
+        }     
+     }           
+  }
 }
 
 if(pars2[4] == 1)
