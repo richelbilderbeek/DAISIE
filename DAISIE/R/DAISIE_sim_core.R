@@ -245,18 +245,16 @@ DAISIE_sim_core = function(time,mainland_n,pars)
     ### if there are two or more independent colonisations, all species are classed as stac=3 and put within same list item: 
   	if(number_colonisations > 1)
     {
-    	descendants = list(branching_times = NA,stac = 3,missing_species = NA,other_clades_same_ancestor = list(),stt_table = stt_table)
+    	descendants = list(branching_times = NA,stac = 3,missing_species = 0,other_clades_same_ancestor = list(),stt_table = stt_table)
     
+   btimes_all_clado_desc = rev(sort(as.numeric(island_spec[,'branching time (BP)'])))
+
+	if(length(btimes_all_clado_desc)!=0) { descendants$branching_times= c(time, btimes_all_clado_desc)}
+	if(length(btimes_all_clado_desc)==0) { descendants$branching_times= c(time, max(as.numeric(island_spec[,"Colonisation time (BP)"])))}
+
+	### create table with information on other clades with same ancestor, but this information is not used in DAISIE_ML
     	oldest = which(as.numeric(island_spec[,"Colonisation time (BP)"]) == max(as.numeric(island_spec[,"Colonisation time (BP)"])))
-    
-    	if(island_spec[oldest[1],"Species type"]=="C")
-      {
-         descendants$branching_times = c(time,rev(sort(as.numeric(island_spec[oldest,"branching time (BP)"]))))	      }	else {
-         descendants$branching_times  = c(time,as.numeric(island_spec[oldest,"Colonisation time (BP)"]))
-      }
-    
-    	descendants$miss_spec = length(island_spec[,1]) - length(oldest) - length(which(island_spec[,"Species type"]=="I"))
-    
+      
     	youngest_table = island_spec[-oldest,]
     	if(class(youngest_table)=='character')
       { 

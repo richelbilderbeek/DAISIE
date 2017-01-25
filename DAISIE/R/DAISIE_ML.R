@@ -63,6 +63,8 @@ DAISIE_ML = function(datalist,initparsopt,idparsopt,parsfix,idparsfix,idparsnosh
 #  . stac == 1 : immigrant is present but has not formed an extant clade
 #  . stac == 2 : immigrant is not present but has formed an extant clade
 #  . stac == 3 : immigrant is present and has formed an extant clade
+#  . stac == 4 : immigrant is present but has not formed an extant clade, and it is known when it immigrated.
+#  . stac == 5 : immigrant is not present and has not formed an extent clade, but only an endemic species
 # datalist[[,]][3] = list with number of missing species in clades for stac = 2 and stac = 3;
 # for stac = 0 and stac = 1, this number equals 0.
 # initparsopt, parsfix = optimized and fixed model parameters

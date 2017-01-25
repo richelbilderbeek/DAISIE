@@ -12,12 +12,14 @@ DAISIE is an island biogeography model that assumes island biota assembly is gov
 \tabular{ll}{
 Package: \tab DAISIE\cr
 Type: \tab Package\cr
-Version: \tab 1.2\cr
-Date: \tab 2016-11-09\cr
+Version: \tab 1.3\cr
+Date: \tab 2017-01-23\cr
 License: \tab GPL 2.0\cr
 }
 
-DAISIE_ML computes the parameters that maximizes the loglikelihood computes by DAISIE_loglik_all
+DAISIE_ML computes the parameters that maximizes the loglikelihood computed by DAISIE_loglik_all for one island/archipelago
+
+DAISIE_ML2 computes the parameters that maximizes the loglikelihood for a set of islands / archipelagoes
 
 DAISIE_sim simulates islands with given parameters
 
@@ -39,7 +41,7 @@ DAISIE_numcol calculates expectation and marginal distribution of the number of 
 }
 \author{
 Rampal S. Etienne, Luis M. Valente, Albert B. Phillimore & Bart Haegeman\cr
-Maintainer: Rampal S. Etienne <r.s.etienne@rug.nl>
+Maintainer: Rampal S. Etienne <r.s.etienne@rug.nl>rep(0:(D1 - 1), each = D2)
 }
 \references{
 Valente, L., A.B. Phillimore & R.S. Etienne (2015). Equilibrium and non-equilibrium dynamics simultaneously operate in the Galapagos islands. Ecology Letters 18: 844-852, <DOI:10.1111/ele.12461>.

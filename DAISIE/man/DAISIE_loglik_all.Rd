@@ -57,7 +57,8 @@ DAISIE_loglik_all(
   * Non_endemic_MaxAge: 1 \cr
   * Endemic: 2 \cr
   * Endemic&Non_Endemic: 3 \cr
-  * Non_endemic: 4 \cr \cr
+  * Non_endemic: 4 \cr
+  * Endemic_MaxAge: 5 \cr \cr
    \code{$missing_species} - number of island species that were not sampled for particular clade (only applicable for endemic clades) \cr
    \code{$type1or2} - whether the colonist belongs to type 1 or type 2 \cr
   }

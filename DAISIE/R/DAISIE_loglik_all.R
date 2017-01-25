@@ -269,7 +269,7 @@ DAISIE_loglik = function(pars1,pars2,brts,stac,missnumspec,methode = "lsodes")
 # - next largest brts = stem age / time of divergence from the mainland
 # The interpretation of this depends on stac (see below)
 # For stac = 0, there is no other value.
-# For stac = 1, this is the time since divergence from the immigrant's sister on the mainland.
+# For stac = 1 and stac = 5, this is the time since divergence from the immigrant's sister on the mainland.
 # The immigrant must have immigrated at some point since then.
 # For stac = 2 and stac = 3, this is the time since divergence from the mainland.
 # The immigrant that established the clade on the island must have immigrated precisely at this point.
@@ -299,6 +299,7 @@ DAISIE_loglik = function(pars1,pars2,brts,stac,missnumspec,methode = "lsodes")
 #  . stac == 3 : immigrant is present and has formed an extant clade
 #  . stac == 4 : immigrant is present but has not formed an extant clade, and it is known when it immigrated.
 # missnumspec = number of missing species
+#  . stac == 5 : immigrant is not present and has not formed an extant clade, but only an endemic species
 
 ddep = pars2[2]
 cond = pars2[3]
@@ -367,20 +368,21 @@ if(min(pars1) < 0)
            {     
               loglik = loglik + log(probs[1 + missnumspec])
            } else {
-             if(stac == 1)
+             if(stac == 1 || stac == 5)
              # for stac = 1, the integration is from the maximum colonization time (usually the
              # island age + tiny time unit) until the present, where we set all probabilities where
              # the immigrant is already present to 0
              # and we evaluate the probability of the immigrant species being present,
-             # but there can be missing species           
+             # but there can be missing species 
+             # for stac = 5, we do exactly the same, but we evaluate the probability of an endemic species being present alone.          
              {         
                 probs[(lx + 1):(2 * lx)] = 0
                 y = ode(probs,brts[2:3],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
                 probs = y[2,2:(2 * lx + 2)]
                 cp = checkprobs(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]               
-                loglik = loglik + log(probs[lx + 1 + missnumspec])
+                loglik = loglik + log(probs[(stac == 1) * lx + (stac == 5) + 1 + missnumspec])
              } else {
-             # for stac > 1, integration is then from the colonization event until the first branching time (stac = 2 and 3) or the present (stac = 4). We add a set of equations for Q_M,n, the probability that the process is compatible with the data, and speciation has not happened; during this time immigration is not allowed because it would alter the colonization time. After speciation, colonization is allowed again (re-immigration)
+             # for stac > 1, but not 5, integration is then from the colonization event until the first branching time (stac = 2 and 3) or the present (stac = 4). We add a set of equations for Q_M,n, the probability that the process is compatible with the data, and speciation has not happened; during this time immigration is not allowed because it would alter the colonization time. After speciation, colonization is allowed again (re-immigration)
              # all probabilities of states with the immigrant present are set to zero and all probabilities of states with endemics present are transported to the state with the colonist present waiting for speciation to happen. We also multiply by the (possibly diversity-dependent) immigration rate
                 gamvec = divdepvec(gam,K,lx,k1,ddep * (ddep == 11 | ddep == 21))
                 probs[(2 * lx + 1):(3 * lx)] = gamvec[1:lx] * probs[1:lx]
@@ -458,6 +460,7 @@ DAISIE_loglik_all = function(pars1,pars2,datalist,methode = "lsodes")
 #  . stac == 2 : immigrant is not present but has formed an extant clade
 #  . stac == 3 : immigrant is present and has formed an extant clade
 #  . stac == 4 : immigrant is present but has not formed an extant clade, and it is known when it immigrated.
+#  . stac == 5 : immigrant is not present and has not formed an extent clade, but only an endemic species
 # datalist[[,]][3] = list with number of missing species in clades for stac = 2 and stac = 3;
 # for stac = 0 and stac = 1, this number equals 0.
 # pars1 = model parameters

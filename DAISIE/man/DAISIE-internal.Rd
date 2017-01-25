@@ -21,6 +21,7 @@
 \alias{DAISIE_numcol_dist}
 \alias{DAISIE_KLdist}
 \alias{DAISIE_loglik_all_choosepar}
+\alias{DAISIE_loglik_all_choosepar2}
 \alias{DAISIE_simplex}
 \alias{DAISIE_sim_min_type2}
 \alias{DAISIE_sim_core}

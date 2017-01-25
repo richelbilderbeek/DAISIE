@@ -49,6 +49,10 @@ DAISIE_dataprep = function(datatable,island_age,M,number_clade_types = 1,list_ty
 		 {
 		    datalist[[i + 1]]$stac = 4
 		 }
+		if(datatable[i,"Status"] == "Endemic_MaxAge")
+		 {
+		    datalist[[i + 1]]$stac = 5
+		 }
 		 if(number_clade_types == 2)
 		 {
 		    if(length(which(list_type2_clades == datatable[i,"Clade_name"])) > 0)

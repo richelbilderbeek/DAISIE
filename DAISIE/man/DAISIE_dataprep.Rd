@@ -26,6 +26,7 @@ for a template of an input table. Each row on the table represents and independe
   * "Non_endemic": applies to non-endemic species for cases where both island and non-island populations of the species have been sampled) \cr
   * "Non_endemic_MaxAge": applies to non-endemic species for cases where island individuals of the species have not been sampled and only the age of the species is available) \cr
   * "Endemic": applies to endemic species and is applicable for both cladogenetic and anagenetic species \cr
+  * "Endemic_MaxAge": applies to endemic species for cases where island individuals of the species have not been sampled and only the age of the species is available. This could apply to endemic species that have recently gone extinct because of antropogenic causes that are (evidently) not modelled, and for which no DNA data is available.\cr
   * "Endemic&Non_Endemic": when endemic clade is present and its mainland ancestor has re-colonized \cr
   \code{$Missing_species} - Number of island species that were not sampled for particular clade (only applicable for "Endemic" clades) \cr
   \code{$Branching_times} - Stem age of the population/species in the case of "Non-endemic", "Non-endemic_MaxAge" and "Endemic" anagenetic species. For "Endemic" cladogenetic 

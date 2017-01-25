@@ -1,8 +1,8 @@
 Package: DAISIE
 Type: Package
 Title: Dynamical Assembly of Islands by Speciation, Immigration and Extinction
-Version: 1.2
-Date: 2016-11-09
+Version: 1.3
+Date: 2017-01-23
 Depends: R (>= 3.0.0)
 Imports: deSolve, grDevices, graphics, stats, utils, DDD (> 3.0), subplex
 Author: Rampal S. Etienne, Luis M. Valente, Albert B. Phillimore & Bart Haegeman
