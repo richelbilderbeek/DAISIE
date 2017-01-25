@@ -348,13 +348,13 @@ if(min(pars1) < 0)
 }
 if((ddep == 1 | ddep == 11) & ceiling(K) < (S + missnumspec))
 {
-   #cat('The value of K is inompatible with the number of species in the clade.\n')
+   cat('The value of K is inompatible with the number of species in the clade. Likelihood for this parameter set will be set to -Inf.\n')
    loglik = -Inf
    return(loglik)
 }
 if(lac == Inf & mu != Inf & missnumspec == 0)
 {
-  loglik = DAISIE_loglik_high_lambda(pars1,-brts,stac)        
+  loglik = DAISIE_loglik_high_lambda(pars1,-brts,stac)
 } else {
   if(ddep == 1 | ddep == 11)
   {
