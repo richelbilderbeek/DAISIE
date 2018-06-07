@@ -18,8 +18,6 @@ knitr::opts_chunk$set(
 
 # DAISIE – Dynamic Assembly of Island biotas through Speciation, Immigration and Extinction 
                    
-Date: 19 May 2015 
-
 Citation: Valente LM, Phillimore AB, Etienne RS (2015) Equilibrium and non-
 equilibrium dynamics simultaneously operate in the Galápagos islands. Ecology 
 Letters, In press. 
@@ -31,87 +29,6 @@ To load the package:
 ```{r}
 library(DAISIE)
 ```
-
-The raw dataset is inputted as a table. The Galápagos dataset table can be visualized with: 
-
-```{r}
-data(Galapagos_datatable)
-knitr::kable(Galapagos_datatable)
-```
-
-Each row in the table represents an independent colonisation event. 
-The table has four columns:
-
- * `Clade_name`: name of the independent colonization event. 
- * `Status`: One of the following categories: 
-    * `Endemic`: applicable for both anagenetic species and radiations. 
-    * `Non_endemic`: If the taxon is not endemic to the island, 
-      and the age of colonisation is 
-      based on a phylogeny where both island and non-island 
-      populations of the species 
-      have been sampled. 
-    * `Non_endemic_MaxAge`: If the taxon is not endemic to the island, 
-      and only an upper bound to the time of colonisation 
-      of the island is known. This applies if individuals
-      from the island population of the species have not been sampled, 
-      but an age of the species is known. 
-    * `Endemic&Non_Endemic`: When an endemic clade is present 
-      and the mainland ancestor has re-colonized. 
-      For remote islands this is expected to be very rare.
- * `Missing_species`: Number of island species that 
-   were not sampled for a particular clade (only applicable for radiations). 
- * `Branching_times` – This should be the stem age of the 
-   population/species in the case of `Non-endemic`, `Non-endemic_MaxAge` 
-   and `Endemic` anagenetic species. For cladogenetic 
-   species these should be branching times of the radiation 
-   including the stem age of the 
-   radiation. Note – if there are species within the radiation that 
-   are not found on the island 
-   (e.g. back-colonisation) the branching times of these species 
-   should be excluded, as the 
-   mainland species pool is treated as static. 
-
-## 3.3 Formatting table to run in DAISIE 
- 
-Before running analyses, the datatable needs to be converted to a DAISIE datalist format 
-using the function DAISIE_dataprep. 
- 
-We will prepare two different datalists based on the Galápagos datatable. In the 1st datalist 
-we will treat all taxa as equivalent. We will specify an island age of four million years 
-(island_age=4) and a mainland pool size of 1000 (M=1000). 
-
-```{r}
-data(Galapagos_datatable) 
-      
-Galapagos_datalist <- DAISIE_dataprep( 
-  datatable = Galapagos_datatable, 
-  island_age = 4, 
-  M = 1000
-)
-```
- 
-In the 2nd datalist we will allow for the Darwin’s finches to form a separate group for which 
-rates can be decoupled from those governing the macroevolutionary process in all other 
-clades (number_clade_types=2 and list_type2_clades = "Finches"). We will set the proportion 
-of Darwin’s finch type species in the mainland pool to be 0.163. (prop_type2_pool=0.163). If 
-prop_type2_pool is not specified then by default it is given the value of the proportion of 
-the Galapagos lineages that Darwin’s finches represent (1/8=0.125 in this case). 
-
-```{r}
-data(Galapagos_datatable) 
-
-Galapagos_datalist_2types <- DAISIE_dataprep( 
-  datatable = Galapagos_datatable, 
-  island_age = 4, 
-  M = 1000, 
-  number_clade_types = 2, 
-  list_type2_clades = "Finches", 
-  prop_type2_pool = 0.163
-)
-```
-
-The objects `Galapagos_datalist` and `Galapagos_datalist_2types` 
-can now be run directly in `DAISIE` functions. 
 
 ##  3.5 Simulating islands 
  
