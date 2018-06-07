@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Luis M. Valente, Albert B. Phillimore, Rampal S. Etienne" />
+
+<meta name="date" content="2015-05-19" />
+
+<title>Demo simulating islands</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Demo simulating islands</h1>
+<h4 class="author"><em>Luis M. Valente, Albert B. Phillimore, Rampal S. Etienne</em></h4>
+<h4 class="date"><em>19 May 2015</em></h4>
+
+
+
+<div id="daisie-dynamic-assembly-of-island-biotas-through-speciation-immigration-and-extinction" class="section level1">
+<h1>DAISIE – Dynamic Assembly of Island biotas through Speciation, Immigration and Extinction</h1>
+<p>Date: 19 May 2015</p>
+<p>Citation: Valente LM, Phillimore AB, Etienne RS (2015) Equilibrium and non- equilibrium dynamics simultaneously operate in the Galápagos islands. Ecology Letters, In press.</p>
+<div id="data-table" class="section level2">
+<h2>3.2 Data table</h2>
+<p>To load the package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DAISIE)</code></pre></div>
+<p>The raw dataset is inputted as a table. The Galápagos dataset table can be visualized with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable)
+knitr<span class="op">::</span><span class="kw">kable</span>(Galapagos_datatable)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Clade_name</th>
+<th align="left">Status</th>
+<th align="right">Missing_species</th>
+<th align="left">Branching_times</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Coccyzus</td>
+<td align="left">Non_endemic_MaxAge</td>
+<td align="right">0</td>
+<td align="left">7.456</td>
+</tr>
+<tr class="even">
+<td align="left">Dendroica</td>
+<td align="left">Non_endemic</td>
+<td align="right">0</td>
+<td align="left">0.34</td>
+</tr>
+<tr class="odd">
+<td align="left">Finches</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">3.0282,1.3227,0.8223,0.4286,0.3462,0.245,0.0808,0.0527,0.0327,0.0221,0.118,0.0756,0.0525,0.0322,0.0118</td>
+</tr>
+<tr class="even">
+<td align="left">Mimus</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">3.958,3.422,2.884,0.459</td>
+</tr>
+<tr class="odd">
+<td align="left">Myiarchus</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">0.855</td>
+</tr>
+<tr class="even">
+<td align="left">Progne</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">0.086</td>
+</tr>
+<tr class="odd">
+<td align="left">Pyrocephalus</td>
+<td align="left">Non_endemic_MaxAge</td>
+<td align="right">0</td>
+<td align="left">10.285</td>
+</tr>
+<tr class="even">
+<td align="left">Zenaida</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">3.51</td>
+</tr>
+</tbody>
+</table>
+<p>Each row in the table represents an independent colonisation event. The table has four columns:</p>
+<ul>
+<li><code>Clade_name</code>: name of the independent colonization event.</li>
+<li><code>Status</code>: One of the following categories:
+<ul>
+<li><code>Endemic</code>: applicable for both anagenetic species and radiations.</li>
+<li><code>Non_endemic</code>: If the taxon is not endemic to the island, and the age of colonisation is based on a phylogeny where both island and non-island populations of the species have been sampled.</li>
+<li><code>Non_endemic_MaxAge</code>: If the taxon is not endemic to the island, and only an upper bound to the time of colonisation of the island is known. This applies if individuals from the island population of the species have not been sampled, but an age of the species is known.</li>
+<li><code>Endemic&amp;Non_Endemic</code>: When an endemic clade is present and the mainland ancestor has re-colonized. For remote islands this is expected to be very rare.</li>
+</ul></li>
+<li><code>Missing_species</code>: Number of island species that were not sampled for a particular clade (only applicable for radiations).</li>
+<li><code>Branching_times</code> – This should be the stem age of the population/species in the case of <code>Non-endemic</code>, <code>Non-endemic_MaxAge</code> and <code>Endemic</code> anagenetic species. For cladogenetic species these should be branching times of the radiation including the stem age of the radiation. Note – if there are species within the radiation that are not found on the island (e.g. back-colonisation) the branching times of these species should be excluded, as the mainland species pool is treated as static.</li>
+</ul>
+</div>
+<div id="formatting-table-to-run-in-daisie" class="section level2">
+<h2>3.3 Formatting table to run in DAISIE</h2>
+<p>Before running analyses, the datatable needs to be converted to a DAISIE datalist format using the function DAISIE_dataprep.</p>
+<p>We will prepare two different datalists based on the Galápagos datatable. In the 1st datalist we will treat all taxa as equivalent. We will specify an island age of four million years (island_age=4) and a mainland pool size of 1000 (M=1000).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable) 
+      
+Galapagos_datalist &lt;-<span class="st"> </span><span class="kw">DAISIE_dataprep</span>( 
+  <span class="dt">datatable =</span> Galapagos_datatable, 
+  <span class="dt">island_age =</span> <span class="dv">4</span>, 
+  <span class="dt">M =</span> <span class="dv">1000</span>
+)</code></pre></div>
+<p>In the 2nd datalist we will allow for the Darwin’s finches to form a separate group for which rates can be decoupled from those governing the macroevolutionary process in all other clades (number_clade_types=2 and list_type2_clades = “Finches”). We will set the proportion of Darwin’s finch type species in the mainland pool to be 0.163. (prop_type2_pool=0.163). If prop_type2_pool is not specified then by default it is given the value of the proportion of the Galapagos lineages that Darwin’s finches represent (1/8=0.125 in this case).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable) 
+
+Galapagos_datalist_2types &lt;-<span class="st"> </span><span class="kw">DAISIE_dataprep</span>( 
+  <span class="dt">datatable =</span> Galapagos_datatable, 
+  <span class="dt">island_age =</span> <span class="dv">4</span>, 
+  <span class="dt">M =</span> <span class="dv">1000</span>, 
+  <span class="dt">number_clade_types =</span> <span class="dv">2</span>, 
+  <span class="dt">list_type2_clades =</span> <span class="st">&quot;Finches&quot;</span>, 
+  <span class="dt">prop_type2_pool =</span> <span class="fl">0.163</span>
+)</code></pre></div>
+<p>The objects <code>Galapagos_datalist</code> and <code>Galapagos_datalist_2types</code> can now be run directly in <code>DAISIE</code> functions.</p>
+</div>
+<div id="simulating-islands" class="section level2">
+<h2>3.5 Simulating islands</h2>
+<p>The function <code>DAISIE_sim</code> allows simulation of DAISIE models and plots the results. The user specifies the parameters to be simulated, the number of replicates, the length of the simulation (typically the island age), and the number of species in the mainland pool.</p>
+<p>When the plot_sims option is set to the default (TRUE) the function will produce a species- through-time plot showing the accumulation of total, endemic and non-endemic species through time, as well as confidence intervals for the total number of species.</p>
+<div id="example-5.1-simulating-100-islands-with-no-diversity-dependence-all-species-sharing-the-same-parameters-and-plotting-the-results" class="section level3">
+<h3>Example 5.1 – Simulating 100 islands with no diversity-dependence, all species sharing the same parameters, and plotting the results</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pars =<span class="st"> </span><span class="kw">c</span>(<span class="fl">2.550687345</span>,<span class="fl">2.683454548</span>,<span class="ot">Inf</span>,<span class="fl">0.00933207</span>,<span class="fl">1.010073119</span>)
+
+island_replicates =<span class="st"> </span><span class="kw">DAISIE_sim</span>( 
+  <span class="dt">time =</span> <span class="dv">4</span>, 
+  <span class="dt">M =</span> <span class="dv">1000</span>, 
+  <span class="dt">pars =</span> pars, 
+  <span class="dt">replicates =</span> <span class="dv">100</span>
+)
+<span class="co">#&gt; [1] &quot;Island replicate 1&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 2&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 3&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 4&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 5&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 6&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 7&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 8&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 9&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 10&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 11&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 12&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 13&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 14&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 15&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 16&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 17&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 18&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 19&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 20&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 21&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 22&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 23&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 24&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 25&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 26&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 27&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 28&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 29&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 30&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 31&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 32&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 33&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 34&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 35&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 36&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 37&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 38&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 39&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 40&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 41&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 42&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 43&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 44&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 45&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 46&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 47&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 48&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 49&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 50&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 51&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 52&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 53&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 54&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 55&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 56&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 57&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 58&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 59&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 60&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 61&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 62&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 63&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 64&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 65&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 66&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 67&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 68&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 69&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 70&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 71&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 72&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 73&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 74&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 75&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 76&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 77&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 78&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 79&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 80&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 81&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 82&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 83&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 84&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 85&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 86&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 87&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 88&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 89&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 90&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 91&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 92&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 93&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 94&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 95&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 96&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 97&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 98&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 99&quot;</span>
+<span class="co">#&gt; [1] &quot;Island replicate 100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 1/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 2/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 3/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 4/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 5/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 6/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 7/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 8/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 9/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 10/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 11/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 12/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 13/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 14/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 15/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 16/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 17/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 18/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 19/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 20/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 21/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 22/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 23/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 24/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 25/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 26/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 27/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 28/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 29/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 30/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 31/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 32/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 33/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 34/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 35/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 36/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 37/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 38/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 39/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 40/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 41/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 42/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 43/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 44/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 45/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 46/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 47/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 48/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 49/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 50/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 51/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 52/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 53/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 54/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 55/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 56/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 57/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 58/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 59/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 60/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 61/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 62/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 63/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 64/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 65/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 66/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 67/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 68/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 69/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 70/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 71/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 72/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 73/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 74/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 75/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 76/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 77/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 78/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 79/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 80/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 81/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 82/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 83/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 84/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 85/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 86/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 87/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 88/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 89/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 90/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 91/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 92/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 93/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 94/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 95/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 96/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 97/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 98/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 99/100&quot;</span>
+<span class="co">#&gt; [1] &quot;Island being formatted: 100/100&quot;</span></code></pre></div>
+<p>The object <code>island_replicates</code> contains the results of the simulation in DAISIE format. 100 islands are stored in the object, and each island replicate can be viewed separately. For example type <code>island_replicates[[23]]</code> to view replicate number 23. The element of the list relating to each island contains a table with the number of species through time, as well as branching time information for each independent colonisation event extant at the end of the simulation.</p>
+</div>
+<div id="example-5.2-simulating-100-islands-with-diversity-dependence-k10-all-species-sharing-the-same-parameters-and-plotting-the-results" class="section level3">
+<h3>Example 5.2 – Simulating 100 islands with diversity-dependence (K’=10), all species sharing the same parameters, and plotting the results</h3>
+<pre><code>pars = c(2.550687345,2.683454548,10,0.00933207,1.010073119) 
+
+island_replicates_K = DAISIE_sim( 
+  time = 4, 
+  M = 1000, 
+  pars = pars, 
+  replicates = 100
+) </code></pre>
+</div>
+<div id="example-5.3-simulating-100-islands-allowing-darwins-finches-to-have-a-higher-rate-of-cladogenesis" class="section level3">
+<h3>Example 5.3 – Simulating 100 islands allowing Darwin’s finches to have a higher rate of cladogenesis:</h3>
+<pre><code>pars_type1 = c(0.38,0.55,Inf,0.004,1.10) 
+pars_type2 = c(2.28,0.55,Inf,0.004,1.10) 
+
+island_replicates_2types = DAISIE_sim( 
+  time = 4, 
+  M = 1000, 
+  pars = c(pars_type1,pars_type2), 
+  replicates = 100, 
+  prop_type2_pool = 0.163
+) </code></pre>
+<p>This produces a figure similar to Fig. 2, with three plots: one for the total number of species, one for species of type 1 and one for species of type 2. Accessing each island replicate individually (e.g. island_replicates_2types[[15]]) shows information on branching times and species-through-time tables for total, type 1 species and type 2 species.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

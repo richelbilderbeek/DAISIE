@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Luis M. Valente, Albert B. Phillimore, Rampal S. Etienne" />
+
+<meta name="date" content="2018-06-07" />
+
+<title>Demo optimizing parameters</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Demo optimizing parameters</h1>
+<h4 class="author"><em>Luis M. Valente, Albert B. Phillimore, Rampal S. Etienne</em></h4>
+<h4 class="date"><em>2018-06-07</em></h4>
+
+
+
+<div id="daisie-dynamic-assembly-of-island-biotas-through-speciation-immigration-and-extinction" class="section level1">
+<h1>DAISIE – Dynamic Assembly of Island biotas through Speciation, Immigration and Extinction</h1>
+<p>Date:</p>
+<p>Citation: Valente LM, Phillimore AB, Etienne RS (2015) Equilibrium and non- equilibrium dynamics simultaneously operate in the Galápagos islands. Ecology Letters, In press.</p>
+<div id="data-table" class="section level2">
+<h2>3.2 Data table</h2>
+<p>To load the package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DAISIE)</code></pre></div>
+<p>The raw dataset is inputted as a table. The Galápagos dataset table can be visualized with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable)
+knitr<span class="op">::</span><span class="kw">kable</span>(Galapagos_datatable)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Clade_name</th>
+<th align="left">Status</th>
+<th align="right">Missing_species</th>
+<th align="left">Branching_times</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Coccyzus</td>
+<td align="left">Non_endemic_MaxAge</td>
+<td align="right">0</td>
+<td align="left">7.456</td>
+</tr>
+<tr class="even">
+<td align="left">Dendroica</td>
+<td align="left">Non_endemic</td>
+<td align="right">0</td>
+<td align="left">0.34</td>
+</tr>
+<tr class="odd">
+<td align="left">Finches</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">3.0282,1.3227,0.8223,0.4286,0.3462,0.245,0.0808,0.0527,0.0327,0.0221,0.118,0.0756,0.0525,0.0322,0.0118</td>
+</tr>
+<tr class="even">
+<td align="left">Mimus</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">3.958,3.422,2.884,0.459</td>
+</tr>
+<tr class="odd">
+<td align="left">Myiarchus</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">0.855</td>
+</tr>
+<tr class="even">
+<td align="left">Progne</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">0.086</td>
+</tr>
+<tr class="odd">
+<td align="left">Pyrocephalus</td>
+<td align="left">Non_endemic_MaxAge</td>
+<td align="right">0</td>
+<td align="left">10.285</td>
+</tr>
+<tr class="even">
+<td align="left">Zenaida</td>
+<td align="left">Endemic</td>
+<td align="right">0</td>
+<td align="left">3.51</td>
+</tr>
+</tbody>
+</table>
+<p>Each row in the table represents an independent colonisation event. The table has four columns:</p>
+<ul>
+<li><code>Clade_name</code>: name of the independent colonization event.</li>
+<li><code>Status</code>: One of the following categories:
+<ul>
+<li><code>Endemic</code>: applicable for both anagenetic species and radiations.</li>
+<li><code>Non_endemic</code>: If the taxon is not endemic to the island, and the age of colonisation is based on a phylogeny where both island and non-island populations of the species have been sampled.</li>
+<li><code>Non_endemic_MaxAge</code>: If the taxon is not endemic to the island, and only an upper bound to the time of colonisation of the island is known. This applies if individuals from the island population of the species have not been sampled, but an age of the species is known.</li>
+<li><code>Endemic&amp;Non_Endemic</code>: When an endemic clade is present and the mainland ancestor has re-colonized. For remote islands this is expected to be very rare.</li>
+</ul></li>
+<li><code>Missing_species</code>: Number of island species that were not sampled for a particular clade (only applicable for radiations).</li>
+<li><code>Branching_times</code> – This should be the stem age of the population/species in the case of <code>Non-endemic</code>, <code>Non-endemic_MaxAge</code> and <code>Endemic</code> anagenetic species. For cladogenetic species these should be branching times of the radiation including the stem age of the radiation. Note – if there are species within the radiation that are not found on the island (e.g. back-colonisation) the branching times of these species should be excluded, as the mainland species pool is treated as static.</li>
+</ul>
+</div>
+<div id="formatting-table-to-run-in-daisie" class="section level2">
+<h2>3.3 Formatting table to run in DAISIE</h2>
+<p>Before running analyses, the datatable needs to be converted to a DAISIE datalist format using the function DAISIE_dataprep.</p>
+<p>We will prepare two different datalists based on the Galápagos datatable. In the 1st datalist we will treat all taxa as equivalent. We will specify an island age of four million years (island_age=4) and a mainland pool size of 1000 (M=1000).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable) 
+      
+Galapagos_datalist &lt;-<span class="st"> </span><span class="kw">DAISIE_dataprep</span>( 
+  <span class="dt">datatable =</span> Galapagos_datatable, 
+  <span class="dt">island_age =</span> <span class="dv">4</span>, 
+  <span class="dt">M =</span> <span class="dv">1000</span>
+)</code></pre></div>
+<p>In the 2nd datalist we will allow for the Darwin’s finches to form a separate group for which rates can be decoupled from those governing the macroevolutionary process in all other clades (number_clade_types=2 and list_type2_clades = “Finches”). We will set the proportion of Darwin’s finch type species in the mainland pool to be 0.163. (prop_type2_pool=0.163). If prop_type2_pool is not specified then by default it is given the value of the proportion of the Galapagos lineages that Darwin’s finches represent (1/8=0.125 in this case).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable) 
+
+Galapagos_datalist_2types &lt;-<span class="st"> </span><span class="kw">DAISIE_dataprep</span>( 
+  <span class="dt">datatable =</span> Galapagos_datatable, 
+  <span class="dt">island_age =</span> <span class="dv">4</span>, 
+  <span class="dt">M =</span> <span class="dv">1000</span>, 
+  <span class="dt">number_clade_types =</span> <span class="dv">2</span>, 
+  <span class="dt">list_type2_clades =</span> <span class="st">&quot;Finches&quot;</span>, 
+  <span class="dt">prop_type2_pool =</span> <span class="fl">0.163</span>
+)</code></pre></div>
+<p>The objects <code>Galapagos_datalist</code> and <code>Galapagos_datalist_2types</code> can now be run directly in <code>DAISIE</code> functions.</p>
+</div>
+<div id="optimizing-parameters-using-maximum-likelihood" class="section level2">
+<h2>3.4 Optimizing parameters using maximum likelihood</h2>
+<p>The function that conducts maximum likelihood optimization of DAISIE model parameters is called <code>DAISIE_ML</code>.</p>
+<p>Different models can be specified using ddmodel option in <code>DAISIE_ML</code>:</p>
+<ul>
+<li><code>ddmodel = 0</code> : no diversity-dependence</li>
+<li><code>ddmodel = 1</code> : linear diversity-dependence in speciation rate</li>
+<li><code>ddmodel = 11</code>: linear diversity-dependence in speciation and immigration rate</li>
+<li><code>ddmodel = 2</code> : exponential diversity-dependence in speciation rate</li>
+<li><code>ddmodel = 21</code>: exponential diversity-dependence in speciation and immigration rate</li>
+</ul>
+<p>Different types of parameters can be optimized or fixed. The parameters are given in the following order: (1) cladogenesis rate, (2) extinction rate, (3) K’ or carrying capacity (maximum number of species that a clade can attain within the island), (4) colonisation rate, and (5) anagenesis rate.</p>
+<p>The identities of the parameters to be optimized or fixed are specified with <code>idparsopt</code> and <code>idparsfix</code> within the DAISIE_ML function. For example, to optimize all parameters we set <code>idparsopt=1:5</code> and <code>idparsfix=NULL</code>. To optimize all parameters but fix the rate of extinction, we set <code>idparsopt=c(1,3,4,5)</code> and <code>idparsfix=2</code>. To optimize all parameters except cladogenesis and anagenesis we set <code>idparsopt=c(2,3,4)</code> and <code>idparsfix=c(1,5)</code>.</p>
+<p>The values of the parameters to be used as initial values for the optimization are specified with <code>initparsopt</code>, and the values to be fixed are specified with <code>parsfix.</code> For example, if we want to optimize all parameters with a starting value of 2 we set <code>initparsopt=c(2,2,2,2,2)</code> and <code>parsfix=NULL</code>. If we want all starting rates to be 0.1, but K’ to be fixed at 20, we use <code>initparsopt=c(0.1,0.1,0.1,0.1)</code> and <code>parsfix=20</code>.</p>
+<p>When running your own data, we strongly recommend that you test multiple initial starting parameters for each model, particularly when optimizing models with multiple free parameters, as there is a high risk of being trapped in local likelihood sub-optima. We also suggest running two rounds of optimization using the optimized parameter set of the 1st round as the initial starting values for the 2nd round. Also note that the initial starting values in the examples of this tutorial may not be appropriate for your data.</p>
+<div id="example-1-optimizing-all-parameters-with-diversity-dependence-in-speciation-and-colonisation" class="section level3">
+<h3>Example 1: Optimizing all parameters, with diversity-dependence in speciation and colonisation</h3>
+<p>We will now optimize all five parameters for a datalist where all clades share the same parameters. We will set the model with linear diversity-dependence in speciation rate and in immigration rate using ddmodel=11. We will set an initial rate of cladogenesis of 2.5, an initial rate of extinction of 2.7, an initial K’ value of 20, an initial rate of colonisation of 0.009 and an initial rate of anagenesis of 1.01 (<code>initparsopt = c(2.5,2.7,20,0.009,1.01)</code>). We will optimize all 5 parameters (<code>idparsopt = 1:5</code>) and we will fix no parameters (<code>parsfix = NULL</code>, <code>idparsfix = NULL</code>).</p>
+<pre><code>data(Galapagos_datalist) 
+
+DAISIE_ML( 
+  datalist = Galapagos_datalist, 
+  initparsopt = c(2.5,2.7,20,0.009,1.01), 
+  ddmodel = 11, 
+  idparsopt = 1:5, 
+  parsfix = NULL, 
+  idparsfix = NULL
+) </code></pre>
+<p>This will take several minutes to run. The parameters optimized and fixed as well as the loglikelihood of the initial starting parameters we have set are shown at the top of the screen output of DAISIE_ML. Once the optimization is completed, the program will output the maximum likelihood parameter estimates and the maximum loglikelihood value. For a given dataset, the likelihood of different DAISIE models can be compared with information criteria such as BIC and AIC.</p>
+</div>
+<div id="example-2-optimizing-model-without-diversity-dependence" class="section level3">
+<h3>Example 2: Optimizing model without diversity-dependence</h3>
+<p>To optimize the parameters of a model with no diversity-dependence, we use the default model (ddmodel=0), and fix the parameter number 3 which corresponds to K’ to infinity (Inf).</p>
+<pre><code>
+data(Galapagos_datalist) 
+
+DAISIE_ML( 
+  datalist = Galapagos_datalist, 
+  initparsopt = c(2.5,2.7,0.009,1.01), 
+  idparsopt = c(1,2,4,5), 
+  parsfix = Inf, 
+  idparsfix = 3
+) </code></pre>
+</div>
+<div id="example-3-optimizing-model-with-no-diversity-dependence-and-no-anagenesis" class="section level3">
+<h3>Example 3: Optimizing model with no diversity-dependence and no anagenesis</h3>
+<p>To optimize the parameters of a model with no diversity-dependence and no anagenesis, we use the default model (ddmodel=0), and fix parameters number 3 and 5, which correspond, respectively to K’ and rate of anagenesis.</p>
+<pre><code>data(Galapagos_datalist) 
+DAISIE_ML( 
+  datalist=Galapagos_datalist, 
+  initparsopt = c(2.5,2.7,0.009), 
+  idparsopt = c(1,2,4), 
+  parsfix = c(Inf,0), 
+  idparsfix = c(3,5)
+) </code></pre>
+</div>
+<div id="example-4-optimizing-all-parameters-but-allowing-darwins-finches-to-have-a-separate-rate-of-cladogenesis." class="section level3">
+<h3>Example 4: Optimizing all parameters, but allowing Darwin’s finches to have a separate rate of cladogenesis.</h3>
+<p>For this example we will use the datalist with Darwin’s finches specified to be of a separate type: Galapagos_datalist_2types.</p>
+<p>If two types of species are considered, then the parameters of the second type of species are in the same order as the first set of parameters, but start at number 6: (6) cladogenesis rate of type 2 species, (7) extinction rate of type 2 species, (8) K’ of type 2 species, (9) colonisation rate of type 2 species, and (10) anagenesis rate of type 2 species. There is also an additional parameter when 2 types of species are considered: the proportion of species of type 2 in the mainland pool. This is parameter number 11.</p>
+<p>Here we will optimize all parameters, but allow the finches to have a separate rate of cladogenesis. We will fix the proportion of type 2 species in the mainland pool at 0.163 (therefore fixing parameter 11 with idparsfix=11 and parsfix=0.163). Note that because we are only allowing the rate of cladogenesis of Darwin’s finches to vary from the background rate, we need to specify that the other rates for Darwin’s finches remain the same as the background – using idparsnoshift = c(7,8,9,10)).</p>
+<pre><code>data(Galapagos_datalist_2types) 
+
+DAISIE_ML( 
+  ddmodel=11, 
+  datalist=Galapagos_datalist_2types, 
+  initparsopt= c(0.38,0.55,20,0.004,1.1,2.28), 
+  idparsopt = c(1,2,3,4,5,6), 
+  parsfix = 0.163, 
+  idparsfix = c(11), 
+  idparsnoshift = c(7,8,9,10)
+) </code></pre>
+</div>
+<div id="example-5-optimizing-a-model-with-no-diversity-dependence-but-allowing-darwins-finches-to-have-a-separate-rate-of-cladogenesis-and-extinction." class="section level3">
+<h3>Example 5: Optimizing a model with no diversity-dependence, but allowing Darwin’s finches to have a separate rate of cladogenesis and extinction.</h3>
+<pre><code>data(Galapagos_datalist_2types) 
+ 
+DAISIE_ML( 
+  ddmodel=0, 
+  datalist=Galapagos_datalist_2types, 
+  initparsopt = c(0.38,0.55,0.004,1.1,2.28,2), 
+  idparsopt = c(1,2,4,5,6,7), 
+  parsfix = c(Inf,0.163), 
+  idparsfix = c(3,11), 
+  idparsnoshift = c(8,9,10)
+) </code></pre>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
