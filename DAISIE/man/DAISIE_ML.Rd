@@ -7,13 +7,15 @@ DAISIE model for data from lineages colonizing an island. It also outputs the
 corresponding loglikelihood that can be used in model comparisons.
 }
 \usage{
-DAISIE_ML(
+DAISIE_ML(  
    datalist,
+   datatype = 'single',
    initparsopt,
    idparsopt,
    parsfix,
    idparsfix,
    idparsnoshift = 6:10,
+   idparsmat = NULL,
    res = 100,
    ddmodel = 0,
    cond = 0,
@@ -22,7 +24,7 @@ DAISIE_ML(
    x_I = 0.98,
    tol = c(1e-04, 1e-05, 1e-07),
    maxiter = 1000 * round((1.25)^length(idparsopt)),
-   methode = "lsodes",
+   methode = 'lsodes',
    optimmethod = 'subplex'
    )
 }
@@ -45,7 +47,8 @@ DAISIE_ML(
   * Non_endemic: 4 \cr \cr
   \code{$missing_species} - number of island species that were not sampled for particular clade (only applicable for endemic clades) \cr
   \code{$type1or2} - whether the colonist belongs to type 1 or type 2 \cr
-  } 
+  }
+  \item{datatype}{Sets the type of data: 'single' for a single island or archipelago treated as one, and 'multiple' for multiple archipelagoes potentially sharing the same parameters} 
   \item{initparsopt}{The initial values of the parameters that must be optimized}
   \item{idparsopt}{
    The ids of the parameters that must be optimized. The ids are defined as follows: \cr \cr
@@ -63,8 +66,15 @@ DAISIE_ML(
    }
   \item{idparsfix}{The ids of the parameters that should not be optimized, e.g. c(1,3) if lambda^c and K should not be optimized.}
   \item{parsfix}{The values of the parameters that should not be optimized }
-  \item{idparsnoshift}{The ids of the parameters that should not be different between two groups of species; 
+  \item{idparsnoshift}{For datatype = 'single' only: The ids of the parameters that should not be different between two groups of species; 
 This can only apply to ids 6:10, e.g. idparsnoshift = c(6,7) means that lambda^c and mu have the same values for both groups}\cr
+  \item{idparsmat}{For datatype = 'multiple' only: Matrix containing the ids of the parameters, linking them to initparsopt and parsfix. Per island system we use the following order: \cr \cr
+  * lac = (initial) cladogenesis rate \cr
+  * mu = extinction rate \cr
+  * K = maximum number of species possible in the clade \cr
+  * gam = (initial) immigration rate \cr
+  * laa = (initial) anagenesis rate \cr
+  Example: idparsmat = rbind(c(1,2,3,4,5),c(1,2,3,6,7)) has different rates of immigration and anagenesis for the two islands.} 
   \item{res}{Sets the maximum number of species for which a probability must be computed, must be larger than the size of the largest clade }
   \item{ddmodel}{Sets the model of diversity-dependence: \cr \cr
     ddmodel = 0 : no diversity dependence \cr
@@ -77,7 +87,7 @@ This can only apply to ids 6:10, e.g. idparsnoshift = c(6,7) means that lambda^c
     cond = 0 : conditioning on island age \cr
     cond = 1 : conditioning on island age and non-extinction of the island biota \cr
   }
-  \item{eqmodel}{Sets the equilibrium constraint that can be used during the likelihood optimization.\cr\cr
+  \item{eqmodel}{Sets the equilibrium constraint that can be used during the likelihood optimization. Only available for datatype = 'single'.\cr\cr
     eqmodel = 0 : no equilibrium is assumed \cr
     eqmodel = 13 : near-equilibrium is assumed on endemics using deterministic equation for endemics and immigrants. Endemics must be within x_E of the equilibrium value\cr
     eqmodel = 15 : near-equilibrium is assumed on endemics and immigrants using deterministic equation for endemics and immigrants. Endemics must be within x_E of the equilibrium value, while non-endemics must be within x_I of the equilibrium value
@@ -191,6 +201,38 @@ DAISIE_ML(
    idparsfix = c(3,8),
    idparsnoshift = c(6,9,10)
    )
+
+### When we have two islands with the same rates except for immigration and anagenesis rate,
+# and we want to optimize all parameters, we use:
+
+data(Galapagos_datalist)
+DAISIE_ML(
+   datalist = list(Galapagos_datalist,Galapagos_datalist),
+   datatype = 'multiple',
+   initparsopt = c(2.5,2.7,20,0.009,1.01,0.009,1.01),
+   idparsmat = rbind(1:5,c(1:3,6,7)),
+   idparsopt = 1:7,
+   parsfix = NULL,
+   idparsfix = NULL
+)
+
+### When we consider the four Macaronesia archipelagoes and set all parameters the same
+# except for rates of cladogenesis, extinction and immigration for Canary Islands,
+# rate of cladogenesis is fixed to 0 for the other archipelagoes,
+# diversity-dependence is assumed to be absent
+# and we want to optimize all parameters, we use:
+
+data(Macaronesia_datalist)
+DAISIE_ML(
+   datalist = Macaronesia_datalist,
+   datatype = 'multiple',
+   initparsopt = c(1.053151832,0.052148979,0.512939011,0.133766934,0.152763179),
+   idparsmat = rbind(1:5,c(6,2,3,7,5),1:5,1:5),
+   idparsopt = c(2,4,5,6,7),
+   parsfix = c(0,Inf),
+   idparsfix = c(1,3)
+)
+   
 ")
 }
 \keyword{models}

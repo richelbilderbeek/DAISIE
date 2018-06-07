@@ -13,11 +13,12 @@ DAISIE_sim(
    M,
    pars,
    replicates,
+   divdepmodel = 'CS',
    prop_type2_pool = NA,
    replicates_apply_type2 = TRUE,
-   format = TRUE,
    sample_freq = 25,
-   plot_sims = TRUE)
+   plot_sims = TRUE,
+   ...)
 }
 
 \arguments{
@@ -43,39 +44,24 @@ for non-diversity dependence.\cr
    The elements 6:10 are optional and are required only when type 2 species are included.
    }  
 \item{replicates}{Number of island replicates to be simulated.}
+\item{divdepmodel}{Option divdepmodel='CS' runs model with clade-specific carrying capacity, where diversity-dependence operates only within single clades, i.e. only among species originating from the same mainland colonist. Option divdepmodel= 'IW' runs model with island-wide carrying capacity, where diversity-dependence operates within and among clades.}
 \item{prop_type2_pool}{Fraction of mainland species that belongs to the 
 second subset of species (type 2). Applies only when two types of species are simulated (length(pars)=10).}
  \item{replicates_apply_type2}{ Applies only when two types of species are being simulated. 
 Default replicates_apply_type2=TRUE
- runs simulations until the number of islands where a type 2 species 
-has colonised is equal to the specified number of replicates. This 
-is recommended if prop_type2_pool is small or if the rate of 
-immigration of type two species (pars[9]) is low, meaning that more 
-replicates are needed to achieve an adequate sample size of islands 
-with type 2 species. Setting replicates_apply_type2=FALSE, simulates islands up 
+ runs simulations until the number of islands where a type 2 species has colonised is equal to the specified number of replicates. This is recommended if prop_type2_pool is small or if the rate of immigration of type two species (pars[9]) is low, meaning that more 
+replicates are needed to achieve an adequate sample size of islands with type 2 species. Setting replicates_apply_type2=FALSE, simulates islands up 
 to specified number of replicates regardless of whether type 2 species have colonised or not.}
-\item{format}{Default format=TRUE formats island replicates to a DAISIE
- format that can be run in DAISIE_ML, DAISIE_loglik_all and DAISIE_plot_sims 
-functions. sample_freq needs to be specified. Setting format=FALSE saves replicates 
-in a RAW format that includes, for each island replicate, a list with the history 
-of all mainland species, even those that have not colonised. If replicates are 
-saved in this RAW format, they can be formatted a posteriori to a DAISIE format 
-using the DAISIE_format_sim function.}
 \item{sample_freq}{Specifies the number of units time should be divided by for 
-plotting purposes. Applies only if format=TRUE. Larger values will lead to 
+plotting purposes. Larger values will lead to 
 plots with higher definition, but will also run slower.}
 \item{plot_sims}{Default=TRUE plots species-through-time (STT) plots. It detects how many types
  of species are present. If only one type of species is present, STT is plotted for all species. If two types are present, 
-three plots are produced: STT for all, STT for type 1 and STT for type 2. Applies only when 
-format=TRUE because the plotting function requires simulated datasets to
- be in a DAISIE (not RAW) format. }
+three plots are produced: STT for all, STT for type 1 and STT for type 2. }
+ \item{...}{ Any arguments to pass on to plotting functions.}
 }
-\details{Returns R list object that contains the simulated islands. 
-If format=TRUE the list is in DAISIE format that can be run on other
- DAISIE functions. If format=FALSE the list is in RAW format. }
+\details{Returns R list object that contains the simulated islands.}
 \value{
-
- If format=TRUE returns R list with simulated islands in a DAISIE format.
 Each simulated dataset is an element of the list, which can be called using [[x]]. For example if the object is called island_replicates, the 1st replicate can be called using island_replicates[[1]]
 Each of the island replicates is a list in itself. The first (e.g. island_replicates[[x]][[1]]) element of that list has the following components: \cr
   \code{$island_age} - the island age \cr
@@ -87,6 +73,7 @@ Each of the island replicates is a list in itself. The first (e.g. island_replic
   \code{$stt_all} - STT table for all species on the island (nI - number of non-endemic species; nA - number of anagenetic species, nC - number of cladogenetic species, present - number of independent colonisations present )\cr
   \code{$stt_stt_type1} - STT table for type 1 species on the island - only if 2 types of species were simulated (nI - number of non-endemic species; nA - number of anagenetic species, nC - number of cladogenetic species, present - number of independent colonisations present )\cr   
   \code{$stt_stt_type2} - STT table for type 2 species on the island - only if 2 types of species were simulated (nI - number of non-endemic species; nA - number of anagenetic species, nC - number of cladogenetic species, present - number of independent colonisations present )\cr   
+  \code{$brts_table} - Only for simulations under 'IW'. Table containing information on order of events in the data, for use in maximum likelihood optimization.)\cr   
 
   The subsequent elements of the list each contain information on a single colonist lineage on the island and has 4 components:\cr
   \code{$branching_times} - island age and stem age of the population/species in the case of Non-endemic, Non-endemic_MaxAge and Endemic anagenetic species. For cladogenetic species these should be island age and branching times of the radiation including the stem age of the radiation.\cr                          
@@ -98,22 +85,6 @@ Each of the island replicates is a list in itself. The first (e.g. island_replic
   \code{$missing_species} - number of island species that were not sampled for particular clade (only applicable for endemic clades) \cr
   \code{$type_1or2} - whether the colonist belongs to type 1 or type 2 \cr
  
-
- If format=FALSE returns R list with simulated islands in a RAW format.
-Each simulated dataset is an element of the list, which can be called using [[x]]. For example if the object is called island_replicates, the 1st replicate can be called using island_replicates[[1]]
-Each of the island replicates is a list in itself. The first (e.g. island_replicates[[x]][[1]]) element of that list has the following components: \cr
-  The following elements of the RAW list each contain information on a single colonist lineage on the island and has 5 components:\cr
-  \code{$branching_times} - island age and stem age of the population/species in the case of Non-endemic, Non-endemic_MaxAge and Endemic anagenetic species. For cladogenetic species these should be island age and branching times of the radiation including the stem age of the radiation.\cr                          
-  \code{$stac} - the status of the colonist \cr
-  * Not_present: 0 \ cr
-  * Non_endemic_MaxAge: 1 \cr
-  * Endemic: 2 \cr
-  * Endemic&Non_Endemic: 3 \cr
-  * Non_endemic: 4 \cr
- 	\code{$stt_table} - Species-through-time table for the descendants of the mainland species (nI - number of non-endemic species; nA - number of anagenetic species, nC - number of cladogenetic species)\cr 
-  \code{$missing_species} - number of island species that were not sampled for particular clade (only applicable for endemic clades) \cr
-  \code{$type_1or2} - whether the colonist belongs to type 1 or type 2 \cr
- 
 }
 \references{
 Valente, L.M., A.B. Phillimore and R.S. Etienne (2015). Equilibrium and non-equilibrium dynamics simultaneously operate in the Galapagos islands. Ecology Letters 18: 844-852.}
@@ -121,7 +92,7 @@ Valente, L.M., A.B. Phillimore and R.S. Etienne (2015). Equilibrium and non-equi
 Luis Valente and Albert Phillimore
 }
 \seealso{
-\code{\link{DAISIE_format_sim}}
+\code{\link{DAISIE_format_CS}}
 \code{\link{DAISIE_plot_sims}}
 }
 \examples{ 

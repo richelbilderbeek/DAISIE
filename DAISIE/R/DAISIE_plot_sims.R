@@ -6,13 +6,13 @@ time<-max(island_replicates[[1]][[1]]$stt_all[,1])
 
 ###  STT ALL species
 s_freq<-length(island_replicates[[1]][[1]]$stt_all[,1])
-complete_arr <-array(dim=c(s_freq,7,replicates))
+complete_arr <-array(dim=c(s_freq,6,replicates))
 
 for(x in 1:replicates)
 {
 sum_endemics<-island_replicates[[x]][[1]]$stt_all[,"nA"]+island_replicates[[x]][[1]]$stt_all[,"nC"]
 total<-island_replicates[[x]][[1]]$stt_all[,"nA"]+island_replicates[[x]][[1]]$stt_all[,"nC"]+island_replicates[[x]][[1]]$stt_all[,"nI"]
-complete_arr[,,x]<-cbind(island_replicates[[x]][[1]]$stt_all,sum_endemics,total)
+complete_arr[,,x]<-cbind(island_replicates[[x]][[1]]$stt_all[,c('Time',"nI","nA","nC")],sum_endemics,total)
 }
 
 
@@ -22,11 +22,11 @@ stt_q0.25_all<-apply(complete_arr,c(1,2),quantile,0.25)
 stt_q0.75_all<-apply(complete_arr,c(1,2),quantile,0.75)
 stt_q0.975_all<-apply(complete_arr,c(1,2),quantile,0.975)
 
-colnames(stt_average_all)<-c("Time","nI","nA","nC","present","Endemic","Total")
-colnames(stt_q0.025_all)<-c("Time","nI","nA","nC","present","Endemic","Total")
-colnames(stt_q0.25_all)<-c("Time","nI","nA","nC","present","Endemic","Total")
-colnames(stt_q0.75_all)<-c("Time","nI","nA","nC","present","Endemic","Total")
-colnames(stt_q0.975_all)<-c("Time","nI","nA","nC","present","Endemic","Total")
+colnames(stt_average_all)<-c("Time","nI","nA","nC","Endemic","Total")
+colnames(stt_q0.025_all)<-c("Time","nI","nA","nC","Endemic","Total")
+colnames(stt_q0.25_all)<-c("Time","nI","nA","nC","Endemic","Total")
+colnames(stt_q0.75_all)<-c("Time","nI","nA","nC","Endemic","Total")
+colnames(stt_q0.975_all)<-c("Time","nI","nA","nC","Endemic","Total")
 
 
 if(is.null(island_replicates[[1]][[1]]$stt_type1)==FALSE)

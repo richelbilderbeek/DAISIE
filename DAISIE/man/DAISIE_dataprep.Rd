@@ -46,7 +46,7 @@ have a distinct macroevolutionary process. Applies only if number_clade_types = 
 Default "proportional" sets the fraction to be proportional to the number of clades of distinct
  macroevolutionary process that have colonised the island. Alternatively, the user
  can specify a value between 0 and 1 (e.g. if mainland pool size is 1000 and prop_type2_pool = 0.02 then number of type2 species is 20). }
-	\item{epss}{ Default= 1E-5 should be appropriate in most cases. This value is used to set the maximum age of colonisation of "Non_endemic_MaxAge" species to an age that is slightly younger than the island for cases when the age provided for that species is older than the island. The new maximum age is then used as an upper bound to integrate over all possible colonisation times. }
+	\item{epss}{ Default= 1E-5 should be appropriate in most cases. This value is used to set the maximum age of colonisation of "Non_endemic_MaxAge" and "Endemic_MaxAge" species to an age that is slightly younger than the island for cases when the age provided for that species is older than the island. The new maximum age is then used as an upper bound to integrate over all possible colonisation times. }
 }
 \details{The output is an R list containing the data formatted to be run
  on other DAISIE functions.}
@@ -62,12 +62,13 @@ Default "proportional" sets the fraction to be proportional to the number of cla
   \code{$not_present_type2} - the number of mainland lineages of type 2 that are not present on the island \cr  
   The following elements of the list each contains information on a single colonist lineage on the island and has 5 components:\cr
   \code{$colonist_name} - the name of the species or clade that colonized the island \cr  
-  \code{$branching_times} - island age and stem age of the population/species in the case of "Non-endemic", "Non-endemic_MaxAge" and "Endemic" anagenetic species. For "Endemic"cladogenetic species these are island age and branching times of the radiation including the stem age of the radiation.\cr                          
+  \code{$branching_times} - island age and stem age of the population/species in the case of "Non-endemic", "Non-endemic_MaxAge" and "Endemic" anagenetic species. For "Endemic" cladogenetic species these are island age and branching times of the radiation including the stem age of the radiation.\cr                          
   \code{$stac} - the status of the colonist \cr
   * Non_endemic_MaxAge: 1 \cr
   * Endemic: 2 \cr
   * Endemic&Non_Endemic: 3 \cr
   * Non_endemic: 4 \cr
+  * Endemic_MaxAge: 5 \cr
   \code{$missing_species} - number of island species that were not sampled for particular clade (only applicable for endemic clades) \cr
   \code{$type_1or2} - whether the colonist belongs to type 1 or type 2 \cr
   }

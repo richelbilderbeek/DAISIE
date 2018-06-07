@@ -2,6 +2,9 @@
 \alias{DAISIE_loglik_rhs}
 \alias{DAISIE_loglik_rhs2}
 \alias{DAISIE_loglik}
+\alias{DAISIE_ML1}
+\alias{DAISIE_ML2}
+\alias{DAISIE_test}
 \alias{checkprobs}
 \alias{checkprobs2}
 \alias{divdepvec}
@@ -19,6 +22,8 @@
 \alias{DAISIE_eq}
 \alias{DAISIE_probdist_rhs}
 \alias{DAISIE_numcol_dist}
+\alias{DAISIE_format_CS}
+\alias{DAISIE_format_IW}
 \alias{DAISIE_KLdist}
 \alias{DAISIE_loglik_all_choosepar}
 \alias{DAISIE_loglik_all_choosepar2}
@@ -26,6 +31,8 @@
 \alias{DAISIE_sim_min_type2}
 \alias{DAISIE_sim_core}
 \alias{DAISIE_loglik_high_lambda}
+\alias{Add_brt_table}
+\alias{DAISIE_ONEcolonist}
 \title{Internal DAISIE Functions}
 \description{Internal DAISIE functions}
 \details{These are not to be called by the user.}

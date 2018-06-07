@@ -1,4 +1,13 @@
-DAISIE_loglik_all_choosepar2 = function(trparsopt,trparsfix,idparsopt,idparsfix,idparsmat,pars2,datalist,methode)
+DAISIE_loglik_all_choosepar2 = function(
+  trparsopt,
+  trparsfix,
+  idparsopt,
+  idparsfix,
+  idparsmat,
+  pars2,
+  datalist,
+  methode
+  )
 {
    trpars1 = 0 * idparsmat
    trpars1[idparsopt] = trparsopt
@@ -33,7 +42,21 @@ DAISIE_loglik_all_choosepar2 = function(trparsopt,trparsfix,idparsopt,idparsfix,
    return(loglik)
 }
 
-DAISIE_ML2 = function(datalist,idparsmat,initparsopt,idparsopt,parsfix,idparsfix, res = 100, ddmodel = 0, cond = 0, tol = c(1E-4, 1E-5, 1E-7), maxiter = 1000 * round((1.25)^length(idparsopt)), methode = 'lsodes',optimmethod = 'subplex')
+DAISIE_ML2 = function(
+  datalist,
+  initparsopt,
+  idparsopt,
+  parsfix,
+  idparsfix,
+  idparsmat,
+  res = 100,
+  ddmodel = 0,
+  cond = 0,
+  tol = c(1E-4, 1E-5, 1E-7),
+  maxiter = 1000 * round((1.25)^length(idparsopt)),
+  methode = 'lsodes',
+  optimmethod = 'subplex'
+  )
 {
 # datalist = list of all data: branching times, status of clade, and numnber of missing species
 # datalist[[,]][1] = list of branching times (positive, from present to past)
@@ -88,12 +111,12 @@ if(missnumspec > (res - 1))
 {
    stop("The number of missing species is too large relative to the resolution of the ODE.\n",call. = FALSE)
 } 
-if((unique(idparsmat) != sort(c(idparsopt,idparsfix))) || (length(initparsopt) != length(idparsopt)) || (length(parsfix) != length(idparsfix)))
+if((sort(unique(as.vector(idparsmat))) != sort(c(idparsopt,idparsfix))) || (length(initparsopt) != length(idparsopt)) || (length(parsfix) != length(idparsfix)))
 {
    stop("The parameters to be optimized and/or fixed are incoherent.\n",call. = FALSE)
 }
 cat("Calculating the likelihood for the initial parameters.","\n")
-flush.console()
+utils::flush.console()
 trparsopt = initparsopt/(1 + initparsopt)
 trparsopt[which(initparsopt == Inf)] = 1
 trparsfix = parsfix/(1 + parsfix)
@@ -107,7 +130,7 @@ if(initloglik == -Inf)
   stop("The initial parameter values have a likelihood that is equal to 0 or below machine precision. Try again with different initial values.\n", call. = FALSE)
 }
 cat("Optimizing the likelihood - this may take a while.","\n")
-flush.console()
+utils::flush.console()
 out = DDD::optimizer(optimmethod = optimmethod,optimpars = optimpars,fun = DAISIE_loglik_all_choosepar2,trparsopt = trparsopt,idparsopt = idparsopt,trparsfix = trparsfix,idparsfix = idparsfix,idparsmat = idparsmat,pars2 = pars2,datalist = datalist,methode = methode)
 if(out$conv != 0)
 {

@@ -217,29 +217,39 @@ dx3 = lacvec[il1] * nn[in4] * xx3[ix1] + muvec[il2] * nn[in2] * xx3[ix2] +
 return(list(c(dx1,dx2,dx3)))
 }
 
-checkprobs = function(lx,loglik,probs)
+checkprobs = function(lv,loglik,probs)
 {
    probs = probs * (probs > 0)
-   if(sum(probs[1:(2 * lx)]) <= 0)
-      {
-         loglik = -Inf
-      } else {
-         loglik = loglik + log(sum(probs[1:(2 * lx)]))
-         probs[1:(2 * lx)] = probs[1:(2 * lx)]/sum(probs[1:(2 * lx)])
-      }
+   if(is.na(sum(probs[1:lv])) || is.nan(sum(probs)))
+   {
+      cat('Numerical issues encountered\n')
+      loglik = -Inf
+   } else if(sum(probs[1:lv]) <= 0)
+   {
+      cat('Numerical issues encountered\n')
+      loglik = -Inf
+   } else {
+      loglik = loglik + log(sum(probs[1:lv]))
+      probs[1:lv] = probs[1:lv]/sum(probs[1:lv])
+   }
    return(list(loglik,probs))
 }
 
 checkprobs2 = function(lx,loglik,probs)
 {
    probs = probs * (probs > 0)
-   if(sum(probs) <= 0)
-      {
-         loglik = -Inf
-      } else {
-         loglik = loglik + log(sum(probs))
-         probs = probs/sum(probs)
-      }   
+   if(is.na(sum(probs)) || is.nan(sum(probs)))
+   {
+      cat('Numerical issues encountered\n')
+      loglik = -Inf
+   } else if(sum(probs) <= 0)
+   {
+      cat('Numerical issues encountered\n')
+      loglik = -Inf
+   } else {
+      loglik = loglik + log(sum(probs))
+      probs = probs/sum(probs)
+   }   
    return(list(loglik,probs))
 }
 
@@ -298,8 +308,8 @@ DAISIE_loglik = function(pars1,pars2,brts,stac,missnumspec,methode = "lsodes")
 #  . stac == 2 : immigrant is not present but has formed an extant clade
 #  . stac == 3 : immigrant is present and has formed an extant clade
 #  . stac == 4 : immigrant is present but has not formed an extant clade, and it is known when it immigrated.
-# missnumspec = number of missing species
 #  . stac == 5 : immigrant is not present and has not formed an extant clade, but only an endemic species
+# missnumspec = number of missing species
 
 ddep = pars2[2]
 cond = pars2[3]
@@ -348,7 +358,7 @@ if(min(pars1) < 0)
 }
 if((ddep == 1 | ddep == 11) & ceiling(K) < (S + missnumspec))
 {
-   cat('The value of K is inompatible with the number of species in the clade. Likelihood for this parameter set will be set to -Inf.\n')
+   #cat('The proposed value of K is inompatible with the number of species in the clade. Likelihood for this parameter set will be set to -Inf.\n')
    loglik = -Inf
    return(loglik)
 }
@@ -358,7 +368,7 @@ if(lac == Inf & mu != Inf & missnumspec == 0)
 } else {
   if(ddep == 1 | ddep == 11)
   {
-     lx = min(max(1 + missnumspec,1 + ceiling(K)),round(pars2[1]) + missnumspec)
+     lx = min(1 + max(missnumspec,ceiling(K)),round(pars2[1]) + missnumspec)
   } else {
      lx = roundn(pars2[1]) + missnumspec
   }
@@ -370,7 +380,7 @@ if(lac == Inf & mu != Inf & missnumspec == 0)
      k1 = 0
      y = ode(probs,brts[1:2],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
      probs = y[2,2:(2 * lx + 2)]
-     cp = checkprobs(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]      
+     cp = checkprobs(lv = 2 * lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]      
      if(stac == 0)
      # for stac = 0, the integration is from the origin of the island until the present
      # and we evaluate the probability of no clade being present and no immigrant species,
@@ -389,7 +399,7 @@ if(lac == Inf & mu != Inf & missnumspec == 0)
           probs[(lx + 1):(2 * lx)] = 0
           y = ode(probs,brts[2:3],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
           probs = y[2,2:(2 * lx + 2)]
-          cp = checkprobs(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]               
+          cp = checkprobs(lv = 2 * lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]               
           loglik = loglik + log(probs[(stac == 1) * lx + (stac == 5) + 1 + missnumspec])
        } else {
        # for stac > 1, but not 5, integration is then from the colonization event until the first branching time (stac = 2 and 3) or the present (stac = 4). We add a set of equations for Q_M,n, the probability that the process is compatible with the data, and speciation has not happened; during this time immigration is not allowed because it would alter the colonization time. After speciation, colonization is allowed again (re-immigration)
@@ -447,7 +457,7 @@ if(pars2[4] == 1)
 return(as.numeric(loglik))
 }
 
-DAISIE_loglik_all = function(pars1,pars2,datalist,methode = "lsodes")
+DAISIE_loglik_all <- DAISIE_loglik_CS <- function(pars1,pars2,datalist,methode = "lsodes")
 {
 # datalist = list of all data: branching times, status of clade, and numnber of missing species
 # datalist[[,]][1] = list of branching times (positive, from present to past)
@@ -468,7 +478,7 @@ DAISIE_loglik_all = function(pars1,pars2,datalist,methode = "lsodes")
 #  . stac == 2 : immigrant is not present but has formed an extant clade
 #  . stac == 3 : immigrant is present and has formed an extant clade
 #  . stac == 4 : immigrant is present but has not formed an extant clade, and it is known when it immigrated.
-#  . stac == 5 : immigrant is not present and has not formed an extent clade, but only an endemic species
+#  . stac == 5 : immigrant is not present and has not formed an extant clade, but only an endemic species
 # datalist[[,]][3] = list with number of missing species in clades for stac = 2 and stac = 3;
 # for stac = 0 and stac = 1, this number equals 0.
 # pars1 = model parameters

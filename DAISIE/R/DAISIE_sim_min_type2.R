@@ -1,6 +1,7 @@
 DAISIE_sim_min_type2 = function(time,M,pars,replicates, prop_type2_pool)
 {
-  island_replicates = list() 
+  island_replicates = list()
+
   n_islands_with_type2 = 0
   counter = 0
   while(n_islands_with_type2 < replicates)
@@ -25,16 +26,14 @@ DAISIE_sim_min_type2 = function(time,M,pars,replicates, prop_type2_pool)
     #### species of pool1
     for (m_spec in 1:pool1)
     { 	
-      result_one_spec = DAISIE_sim_core(time = time,mainland_n = 1,pars = c(lac_1,mu_1,K_1,gam_1,laa_1))
-      full_list[[m_spec]] = result_one_spec$taxon_list
+      full_list[[m_spec]] = DAISIE_sim_core(time = time,mainland_n = 1,pars = c(lac_1,mu_1,K_1,gam_1,laa_1))
       full_list[[m_spec]]$type1or2 = 1
     }
     
     #### species of pool2
     for (m_spec in (pool1 + 1):(pool1 + pool2))
     { 	
-      result_one_spec = DAISIE_sim_core(time = time,mainland_n = 1,pars = c(lac_2,mu_2,K_2,gam_2,laa_2))
-      full_list[[m_spec]] = result_one_spec$taxon_list
+      full_list[[m_spec]] = DAISIE_sim_core(time = time,mainland_n = 1,pars = c(lac_2,mu_2,K_2,gam_2,laa_2))
       full_list[[m_spec]]$type1or2 = 2
     }
       

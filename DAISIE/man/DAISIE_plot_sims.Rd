@@ -23,7 +23,7 @@ Luis Valente
 }
 \seealso{
  \code{\link{DAISIE_sim}}
-\code{\link{DAISIE_format_sim}}
+\code{\link{DAISIE_format_CS}}
 }
 \examples{ 
 

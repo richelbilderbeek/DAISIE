@@ -1,5 +1,6 @@
 \name{DAISIE_loglik_all}
 \alias{DAISIE_loglik_all}
+\alias{DAISIE_loglik_CS}
 \title{
 Computes the loglikelihood of the DAISIE model given data and a set of model parameters
 }
