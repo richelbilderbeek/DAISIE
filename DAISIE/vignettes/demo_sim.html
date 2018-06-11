@@ -76,112 +76,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="daisie-dynamic-assembly-of-island-biotas-through-speciation-immigration-and-extinction" class="section level1">
 <h1>DAISIE – Dynamic Assembly of Island biotas through Speciation, Immigration and Extinction</h1>
-<p>Date: 19 May 2015</p>
 <p>Citation: Valente LM, Phillimore AB, Etienne RS (2015) Equilibrium and non- equilibrium dynamics simultaneously operate in the Galápagos islands. Ecology Letters, In press.</p>
 <div id="data-table" class="section level2">
 <h2>3.2 Data table</h2>
 <p>To load the package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DAISIE)</code></pre></div>
-<p>The raw dataset is inputted as a table. The Galápagos dataset table can be visualized with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable)
-knitr<span class="op">::</span><span class="kw">kable</span>(Galapagos_datatable)</code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Clade_name</th>
-<th align="left">Status</th>
-<th align="right">Missing_species</th>
-<th align="left">Branching_times</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Coccyzus</td>
-<td align="left">Non_endemic_MaxAge</td>
-<td align="right">0</td>
-<td align="left">7.456</td>
-</tr>
-<tr class="even">
-<td align="left">Dendroica</td>
-<td align="left">Non_endemic</td>
-<td align="right">0</td>
-<td align="left">0.34</td>
-</tr>
-<tr class="odd">
-<td align="left">Finches</td>
-<td align="left">Endemic</td>
-<td align="right">0</td>
-<td align="left">3.0282,1.3227,0.8223,0.4286,0.3462,0.245,0.0808,0.0527,0.0327,0.0221,0.118,0.0756,0.0525,0.0322,0.0118</td>
-</tr>
-<tr class="even">
-<td align="left">Mimus</td>
-<td align="left">Endemic</td>
-<td align="right">0</td>
-<td align="left">3.958,3.422,2.884,0.459</td>
-</tr>
-<tr class="odd">
-<td align="left">Myiarchus</td>
-<td align="left">Endemic</td>
-<td align="right">0</td>
-<td align="left">0.855</td>
-</tr>
-<tr class="even">
-<td align="left">Progne</td>
-<td align="left">Endemic</td>
-<td align="right">0</td>
-<td align="left">0.086</td>
-</tr>
-<tr class="odd">
-<td align="left">Pyrocephalus</td>
-<td align="left">Non_endemic_MaxAge</td>
-<td align="right">0</td>
-<td align="left">10.285</td>
-</tr>
-<tr class="even">
-<td align="left">Zenaida</td>
-<td align="left">Endemic</td>
-<td align="right">0</td>
-<td align="left">3.51</td>
-</tr>
-</tbody>
-</table>
-<p>Each row in the table represents an independent colonisation event. The table has four columns:</p>
-<ul>
-<li><code>Clade_name</code>: name of the independent colonization event.</li>
-<li><code>Status</code>: One of the following categories:
-<ul>
-<li><code>Endemic</code>: applicable for both anagenetic species and radiations.</li>
-<li><code>Non_endemic</code>: If the taxon is not endemic to the island, and the age of colonisation is based on a phylogeny where both island and non-island populations of the species have been sampled.</li>
-<li><code>Non_endemic_MaxAge</code>: If the taxon is not endemic to the island, and only an upper bound to the time of colonisation of the island is known. This applies if individuals from the island population of the species have not been sampled, but an age of the species is known.</li>
-<li><code>Endemic&amp;Non_Endemic</code>: When an endemic clade is present and the mainland ancestor has re-colonized. For remote islands this is expected to be very rare.</li>
-</ul></li>
-<li><code>Missing_species</code>: Number of island species that were not sampled for a particular clade (only applicable for radiations).</li>
-<li><code>Branching_times</code> – This should be the stem age of the population/species in the case of <code>Non-endemic</code>, <code>Non-endemic_MaxAge</code> and <code>Endemic</code> anagenetic species. For cladogenetic species these should be branching times of the radiation including the stem age of the radiation. Note – if there are species within the radiation that are not found on the island (e.g. back-colonisation) the branching times of these species should be excluded, as the mainland species pool is treated as static.</li>
-</ul>
-</div>
-<div id="formatting-table-to-run-in-daisie" class="section level2">
-<h2>3.3 Formatting table to run in DAISIE</h2>
-<p>Before running analyses, the datatable needs to be converted to a DAISIE datalist format using the function DAISIE_dataprep.</p>
-<p>We will prepare two different datalists based on the Galápagos datatable. In the 1st datalist we will treat all taxa as equivalent. We will specify an island age of four million years (island_age=4) and a mainland pool size of 1000 (M=1000).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable) 
-      
-Galapagos_datalist &lt;-<span class="st"> </span><span class="kw">DAISIE_dataprep</span>( 
-  <span class="dt">datatable =</span> Galapagos_datatable, 
-  <span class="dt">island_age =</span> <span class="dv">4</span>, 
-  <span class="dt">M =</span> <span class="dv">1000</span>
-)</code></pre></div>
-<p>In the 2nd datalist we will allow for the Darwin’s finches to form a separate group for which rates can be decoupled from those governing the macroevolutionary process in all other clades (number_clade_types=2 and list_type2_clades = “Finches”). We will set the proportion of Darwin’s finch type species in the mainland pool to be 0.163. (prop_type2_pool=0.163). If prop_type2_pool is not specified then by default it is given the value of the proportion of the Galapagos lineages that Darwin’s finches represent (1/8=0.125 in this case).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Galapagos_datatable) 
-
-Galapagos_datalist_2types &lt;-<span class="st"> </span><span class="kw">DAISIE_dataprep</span>( 
-  <span class="dt">datatable =</span> Galapagos_datatable, 
-  <span class="dt">island_age =</span> <span class="dv">4</span>, 
-  <span class="dt">M =</span> <span class="dv">1000</span>, 
-  <span class="dt">number_clade_types =</span> <span class="dv">2</span>, 
-  <span class="dt">list_type2_clades =</span> <span class="st">&quot;Finches&quot;</span>, 
-  <span class="dt">prop_type2_pool =</span> <span class="fl">0.163</span>
-)</code></pre></div>
-<p>The objects <code>Galapagos_datalist</code> and <code>Galapagos_datalist_2types</code> can now be run directly in <code>DAISIE</code> functions.</p>
 </div>
 <div id="simulating-islands" class="section level2">
 <h2>3.5 Simulating islands</h2>

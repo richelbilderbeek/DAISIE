@@ -1,7 +1,7 @@
 ---
 title: "Demo optimizing parameters"
 author: "Luis M. Valente, Albert B. Phillimore, Rampal S. Etienne"
-date: "`r Sys.Date()`"
+date: "19 May 2015"
 output: rmarkdown::html_vignette
 vignette: >
  %\VignetteIndexEntry{Demo optimizing parameters}
@@ -17,8 +17,6 @@ knitr::opts_chunk$set(
 ```
 
 # DAISIE – Dynamic Assembly of Island biotas through Speciation, Immigration and Extinction 
-                   
-Date:  
 
 Citation: Valente LM, Phillimore AB, Etienne RS (2015) Equilibrium and non-
 equilibrium dynamics simultaneously operate in the Galápagos islands. Ecology 
