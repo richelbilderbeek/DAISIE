@@ -46,7 +46,7 @@ To shorten the run-time of this vignette, reduce the number of `n_replicates`.
 For increased accuracy, increase this number.
 
 ```{r}
-n_replicates <- 10
+n_replicates <- 2
 ```
 
 ```{r} 
@@ -79,7 +79,7 @@ independent colonisation event extant at the end of the simulation.
 ### Example 5.2 – Simulating 100 islands with diversity-dependence (K’=10), all species sharing the same parameters, and plotting the results 
 
 ```{r} 
-pars <- c(2.550687345,2.683454548,10,0.00933207,1.010073119) 
+pars <- c(2.550687345, 2.683454548, 10,0.00933207, 1.010073119) 
 
 island_replicates_K <- DAISIE_sim( 
   time = 4, 
@@ -92,9 +92,9 @@ island_replicates_K <- DAISIE_sim(
  
 ### Example 5.3 – Simulating 100 islands allowing Darwin’s finches to have a higher rate of cladogenesis: 
 
-```
-pars_type1 <- c(0.38,0.55,Inf,0.004,1.10) 
-pars_type2 <- c(2.28,0.55,Inf,0.004,1.10) 
+```{r}
+pars_type1 <- c(0.38, 0.55, Inf, 0.004, 1.10) 
+pars_type2 <- c(2.28, 0.55, Inf, 0.004, 1.10) 
 
 island_replicates_2types <- DAISIE_sim( 
   time = 4, 

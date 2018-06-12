@@ -66,7 +66,14 @@ DAISIE_sim = function(
       
       if(replicates_apply_type2 == TRUE)
       {
-        island_replicates = DAISIE_sim_min_type2(time = time,M = M,pars = pars,replicates = replicates, prop_type2_pool = prop_type2_pool)
+        island_replicates = DAISIE_sim_min_type2(
+          time = time,
+          M = M,
+          pars = pars,
+          replicates = replicates,
+          prop_type2_pool = prop_type2_pool,
+          verbose = verbose
+        )
       } else
       {
         for(rep in 1:replicates)
