@@ -42,6 +42,13 @@ through time, as well as confidence intervals for the total number of species.
  
 ### Example 5.1 – Simulating 100 islands with no diversity-dependence, all species sharing the  same parameters, and plotting the results 
 
+To shorten the run-time of this vignette, reduce the number of `n_replicates`.
+For increased accuracy, increase this number.
+
+```{r}
+n_replicates <- 10
+```
+
 ```{r} 
 pars <- c(2.550687345,2.683454548,Inf,0.00933207,1.010073119)
 
@@ -49,44 +56,53 @@ island_replicates <- DAISIE_sim(
   time = 4, 
   M = 1000, 
   pars = pars, 
-  replicates = 10,
+  replicates = n_replicates,
   verbose = FALSE
 )
 ```
 
 The object `island_replicates` 
-contains the results of the simulation in DAISIE format. 100 islands are stored in the object, 
-and each island replicate can be viewed separately. For example 
-type `island_replicates[[23]]` to view replicate number 23. 
+contains the results of the simulation in DAISIE format. 
+`r n_replicates` islands are stored in the object, 
+and each island replicate can be viewed separately. 
+
+For example, type `island_replicates[[1]]` to view the first replicate:
+
+```{r}
+island_replicates[[1]]
+```
+
 The element of the list relating to each island contains a table 
 with the number of species through time, as well as branching time information for each 
 independent colonisation event extant at the end of the simulation.
 
 ### Example 5.2 – Simulating 100 islands with diversity-dependence (K’=10), all species sharing the same parameters, and plotting the results 
 
-``` 
-pars = c(2.550687345,2.683454548,10,0.00933207,1.010073119) 
+```{r} 
+pars <- c(2.550687345,2.683454548,10,0.00933207,1.010073119) 
 
-island_replicates_K = DAISIE_sim( 
+island_replicates_K <- DAISIE_sim( 
   time = 4, 
   M = 1000, 
   pars = pars, 
-  replicates = 100
+  replicates = n_replicates,
+  verbose = FALSE
 ) 
 ``` 
  
 ### Example 5.3 – Simulating 100 islands allowing Darwin’s finches to have a higher rate of cladogenesis: 
 
 ```
-pars_type1 = c(0.38,0.55,Inf,0.004,1.10) 
-pars_type2 = c(2.28,0.55,Inf,0.004,1.10) 
+pars_type1 <- c(0.38,0.55,Inf,0.004,1.10) 
+pars_type2 <- c(2.28,0.55,Inf,0.004,1.10) 
 
-island_replicates_2types = DAISIE_sim( 
+island_replicates_2types <- DAISIE_sim( 
   time = 4, 
   M = 1000, 
   pars = c(pars_type1,pars_type2), 
-  replicates = 100, 
-  prop_type2_pool = 0.163
+  replicates = n_replicates, 
+  prop_type2_pool = 0.163,
+  verbose = FALSE
 ) 
 ```                
 
