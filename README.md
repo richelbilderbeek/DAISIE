@@ -1,5 +1,11 @@
 # DAISIE
 
+Branch|[![Travis CI logo](TravisCI.png)](https://travis-ci.org)|[![Codecov logo](Codecov.png)](https://www.codecov.io)
+---|---|---
+master|[![Build Status](https://travis-ci.org/rsetienne/DAISIE.svg?branch=master)](https://travis-ci.org/rsetienne/DAISIE) | [![codecov.io](https://codecov.io/github/rsetienne/DAISIE/coverage.svg?branch=master)](https://codecov.io/github/rsetienne/DAISIE?branch=master)
+master|[![Build Status](https://travis-ci.org/richelbilderbeek/DAISIE.svg?branch=master)](https://travis-ci.org/richelbilderbeek/DAISIE) | [![codecov.io](https://codecov.io/github/richelbilderbeek/DAISIE/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/DAISIE?branch=master)
+develop|[![Build Status](https://travis-ci.org/richelbilderbeek/DAISIE.svg?branch=develop)](https://travis-ci.org/richelbilderbeek/DAISIE) | [![codecov.io](https://codecov.io/github/richelbilderbeek/DAISIE/coverage.svg?branch=develop)](https://codecov.io/github/richelbilderbeek/DAISIE?branch=develop)
+
 Dynamic Assembly of Island biota through Speciation, Immigration and Extinction in R
 
 This is a development version before the official release on CRAN.
