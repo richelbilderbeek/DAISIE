@@ -57,8 +57,15 @@ island_replicates <- DAISIE_sim(
   M = 1000, 
   pars = pars, 
   replicates = n_replicates,
+  plot_sims = FALSE,
   verbose = FALSE
 )
+```
+
+Plotting the results (note that no graph will appear when Knitting):
+
+```{r}
+DAISIE_plot_sims(island_replicates)
 ```
 
 The object `island_replicates` 
