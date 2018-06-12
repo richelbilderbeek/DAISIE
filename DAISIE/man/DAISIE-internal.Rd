@@ -4,7 +4,6 @@
 \alias{DAISIE_loglik}
 \alias{DAISIE_ML1}
 \alias{DAISIE_ML2}
-\alias{DAISIE_test}
 \alias{checkprobs}
 \alias{checkprobs2}
 \alias{divdepvec}

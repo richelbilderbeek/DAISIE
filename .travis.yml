@@ -1,0 +1,20 @@
+language: r
+sudo: false
+cache: packages
+
+env:
+  - LINTR_COMMENT_BOT=false
+
+r_github_packages:
+  - jimhester/lintr
+  - jimhester/covr
+  - MangoTheCat/goodpractice
+
+# Go into folder, from https://github.com/travis-ci/travis-ci/issues/5775#issuecomment-202411532
+before_install:
+ - cd DAISIE
+
+after_success:
+  - Rscript -e 'lintr::lint_package()'
+  - Rscript -e 'library(covr); codecov()'
+  - Rscript -e 'library(goodpractice); gp()'

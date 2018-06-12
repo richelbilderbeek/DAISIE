@@ -11,6 +11,9 @@ library(DAISIE)
 data(Galapagos_datatable)
 knitr::kable(Galapagos_datatable)
 
+## ----fig.width=7, fig.height=7-------------------------------------------
+DAISIE::DAISIE_plot_island(Galapagos_datatable, island_age = 4)
+
 ## ------------------------------------------------------------------------
 data(Galapagos_datatable) 
       
