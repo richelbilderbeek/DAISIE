@@ -56,6 +56,6 @@ Suggests:
 Because the DAISIE package is located in the folder `DAISIE`, do:
 
 ```
-Removes:
+Remotes:
   rsetienne/DAISIE/DAISIE
 ```
