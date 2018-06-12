@@ -18,6 +18,7 @@ DAISIE_sim(
    replicates_apply_type2 = TRUE,
    sample_freq = 25,
    plot_sims = TRUE,
+   verbose = TRUE,
    ...)
 }
 
