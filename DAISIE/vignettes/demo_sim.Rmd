@@ -49,13 +49,21 @@ For increased accuracy, increase this number.
 n_replicates <- 10
 ```
 
+```{r}
+set.seed(42)
+```
+
 ```{r fig.width=7, fig.height=7}
-pars <- c(2.550687345, 2.683454548, Inf, 0.00933207, 1.010073119)
+clado_rate <- 2.550687345 # cladogenesis rate
+ext_rate <- 2.683454548 # extinction rate
+clade_carr_cap <- Inf # clade-level carrying capacity
+imm_rate <- 0.00933207 # immigration rate
+ana_rate <- 1.010073119 # anagenesis rate
 
 island_replicates <- DAISIE_sim( 
   time = 4, 
   M = 1000, 
-  pars = pars, 
+  pars = c(clado_rate, ext_rate, clade_carr_cap, imm_rate, ana_rate), 
   replicates = n_replicates,
   plot_sims = FALSE,
   verbose = FALSE
