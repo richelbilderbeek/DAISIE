@@ -69,6 +69,12 @@ The table has four columns:
    should be excluded, as the 
    mainland species pool is treated as static. 
 
+The same data can also be visualized:
+
+```{r fig.width=7, fig.height=7}
+DAISIE::DAISIE_plot_island(Galapagos_datatable, island_age = 4)
+```
+
 ## 3.3 Formatting table to run in DAISIE 
  
 Before running analyses, the datatable needs to be converted to a DAISIE datalist format 
