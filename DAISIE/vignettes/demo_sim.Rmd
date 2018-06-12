@@ -46,7 +46,7 @@ To shorten the run-time of this vignette, reduce the number of `n_replicates`.
 For increased accuracy, increase this number.
 
 ```{r}
-n_replicates <- 2
+n_replicates <- 10
 ```
 
 ```{r fig.width=7, fig.height=7}
@@ -67,12 +67,7 @@ The object `island_replicates`
 contains the results of the simulation in DAISIE format. 
 `r n_replicates` islands are stored in the object, 
 and each island replicate can be viewed separately. 
-
-For example, type `island_replicates[[1]]` to view the first replicate:
-
-```{r}
-island_replicates[[1]]
-```
+For example, type `island_replicates[[1]]` to view the first replicate.
 
 The element of the list relating to each island contains a table 
 with the number of species through time, as well as branching time information for each 
