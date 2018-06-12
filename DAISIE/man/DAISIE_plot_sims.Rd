@@ -5,12 +5,15 @@
 three plots are produced: STT for all, STT for type 1 and STT for type 2. }
 \usage{
 DAISIE_plot_sims(
-island_replicates
+island_replicates,
+use_dev_new = TRUE
 )
 }
 
 \arguments{
 \item{island_replicates}{Island replicates in DAISIE format (Produced in DAISIE_sim with format=TRUE option, or in DAISIE_format_sim)}
+\item{use_dev_new}{Default=TRUE. Use \code{dev.new} before plotting. Set to 
+\code{FALSE} when plotting within a vignette}
 }
 \details{R plots with number of total, endemic and non-endemic STTs for different types of species for the entire time span the islands were simulated. 2.5-97.5th percentiles are plotted in light grey, 25-75th percentiles plotted in dark grey. }
 \value{

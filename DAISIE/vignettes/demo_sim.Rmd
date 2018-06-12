@@ -49,7 +49,7 @@ For increased accuracy, increase this number.
 n_replicates <- 2
 ```
 
-```{r} 
+```{r fig.width=7, fig.height=7}
 pars <- c(2.550687345,2.683454548,Inf,0.00933207,1.010073119)
 
 island_replicates <- DAISIE_sim( 
@@ -60,12 +60,7 @@ island_replicates <- DAISIE_sim(
   plot_sims = FALSE,
   verbose = FALSE
 )
-```
-
-Plotting the results (note that no graph will appear when Knitting):
-
-```{r}
-DAISIE_plot_sims(island_replicates)
+DAISIE_plot_sims(island_replicates, use_dev_new = FALSE)
 ```
 
 The object `island_replicates` 
@@ -85,7 +80,7 @@ independent colonisation event extant at the end of the simulation.
 
 ### Example 5.2 – Simulating 100 islands with diversity-dependence (K’=10), all species sharing the same parameters, and plotting the results 
 
-```{r} 
+```{r fig.width=7, fig.height=7} 
 pars <- c(2.550687345, 2.683454548, 10,0.00933207, 1.010073119) 
 
 island_replicates_K <- DAISIE_sim( 
@@ -93,13 +88,15 @@ island_replicates_K <- DAISIE_sim(
   M = 1000, 
   pars = pars, 
   replicates = n_replicates,
+  plot_sims = FALSE,
   verbose = FALSE
 ) 
+DAISIE_plot_sims(island_replicates_K, use_dev_new = FALSE)
 ``` 
  
 ### Example 5.3 – Simulating 100 islands allowing Darwin’s finches to have a higher rate of cladogenesis: 
 
-```{r}
+```{r fig.width=7, fig.height=7}
 pars_type1 <- c(0.38, 0.55, Inf, 0.004, 1.10) 
 pars_type2 <- c(2.28, 0.55, Inf, 0.004, 1.10) 
 
@@ -109,8 +106,10 @@ island_replicates_2types <- DAISIE_sim(
   pars = c(pars_type1,pars_type2), 
   replicates = n_replicates, 
   prop_type2_pool = 0.163,
+  plot_sims = FALSE,
   verbose = FALSE
-) 
+)
+DAISIE_plot_sims(island_replicates_2types, use_dev_new = FALSE)
 ```                
 
 This produces a figure similar to Fig. 2, with three plots: 

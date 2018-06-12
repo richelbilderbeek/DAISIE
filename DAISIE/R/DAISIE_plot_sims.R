@@ -1,4 +1,7 @@
-DAISIE_plot_sims <- function(island_replicates) {
+DAISIE_plot_sims <- function(
+  island_replicates, 
+  use_dev_new = TRUE
+) {
     
     replicates <- length(island_replicates)
     time <- max(island_replicates[[1]][[1]]$stt_all[, 1])
@@ -85,7 +88,9 @@ DAISIE_plot_sims <- function(island_replicates) {
         colnames(stt_q0.75_type2) <- c("Time", "nI", "nA", "nC", "present", "Endemic", "Total")
         colnames(stt_q0.975_type2) <- c("Time", "nI", "nA", "nC", "present", "Endemic", "Total")
         
-        dev.new(width = 12, height = 4)
+        if (use_dev_new == TRUE) {
+          dev.new(width = 12, height = 4)
+        }
         par(mfrow = c(1, 3))
         
         suppressWarnings(plot(NULL, NULL, xlim = rev(c(0, time)), ylim = c(1, max(stt_q0.975_all)), ylab = "No of species + 1", 
@@ -125,7 +130,9 @@ DAISIE_plot_sims <- function(island_replicates) {
         lines(stt_average_type2[, "Time"], stt_average_type2[, "Endemic"] + 1, lwd = 2, col = "dodgerblue1")
         
     } else {
-        dev.new(width = 6, height = 6)
+        if (use_dev_new == TRUE) {
+          dev.new(width = 6, height = 6)
+        }
         par(mfrow = c(1, 1))
         suppressWarnings(plot(NULL, NULL, xlim = rev(c(0, time)), ylim = c(1, max(stt_q0.975_all)), ylab = "No of species + 1", 
             bty = "l", xaxs = "i", xlab = "Time before present", main = "Species-through-time - All species", 
