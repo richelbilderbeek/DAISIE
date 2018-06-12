@@ -50,7 +50,7 @@ n_replicates <- 10
 ```
 
 ```{r fig.width=7, fig.height=7}
-pars <- c(2.550687345,2.683454548,Inf,0.00933207,1.010073119)
+pars <- c(2.550687345, 2.683454548, Inf, 0.00933207, 1.010073119)
 
 island_replicates <- DAISIE_sim( 
   time = 4, 
