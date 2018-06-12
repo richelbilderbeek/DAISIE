@@ -43,13 +43,14 @@ through time, as well as confidence intervals for the total number of species.
 ### Example 5.1 – Simulating 100 islands with no diversity-dependence, all species sharing the  same parameters, and plotting the results 
 
 ```{r} 
-pars = c(2.550687345,2.683454548,Inf,0.00933207,1.010073119)
+pars <- c(2.550687345,2.683454548,Inf,0.00933207,1.010073119)
 
-island_replicates = DAISIE_sim( 
+island_replicates <- DAISIE_sim( 
   time = 4, 
   M = 1000, 
   pars = pars, 
-  replicates = 100
+  replicates = 10,
+  verbose = FALSE
 )
 ```
 

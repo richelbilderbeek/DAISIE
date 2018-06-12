@@ -88,114 +88,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>When the plot_sims option is set to the default (TRUE) the function will produce a species- through-time plot showing the accumulation of total, endemic and non-endemic species through time, as well as confidence intervals for the total number of species.</p>
 <div id="example-5.1-simulating-100-islands-with-no-diversity-dependence-all-species-sharing-the-same-parameters-and-plotting-the-results" class="section level3">
 <h3>Example 5.1 – Simulating 100 islands with no diversity-dependence, all species sharing the same parameters, and plotting the results</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pars =<span class="st"> </span><span class="kw">c</span>(<span class="fl">2.550687345</span>,<span class="fl">2.683454548</span>,<span class="ot">Inf</span>,<span class="fl">0.00933207</span>,<span class="fl">1.010073119</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">2.550687345</span>,<span class="fl">2.683454548</span>,<span class="ot">Inf</span>,<span class="fl">0.00933207</span>,<span class="fl">1.010073119</span>)
 
-island_replicates =<span class="st"> </span><span class="kw">DAISIE_sim</span>( 
+island_replicates &lt;-<span class="st"> </span><span class="kw">DAISIE_sim</span>( 
   <span class="dt">time =</span> <span class="dv">4</span>, 
   <span class="dt">M =</span> <span class="dv">1000</span>, 
   <span class="dt">pars =</span> pars, 
-  <span class="dt">replicates =</span> <span class="dv">100</span>
+  <span class="dt">replicates =</span> <span class="dv">100</span>,
+  <span class="dt">verbose =</span> <span class="ot">FALSE</span>
 )
-<span class="co">#&gt; [1] &quot;Island replicate 1&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 2&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 3&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 4&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 5&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 6&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 7&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 8&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 9&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 10&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 11&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 12&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 13&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 14&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 15&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 16&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 17&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 18&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 19&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 20&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 21&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 22&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 23&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 24&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 25&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 26&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 27&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 28&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 29&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 30&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 31&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 32&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 33&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 34&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 35&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 36&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 37&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 38&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 39&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 40&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 41&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 42&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 43&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 44&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 45&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 46&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 47&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 48&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 49&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 50&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 51&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 52&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 53&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 54&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 55&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 56&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 57&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 58&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 59&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 60&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 61&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 62&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 63&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 64&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 65&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 66&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 67&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 68&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 69&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 70&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 71&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 72&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 73&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 74&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 75&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 76&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 77&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 78&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 79&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 80&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 81&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 82&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 83&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 84&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 85&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 86&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 87&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 88&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 89&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 90&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 91&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 92&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 93&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 94&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 95&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 96&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 97&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 98&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 99&quot;</span>
-<span class="co">#&gt; [1] &quot;Island replicate 100&quot;</span>
 <span class="co">#&gt; [1] &quot;Island being formatted: 1/100&quot;</span>
 <span class="co">#&gt; [1] &quot;Island being formatted: 2/100&quot;</span>
 <span class="co">#&gt; [1] &quot;Island being formatted: 3/100&quot;</span>

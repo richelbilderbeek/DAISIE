@@ -1,5 +1,10 @@
-DAISIE_format_IW = function(island_replicates,time,M,sample_freq)
-{
+DAISIE_format_IW <- function(
+  island_replicates,
+  time,
+  M,
+  sample_freq,
+  verbose = TRUE
+) {
   several_islands = list()
   for(rep in 1:length(island_replicates)) 
   {
@@ -39,8 +44,9 @@ DAISIE_format_IW = function(island_replicates,time,M,sample_freq)
     island_list = Add_brt_table(island_list)
     
     several_islands[[rep]] = island_list
-    
-    print(paste("Island being formatted: ",rep,"/",length(island_replicates),sep = ""))
+    if (verbose == TRUE) {
+      print(paste("Island being formatted: ",rep,"/",length(island_replicates),sep = ""))
+    }
     
   }
   return(several_islands)  

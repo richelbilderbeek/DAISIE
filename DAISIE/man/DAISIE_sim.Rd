@@ -58,6 +58,8 @@ plots with higher definition, but will also run slower.}
 \item{plot_sims}{Default=TRUE plots species-through-time (STT) plots. It detects how many types
  of species are present. If only one type of species is present, STT is plotted for all species. If two types are present, 
 three plots are produced: STT for all, STT for type 1 and STT for type 2. }
+\item{verbose}{Default=TRUE Give intermediate output, also if everything goes 
+OK}
  \item{...}{ Any arguments to pass on to plotting functions.}
 }
 \details{Returns R list object that contains the simulated islands.}

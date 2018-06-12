@@ -8,8 +8,9 @@ DAISIE_sim = function(
   replicates_apply_type2 = TRUE,
   sample_freq = 25,
   plot_sims = TRUE,
-  ...) 
-{
+  verbose = TRUE,
+  ...
+) {
   island_replicates  = list()
 
   if(divdepmodel =='IW')
@@ -22,10 +23,17 @@ DAISIE_sim = function(
     for(rep in 1:replicates)
     {
       island_replicates[[rep]] <- DAISIE_sim_core(time=time,mainland_n = M,pars=pars)
-      print(paste("Island replicate ",rep,sep = ""))	
+      if (verbose == TRUE) {
+        print(paste("Island replicate ",rep,sep = ""))
+      }
     } 
-    island_replicates = DAISIE_format_IW(island_replicates = island_replicates,
-                                         time = time,M = M,sample_freq = sample_freq)
+    island_replicates <- DAISIE_format_IW(
+      island_replicates = island_replicates,
+      time = time,
+      M = M,
+      sample_freq = sample_freq,
+      verbose = verbose
+    )
   }
       
   if(divdepmodel == 'CS')
@@ -43,7 +51,9 @@ DAISIE_sim = function(
         }
         
         island_replicates[[rep]] = full_list
-        print(paste("Island replicate ",rep,sep = ""))	
+        if (verbose == TRUE) {
+          print(paste("Island replicate ",rep,sep = ""))
+        }
       } 
     }
     
@@ -92,11 +102,19 @@ DAISIE_sim = function(
             full_list[[m_spec]]$type1or2 = 2
           }
           island_replicates[[rep]] = full_list
-          print(paste("Island replicate ",rep,sep = ""))	
+          if (verbose == TRUE) {
+            print(paste("Island replicate ",rep,sep = ""))
+          }
         }
       }
     }
-    island_replicates = DAISIE_format_CS(island_replicates = island_replicates,time = time,M = M,sample_freq = sample_freq)
+    island_replicates <- DAISIE_format_CS(
+      island_replicates = island_replicates,
+      time = time,
+      M = M,
+      sample_freq = sample_freq,
+      verbose = verbose
+    )
   }
   if(plot_sims == TRUE)
   { 
