@@ -244,7 +244,31 @@ DAISIE_sim_core = function(time,mainland_n,pars)
   return(island) 
 }
 
-
+#' Version of DAISIE_sim_core that checks all its inputs
+#' and uses descriptively named arguments
+#' @param sim_time length of the simulated time
+#' @param n_mainland_species number of mainland species
+#' @param clado_rate cladogenesis rate 
+#' @param ext_rate extinction rate
+#' @param carr_cap carrying capacity
+#' @param imm_rate immigration rate
+#' @param ana_rate anagenesis rate
+DAISIE_sim_core_checked <- function(
+  sim_time, 
+  n_mainland_species, 
+  clado_rate, 
+  ext_rate,
+  carr_cap,
+  imm_rate,
+  ana_rate
+)
+{
+  DAISIE_sim_core(
+    time = sim_time,
+    mainland_n = n_mainland_species,
+    pars = c(clado_rate, ext_rate, carr_cap, imm_rate, ana_rate)
+  )
+}
 
 DAISIE_ONEcolonist = function(time,island_spec,stt_table)
 {
