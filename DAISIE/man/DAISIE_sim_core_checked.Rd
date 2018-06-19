@@ -29,7 +29,17 @@ a list with these elements:
 \describe{
   \item{stt_table}{a species-through-time table}
   \item{branching_times}{branching times}
-  \item{stac}{?no idea}
+  \item{stac}{
+    status of the clade formed by the immigrant:
+    \itemize{
+      \item{0: immigrant is not present and has not formed an extant clade}
+      \item{1: immigrant is present but has not formed an extant clade}
+      \item{2: immigrant is not present but has formed an extant clade}
+      \item{3: immigrant is present and has formed an extant clade}
+      \item{4: immigrant is present but has not formed an extant clade, and it is known when it immigrated.}
+      \item{5: immigrant is not present and has not formed an extant clade, but only an endemic species}
+    }
+  }
   \item{missing_species}{number of missing species}
   \item{other_clades_same_ancestor}{(not always present) ?no idea}
 }

@@ -21,15 +21,18 @@ test_that("use", {
   expect_true("branching_times" %in% names(result))
   expect_true("stac" %in% names(result))
   expect_true("missing_species" %in% names(result))
-  island_replicates <- list()
-  island_replicates[[1]][[1]] <- result
-  # May also return 'other_clades_same_ancestor'
-  island_replicates <- DAISIE_format_CS(
-    island_replicates = island_replicates,
-    time = sim_time,
-    M = n_mainland_species,
-    sample_freq = 25,
-    verbose = FALSE
-  )
-  DAISIE_plot_sims(island_replicates, use_dev_new = FALSE)
+  if (1 == 2) {
+    island_replicates <- list()
+    island_replicates[[1]][[1]] <- result
+    # May also return 'other_clades_same_ancestor'
+    island_replicates <- DAISIE_format_CS(
+      island_replicates = island_replicates,
+      time = sim_time,
+      M = n_mainland_species,
+      sample_freq = 25,
+      verbose = FALSE
+    )
+    DAISIE_plot_sims(island_replicates, use_dev_new = FALSE)
+    DAISIE_plot_island(island = island_replicates[[1]], island_age = sim_time) 
+  }
 })
