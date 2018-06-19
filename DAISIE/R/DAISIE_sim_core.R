@@ -26,6 +26,10 @@ DAISIE_sim_core = function(time,mainland_n,pars)
   	ext_rate = mu * length(island_spec[,1])
   	ana_rate = laa * length(which(island_spec[,4] == "I"))
   	clado_rate = max(c(length(island_spec[,1]) * (lac * (1 -length(island_spec[,1])/K)),0),na.rm = T)
+  	# RJCB: identical to:
+  	# n_species <- length(island_spec[,1])
+    # clado_rate <- n_species * (lac * (1 - n_species/K))
+	  # clado_rate <- max(clado_rate, 0) # Cannot have negative cladogenesis rate
   	immig_rate = max(c(mainland_n * gam * (1 - length(island_spec[,1])/K),0),na.rm = T)
   			
   	totalrate = ext_rate + clado_rate + ana_rate + immig_rate
