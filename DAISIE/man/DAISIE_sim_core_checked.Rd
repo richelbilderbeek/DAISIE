@@ -23,6 +23,16 @@ DAISIE_sim_core_checked(sim_time, n_mainland_species, clado_rate, ext_rate,
 
 \item{ana_rate}{anagenesis rate}
 }
+\value{
+a list with these elements:
+\describe{
+  \item{stt_table}{a species-through-time table}
+  \item{branching_times}{branching times}
+  \item{stac}{?no idea}
+  \item{missing_species}{number of missing species}
+  \item{other_clades_same_ancestor}{(not always present) ?no idea}
+}
+}
 \description{
 Version of DAISIE_sim_core that checks all its inputs
 and uses descriptively named arguments

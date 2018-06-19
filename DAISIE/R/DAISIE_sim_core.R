@@ -253,6 +253,14 @@ DAISIE_sim_core = function(time,mainland_n,pars)
 #' @param carr_cap carrying capacity
 #' @param imm_rate immigration rate
 #' @param ana_rate anagenesis rate
+#' @return a list with these elements:
+#' \describe{
+#'   \item{stt_table}{a species-through-time table}
+#'   \item{branching_times}{branching times}
+#'   \item{stac}{?no idea}
+#'   \item{missing_species}{number of missing species}
+#'   \item{other_clades_same_ancestor}{(not always present) ?no idea}
+#' }
 DAISIE_sim_core_checked <- function(
   sim_time, 
   n_mainland_species, 
