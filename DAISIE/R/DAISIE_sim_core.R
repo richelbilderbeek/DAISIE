@@ -259,14 +259,12 @@ DAISIE_sim_core = function(time,mainland_n,pars)
 #'   \item{stt_table}{a species-through-time table}
 #'   \item{branching_times}{branching times}
 #'   \item{stac}{
-#'     status of the clade formed by the immigrant:
+#'     the status of the colonist
 #'     \itemize{
-#'       \item{0: immigrant is not present and has not formed an extant clade}
-#'       \item{1: immigrant is present but has not formed an extant clade}
-#'       \item{2: immigrant is not present but has formed an extant clade}
-#'       \item{3: immigrant is present and has formed an extant clade}
-#'       \item{4: immigrant is present but has not formed an extant clade, and it is known when it immigrated.}
-#'       \item{5: immigrant is not present and has not formed an extant clade, but only an endemic species}
+#'       \item{1: \code{Non_endemic_MaxAge} (?immigrant is present but has not formed an extant clade)}
+#'       \item{2: \code{Endemic} (?immigrant is not present but has formed an extant clade)}
+#'       \item{3: \code{Endemic&Non_Endemic} (?immigrant is present and has formed an extant clade)}
+#'       \item{4: \code{Non_endemic} (?immigrant is present but has not formed an extant clade, and it is known when it immigrated)}
 #'     }
 #'   }
 #'   \item{missing_species}{number of missing species}
