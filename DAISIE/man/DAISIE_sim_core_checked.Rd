@@ -2,7 +2,8 @@
 % Please edit documentation in R/DAISIE_sim_core.R
 \name{DAISIE_sim_core_checked}
 \alias{DAISIE_sim_core_checked}
-\title{Version of DAISIE_sim_core that checks all its inputs
+\title{Runs one DAISIE simulation with a clade-specific carrying capacity.
+Version of \code{DAISIE_sim_core} that checks all its inputs
 and uses descriptively named arguments}
 \usage{
 DAISIE_sim_core_checked(sim_time, n_mainland_species, clado_rate, ext_rate,
@@ -34,6 +35,10 @@ a list with these elements:
 }
 }
 \description{
-Version of DAISIE_sim_core that checks all its inputs
+Runs one DAISIE simulation with a clade-specific carrying capacity.
+Version of \code{DAISIE_sim_core} that checks all its inputs
 and uses descriptively named arguments
+}
+\author{
+Richel J.C. Bilderbeek
 }
