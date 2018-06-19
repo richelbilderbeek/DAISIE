@@ -1,0 +1,6 @@
+# No Codecov message with Pull Request
+comment: false
+
+# DAISIE package is in the DAISIE folder of the DAISIE repo
+fixes:
+  - "::DAISIE/" 
