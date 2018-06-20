@@ -33,8 +33,17 @@ island_area <- function(timeval, totaltime, Apars, island_function_shape){
 }
 
 
-# Function to describe changes in extinction rate through time. From
-# Valente et al 2014 ProcB
+#' Function to describe changes in extinction rate through time. From
+#' Valente et al 2014 ProcB
+#' @param timeval something
+#' @param totaltime something
+#' @param mu something
+#' @param Apars something
+#' @param Epars something
+#' @param island_function_shape something
+#' @param extcutoff something
+#' @param island_spec something
+#' @param K something
 get_ext_rate <- function(timeval, totaltime, mu,
                          Apars, Epars, 
                          island_function_shape, 
@@ -76,7 +85,7 @@ get_ana_rate <- function(timeval, totaltime, laa,
 #' Function to calculate cladogenesis rate given number of island species
 #' @param timeval something
 #' @param totaltime something
-#' @param laa something
+#' @param lac something
 #' @param Apars something
 #' @param Epars something
 #' @param island_function_shape something
@@ -95,13 +104,14 @@ get_clado_rate <- function(timeval, totaltime,
 #' Something
 #' @param timeval something
 #' @param totaltime something
-#' @param laa something
+#' @param gam something
 #' @param Apars something
 #' @param Epars something
 #' @param island_function_shape something
 #' @param extcutoff something
 #' @param island_spec something
 #' @param K something
+#' @param mainland_n something
 get_immig_rate <- function(timeval, totaltime,
                            gam, Apars, Epars,
                            island_function_shape, 
@@ -114,13 +124,10 @@ get_immig_rate <- function(timeval, totaltime,
 #' Something
 #' @param timeval something
 #' @param totaltime something
-#' @param laa something
 #' @param Apars something
-#' @param Epars something
-#' @param island_function_shape something
-#' @param extcutoff something
-#' @param island_spec something
-#' @param K something
+#' @param ext_multiplier something
+#' @param island_ontogeny something
+#' @param thor something
 get_thor <- function(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor) {
   # Function calculates where the horizon for max(ext_rate) is.
   if (is.null(island_ontogeny)) {

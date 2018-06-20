@@ -1,4 +1,4 @@
-DAISIE_sim = function(
+DAISIE_sim <- function(
   time,
   M,
   pars,
@@ -11,8 +11,9 @@ DAISIE_sim = function(
   island_ontogeny = NULL, # NULL = no effect; "quadratic" = quadratic function; "linear" = linear function
   Apars = NULL,
   Epars = NULL,
-  ...) 
-{
+  verbose = TRUE,
+  ...
+) {
   totaltime <- time
   island_replicates  = list()
   
@@ -25,14 +26,17 @@ DAISIE_sim = function(
     
     for(rep in 1:replicates)
     {
-      island_replicates[[rep]] <- DAISIE_sim_core(time=totaltime,
-                                                  mainland_n = M,
-                                                  pars=pars,
-                                                  island_ontogeny = island_ontogeny,
-                                                  Apars = Apars,
-                                                  Epars = Epars)
-      
-      print(paste("Island replicate ",rep,sep = ""))	
+      island_replicates[[rep]] <- DAISIE_sim_core(
+        time = totaltime,
+        mainland_n = M,
+        pars = pars,
+        island_ontogeny = island_ontogeny,
+        Apars = Apars,
+        Epars = Epars
+      )
+      if (verbose == TRUE) {
+        print(paste("Island replicate ",rep,sep = ""))
+      }
     } 
     island_replicates = DAISIE_format_IW(island_replicates = island_replicates,
                                          time = totaltime,M = M,sample_freq = sample_freq)
@@ -49,17 +53,21 @@ DAISIE_sim = function(
         full_list = list()
         for(m_spec in 1:M) 
         { 	
-          full_list[[m_spec]]  = DAISIE_sim_core(time=totaltime,
-                                                 mainland_n = 1,
-                                                 pars = pars,
-                                                 island_ontogeny = island_ontogeny,
-                                                 Apars = Apars,
-                                                 Epars = Epars)
+          full_list[[m_spec]] <- DAISIE_sim_core(
+            time = totaltime,
+            mainland_n = 1,
+            pars = pars,
+            island_ontogeny = island_ontogeny,
+            Apars = Apars,
+            Epars = Epars
+          )
           # print(full_list)
         }
         
         island_replicates[[rep]] = full_list
-        print(paste("Island replicate ",rep,sep = ""))	
+        if (verbose == TRUE) {
+          print(paste("Island replicate ",rep,sep = ""))
+        }
       } 
     }
     
@@ -112,7 +120,9 @@ DAISIE_sim = function(
             full_list[[m_spec]]$type1or2 = 2
           }
           island_replicates[[rep]] = full_list
-          print(paste("Island replicate ",rep,sep = ""))	
+          if (verbose == TRUE) {
+            print(paste("Island replicate ",rep,sep = ""))
+          }
         }
       }
     }

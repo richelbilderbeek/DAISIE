@@ -13,17 +13,11 @@ get_thor(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor)
 
 \item{Apars}{something}
 
-\item{laa}{something}
+\item{ext_multiplier}{something}
 
-\item{Epars}{something}
+\item{island_ontogeny}{something}
 
-\item{island_function_shape}{something}
-
-\item{extcutoff}{something}
-
-\item{island_spec}{something}
-
-\item{K}{something}
+\item{thor}{something}
 }
 \description{
 Something

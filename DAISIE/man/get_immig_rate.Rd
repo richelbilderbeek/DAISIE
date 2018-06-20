@@ -12,6 +12,8 @@ get_immig_rate(timeval, totaltime, gam, Apars, Epars, island_function_shape,
 
 \item{totaltime}{something}
 
+\item{gam}{something}
+
 \item{Apars}{something}
 
 \item{Epars}{something}
@@ -24,7 +26,7 @@ get_immig_rate(timeval, totaltime, gam, Apars, Epars, island_function_shape,
 
 \item{K}{something}
 
-\item{laa}{something}
+\item{mainland_n}{something}
 }
 \description{
 Something
