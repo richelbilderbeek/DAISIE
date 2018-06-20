@@ -23,6 +23,17 @@ DAISIE_sim_core = function(time,mainland_n,pars)
   
   while(timeval < time)
   {
+    # Old code
+    ext_rate = mu * length(island_spec[,1])
+    ana_rate = laa * length(which(island_spec[,4] == "I"))
+    clado_rate = max(c(length(island_spec[,1]) * (lac * (1 -length(island_spec[,1])/K)),0),na.rm = T)
+    immig_rate = max(c(mainland_n * gam * (1 - length(island_spec[,1])/K),0),na.rm = T)
+    
+    testit::assert(ext_rate == DAISIE_calc_clade_ext_rate(ps_ext_rate = mu, n_species = length(island_spec[,1])))
+    testit::assert(ana_rate == DAISIE_calc_clade_ana_rate(ps_ana_rate = laa, n_immigrants = length(which(island_spec[,4] == "I"))))
+    testit::assert(clado_rate == DAISIE_calc_clade_clado_rate(ps_clado_rate = lac, n_species = length(island_spec[,1]), carr_cap = K))
+    testit::assert(immig_rate == DAISIE_calc_clade_imm_rate(ps_imm_rate = gam, n_island_species = length(island_spec[,1]), n_mainland_species = mainland_n, carr_cap = K))
+
     n_island_species <- length(island_spec[,1])
     n_immigrants <- length(which(island_spec[,4] == "I"))
   	ext_rate <- DAISIE_calc_clade_ext_rate(ps_ext_rate = mu, n_species = n_island_species)

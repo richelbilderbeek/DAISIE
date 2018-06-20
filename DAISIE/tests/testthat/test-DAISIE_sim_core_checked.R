@@ -23,6 +23,7 @@ test_that("use", {
   expect_true("missing_species" %in% names(result))
   if (1 == 2) {
     island_replicates <- list()
+    island_replicates[[1]] <- list()
     island_replicates[[1]][[1]] <- result
     # May also return 'other_clades_same_ancestor'
     island_replicates <- DAISIE_format_CS(
