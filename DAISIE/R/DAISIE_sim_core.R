@@ -1,3 +1,19 @@
+#' Internal function of the DAISIE simulation
+#' @param time simulated amount of time
+#' @param mainland_n number of mainland species, that
+#'   is, the number of species that can potentially colonize the island.
+#'   If \code{\link{DAISIE_sim}} uses a clade-specific diversity dependence,
+#'   this value is set to 1. 
+#'   If \code{\link{DAISIE_sim}} uses an island-specific diversity dependence,
+#'   this value is set to the number of mainland species.
+#' @param pars a numeric vector:
+#' \itemize{
+#'   \item{[1]: cladogenesis rate}
+#'   \item{[2]: extinction rate}
+#'   \item{[3]: carrying capacity}
+#'   \item{[4]: immigration rate}
+#'   \item{[5]: anagenesis rate}
+#' }
 DAISIE_sim_core = function(time,mainland_n,pars)
 {
   lac = pars[1]
@@ -243,7 +259,7 @@ DAISIE_sim_core = function(time,mainland_n,pars)
   return(island) 
 }
 
-#' Runs one DAISIE simulation with a clade-specific carrying capacity.
+#' Runs one DAISIE simulation.
 #' Version of \code{DAISIE_sim_core} that checks all its inputs
 #' and uses descriptively named arguments
 #' @param sim_time length of the simulated time

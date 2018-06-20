@@ -43,7 +43,7 @@ DAISIE_sim = function(
       for(rep in 1:replicates)
       {
         island_replicates[[rep]] = list() 
-        
+        # Run each clade seperately
         full_list = list()
         for(m_spec in 1:M) 
         { 	
