@@ -5,6 +5,8 @@ Branch|[![Travis CI logo](TravisCI.png)](https://travis-ci.org)|[![Codecov logo]
 master|[![Build Status](https://travis-ci.org/rsetienne/DAISIE.svg?branch=master)](https://travis-ci.org/rsetienne/DAISIE) | [![codecov.io](https://codecov.io/github/rsetienne/DAISIE/coverage.svg?branch=master)](https://codecov.io/github/rsetienne/DAISIE?branch=master)
 master|[![Build Status](https://travis-ci.org/richelbilderbeek/DAISIE.svg?branch=master)](https://travis-ci.org/richelbilderbeek/DAISIE) | [![codecov.io](https://codecov.io/github/richelbilderbeek/DAISIE/coverage.svg?branch=master)](https://codecov.io/github/richelbilderbeek/DAISIE?branch=master)
 develop|[![Build Status](https://travis-ci.org/richelbilderbeek/DAISIE.svg?branch=develop)](https://travis-ci.org/richelbilderbeek/DAISIE) | [![codecov.io](https://codecov.io/github/richelbilderbeek/DAISIE/coverage.svg?branch=develop)](https://codecov.io/github/richelbilderbeek/DAISIE?branch=develop)
+pedro|[![Build Status](https://travis-ci.org/richelbilderbeek/DAISIE.svg?branch=pedro)](https://travis-ci.org/richelbilderbeek/DAISIE) | [![codecov.io](https://codecov.io/github/richelbilderbeek/DAISIE/coverage.svg?branch=pedro)](https://codecov.io/github/richelbilderbeek/DAISIE?branch=pedro)
+richel|[![Build Status](https://travis-ci.org/richelbilderbeek/DAISIE.svg?branch=richel)](https://travis-ci.org/richelbilderbeek/DAISIE) | [![codecov.io](https://codecov.io/github/richelbilderbeek/DAISIE/coverage.svg?branch=richel)](https://codecov.io/github/richelbilderbeek/DAISIE?branch=richel)
 
 Dynamic Assembly of Island biota through Speciation, Immigration and Extinction in R
 
