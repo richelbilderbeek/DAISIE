@@ -29,3 +29,6 @@ get_clado_rate(timeval, totaltime, lac, Apars, Epars, island_function_shape,
 \description{
 Function to calculate cladogenesis rate given number of island species
 }
+\seealso{
+Does the same as \link{DAISIE_calc_clade_clado_rate}
+}

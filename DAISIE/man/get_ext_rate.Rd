@@ -31,3 +31,6 @@ get_ext_rate(timeval, totaltime, mu, Apars, Epars, island_function_shape,
 Function to describe changes in extinction rate through time. From
 Valente et al 2014 ProcB
 }
+\seealso{
+Does the same as \link{DAISIE_calc_clade_ext_rate}
+}

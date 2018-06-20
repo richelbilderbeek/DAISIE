@@ -44,6 +44,7 @@ island_area <- function(timeval, totaltime, Apars, island_function_shape){
 #' @param extcutoff something
 #' @param island_spec something
 #' @param K something
+#' @seealso Does the same as \link{DAISIE_calc_clade_ext_rate}
 get_ext_rate <- function(timeval, totaltime, mu,
                          Apars, Epars, 
                          island_function_shape, 
@@ -75,6 +76,7 @@ get_ext_rate <- function(timeval, totaltime, mu,
 #' @param extcutoff something
 #' @param island_spec something
 #' @param K something
+#' @seealso Does the same as \link{DAISIE_calc_clade_ana_rate}
 get_ana_rate <- function(timeval, totaltime, laa,
                          Apars, Epars, island_function_shape,
                          extcutoff, island_spec, K) {
@@ -92,6 +94,7 @@ get_ana_rate <- function(timeval, totaltime, laa,
 #' @param extcutoff something
 #' @param island_spec something
 #' @param K something
+#' @seealso Does the same as \link{DAISIE_calc_clade_clado_rate}
 get_clado_rate <- function(timeval, totaltime,
                            lac, Apars, Epars,
                            island_function_shape, 
@@ -112,6 +115,7 @@ get_clado_rate <- function(timeval, totaltime,
 #' @param island_spec something
 #' @param K something
 #' @param mainland_n something
+#' @seealso Does the same as \link{DAISIE_calc_clade_imm_rate}
 get_immig_rate <- function(timeval, totaltime,
                            gam, Apars, Epars,
                            island_function_shape, 

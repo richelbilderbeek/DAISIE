@@ -31,3 +31,6 @@ get_immig_rate(timeval, totaltime, gam, Apars, Epars, island_function_shape,
 \description{
 Something
 }
+\seealso{
+Does the same as \link{DAISIE_calc_clade_imm_rate}
+}

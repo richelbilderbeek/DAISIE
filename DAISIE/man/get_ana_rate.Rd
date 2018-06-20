@@ -29,3 +29,6 @@ get_ana_rate(timeval, totaltime, laa, Apars, Epars, island_function_shape,
 \description{
 Function to calculate anagenesis rate given number of immigrant species
 }
+\seealso{
+Does the same as \link{DAISIE_calc_clade_ana_rate}
+}
