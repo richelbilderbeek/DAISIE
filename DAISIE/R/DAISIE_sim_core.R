@@ -25,6 +25,7 @@ DAISIE_sim_core = function(time,mainland_n,pars)
   {  	
   	ext_rate = mu * length(island_spec[,1])
   	ana_rate = laa * length(which(island_spec[,4] == "I"))
+    # For clade-specific carrying capacity, each clade is simulated seperately in DAISIE_sim
   	clado_rate = max(c(length(island_spec[,1]) * (lac * (1 -length(island_spec[,1])/K)),0),na.rm = T)
   	# RJCB: identical to:
   	# n_species <- length(island_spec[,1])
