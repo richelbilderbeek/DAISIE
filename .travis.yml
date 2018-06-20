@@ -9,6 +9,11 @@ env:
 r_packages:
   - devtools
   - testit
+  - ape
+  - ade4
+  - phytools
+  - expm
+  - pracma
 
 r_github_packages:
   - jimhester/lintr
