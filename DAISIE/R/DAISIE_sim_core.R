@@ -22,24 +22,17 @@ DAISIE_sim_core = function(time,mainland_n,pars)
   stt_table[1,] = c(time,0,0,0)
   
   while(timeval < time)
-  {  	
-  	ext_rate = mu * length(island_spec[,1])
-  	ana_rate = laa * length(which(island_spec[,4] == "I"))
-  	clado_rate = max(c(length(island_spec[,1]) * (lac * (1 -length(island_spec[,1])/K)),0),na.rm = T)
-  	immig_rate = max(c(mainland_n * gam * (1 - length(island_spec[,1])/K),0),na.rm = T)
-
-  	testit::assert(ext_rate == DAISIE_calc_clade_ext_rate(ps_ext_rate = mu, n_species = length(island_spec[,1])))
-  	testit::assert(ana_rate == DAISIE_calc_clade_ana_rate(ps_ana_rate = laa, n_immigrants = length(which(island_spec[,4] == "I"))))
-  	testit::assert(clado_rate == DAISIE_calc_clade_clado_rate(ps_clado_rate = lac, n_species = length(island_spec[,1]), carr_cap = K))
-  	testit::assert(immig_rate == DAISIE_calc_clade_imm_rate(ps_imm_rate = gam, n_island_species = length(island_spec[,1]), n_mainland_species = mainland_n, carr_cap = K))
-  	
-  			
-  	totalrate = ext_rate + clado_rate + ana_rate + immig_rate
-  	dt = rexp(1,totalrate)
-  	
-  	timeval  =  timeval  + dt
-  	
-  	possible_event = sample(1:4,1,replace=FALSE,c(immig_rate,ext_rate,ana_rate,clado_rate))
+  {
+    n_island_species <- length(island_spec[,1])
+    n_immigrants <- length(which(island_spec[,4] == "I"))
+  	ext_rate <- DAISIE_calc_clade_ext_rate(ps_ext_rate = mu, n_species = n_island_species)
+  	ana_rate <- DAISIE_calc_clade_ana_rate(ps_ana_rate = laa, n_immigrants = n_immigrants)
+  	clado_rate <- DAISIE_calc_clade_clado_rate(ps_clado_rate = lac, n_species = n_island_species, carr_cap = K)
+  	immig_rate <- DAISIE_calc_clade_imm_rate(ps_imm_rate = gam, n_island_species = n_island_species, n_mainland_species = mainland_n, carr_cap = K)
+  	totalrate <- ext_rate + clado_rate + ana_rate + immig_rate
+  	dt <- rexp(1, totalrate)
+  	timeval <- timeval  + dt
+  	possible_event <- sample(1:4,1,replace=FALSE,c(immig_rate,ext_rate,ana_rate,clado_rate))
   
     ##############
     if(timeval <= time)
