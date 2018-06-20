@@ -26,7 +26,7 @@ DAISIE_sim_core <- function(time,
   }
   
   if (!is.null(island_ontogeny) && island_ontogeny != "linear" && island_ontogeny != "quadratic") {
-    stop("Please select valid island ontogeny model. \n Options are no ontogeny: NULL, 'linear' or 'quadratic'.")
+    stop("Please select valid island ontogeny model. Options are no ontogeny: NULL, 'linear' or 'quadratic'.")
   }
   
   mainland_spec <- seq(1,mainland_n,1)
@@ -36,18 +36,10 @@ DAISIE_sim_core <- function(time,
   stt_table <- matrix(ncol = 4)
   colnames(stt_table) <- c("Time","nI","nA","nC")
   stt_table[1,] <- c(totaltime,0,0,0)
-  
- 
 
-  # Determine rates
   # Pick thor (before timeval, to set Amax thor)
   thor <- get_thor(0, totaltime, Apars, ext_multiplier, island_ontogeny, thor = NULL)
-  # print(thor)
-  
 
-  # Pick timeval
-  # timeval <- pick_timeval(rates, timeval)
-  
   while(timeval <= totaltime) {
     if (timeval < thor) {
 
@@ -57,21 +49,18 @@ DAISIE_sim_core <- function(time,
                             extcutoff = extcutoff, K = K,
                             island_spec = island_spec, mainland_n, thor)
       timeval <- pick_timeval(rates, timeval)
+      
       # Determine event
       possible_event <- DDD::sample2(1:5, 1, prob = c(rates[[1]], rates[[2]], 
                                                       rates[[3]], rates[[4]], 
                                                       (rates[[5]] - rates[[2]])),
                                      replace = FALSE)
-      # assertthat::assert_that(assertthat::are_equal(rates[[5]], rates[[2]]))
-      # print(possible_event)
-      # Run event
-       
-
+      
       if (timeval <= totaltime) {
+        # Run event
         new_state <- DAISIE_sim_update_state(timeval = timeval, possible_event = possible_event, maxspecID = maxspecID,
                                              mainland_spec = mainland_spec, island_spec = island_spec)
         island_spec <- new_state$island_spec
-        # print(island_spec)
         maxspecID <- new_state$maxspecID
       
       }
@@ -80,40 +69,20 @@ DAISIE_sim_core <- function(time,
                            length(which(island_spec[,4] == "I")),
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
-      # rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
-      #                       mu = mu, laa = laa, lac = lac, Apars = Apars,
-      #                       Epars = Epars, island_ontogeny = island_ontogeny, 
-      #                       extcutoff = extcutoff, K = K,
-      #                       island_spec = island_spec, mainland_n = mainland_n, thor = thor)
-      # cat(c(rates[[1]], rates[[2]], 
-            # rates[[3]], rates[[4]], 
-            # (rates[[5]] - rates[[2]])), "\n")
-      # Pick timeval
 
-      # cat("timeval: ", timeval, "\n")
-      # cat("thor: ", thor, "\n")
-                         ##### After thor is reached ####
-                         
     } else {
-      
-      # Update timeval
-      
-      # timeval <- thor
-      
+      ##### After thor is reached ####
       # Recalculate thor
       thor <- get_thor(timeval = timeval, totaltime = totaltime, Apars = Apars,
                        ext_multiplier = ext_multiplier,
                        island_ontogeny = island_ontogeny, thor = thor)
-      # cat(rates[[1]], rates[[2]], rates[[3]], rates[[4]], rates[[5]], "\n")
     }
-    # print(island_spec)
   }
-  # print(island_spec)
+  
   ############# 
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
   if(length(island_spec[,1]) == 0)
   {
-    # print(island_spec[,1])
     island <- list(stt_table = stt_table, branching_times = totaltime, stac = 0, missing_species = 0)
   } else
   {
@@ -124,7 +93,6 @@ DAISIE_sim_core <- function(time,
     ### set ages as counting backwards from present
     island_spec[,"branching time (BP)"] <- totaltime - as.numeric(island_spec[,"branching time (BP)"])
     island_spec[,"Colonisation time (BP)"] <- totaltime - as.numeric(island_spec[,"Colonisation time (BP)"])
-    # print(island_spec[,"branching time (BP)"])
     if(mainland_n == 1)
     {
       island <- DAISIE_ONEcolonist(totaltime,island_spec,stt_table)
@@ -152,8 +120,6 @@ DAISIE_sim_core <- function(time,
   return(island)
 }
 
-
-
 update_rates <- function(timeval, totaltime,
                          gam, mu, laa, lac, Apars, Epars,
                          island_ontogeny, 
@@ -168,14 +134,12 @@ update_rates <- function(timeval, totaltime,
                                island_function_shape = island_ontogeny, 
                                extcutoff = extcutoff, island_spec = island_spec,
                                K = K, mainland_n = mainland_n)
-  # cat("immig rate: ", immig_rate, "\n")
+  
   ext_rate <- get_ext_rate(timeval = timeval, totaltime = totaltime, mu = mu,
                            Apars = Apars, Epars = Epars, 
                            island_function_shape = island_ontogeny, 
                            extcutoff = extcutoff, island_spec = island_spec,
                            K = K)
-  
-  
   
   ana_rate <- get_ana_rate(timeval = timeval, totaltime = totaltime, laa = laa,
                            Apars = Apars, Epars = Epars,
@@ -190,9 +154,13 @@ update_rates <- function(timeval, totaltime,
                                K = K)
   
   if (is.null(island_ontogeny)) {
+    
     ext_rate_max <- ext_rate
-  } else if((Apars[2] * Apars[4]) > timeval) {
+    
+  } else if ((Apars[2] * Apars[4]) > timeval) {
+    
     ext_rate_max <- ext_rate
+
   } else {
     
     ext_rate_max <- get_ext_rate(timeval = thor, totaltime = totaltime, mu = mu,
@@ -397,7 +365,6 @@ DAISIE_ONEcolonist <- function(totaltime,island_spec,stt_table)
   {
     if(island_spec[1,"Species type"] == "I")
     {
-      # print("hey1")
       descendants <- list(stt_table = stt_table, 
                           branching_times = c(totaltime,as.numeric(island_spec[1,"Colonisation time (BP)"])),
                           stac = 4,
@@ -405,7 +372,6 @@ DAISIE_ONEcolonist <- function(totaltime,island_spec,stt_table)
     }
     if(island_spec[1,"Species type"] == "A")
     {
-      # print("hey2")
       descendants <- list(stt_table = stt_table,
                           branching_times = c(totaltime,as.numeric(island_spec[1,"Colonisation time (BP)"])),
                           stac = 2,
@@ -413,7 +379,6 @@ DAISIE_ONEcolonist <- function(totaltime,island_spec,stt_table)
     } 
     if(island_spec[1,"Species type"] == "C")
     {
-      # print("hey3")
       descendants <- list(stt_table = stt_table,
                           branching_times = c(totaltime,rev(sort(as.numeric(island_spec[,"branching time (BP)"])))),
                           stac = 2,
@@ -427,7 +392,6 @@ DAISIE_ONEcolonist <- function(totaltime,island_spec,stt_table)
     descendants <- list(stt_table = stt_table,
                         branching_times = NA,stac = 2,missing_species = 0,
                         other_clades_same_ancestor = list())
-    # print(stt_table)
     ### create table with information on other clades with same ancestor, but this information is not used in DAISIE_ML
     oldest <- which(as.numeric(island_spec[,"Colonisation time (BP)"]) == max(as.numeric(island_spec[,"Colonisation time (BP)"])))
     
