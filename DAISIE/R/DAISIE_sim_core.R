@@ -25,13 +25,14 @@ DAISIE_sim_core = function(time,mainland_n,pars)
   {  	
   	ext_rate = mu * length(island_spec[,1])
   	ana_rate = laa * length(which(island_spec[,4] == "I"))
-    # For clade-specific carrying capacity, each clade is simulated seperately in DAISIE_sim
   	clado_rate = max(c(length(island_spec[,1]) * (lac * (1 -length(island_spec[,1])/K)),0),na.rm = T)
-  	# RJCB: identical to:
-  	# n_species <- length(island_spec[,1])
-    # clado_rate <- n_species * (lac * (1 - n_species/K))
-	  # clado_rate <- max(clado_rate, 0) # Cannot have negative cladogenesis rate
   	immig_rate = max(c(mainland_n * gam * (1 - length(island_spec[,1])/K),0),na.rm = T)
+
+  	testit::assert(ext_rate == DAISIE_calc_clade_ext_rate(ps_ext_rate = mu, n_species = length(island_spec[,1])))
+  	testit::assert(ana_rate == DAISIE_calc_clade_ana_rate(ps_ana_rate = laa, n_immigrants = length(which(island_spec[,4] == "I"))))
+  	testit::assert(clado_rate == DAISIE_calc_clade_clado_rate(ps_clado_rate = lac, n_species = length(island_spec[,1]), carr_cap = K))
+  	testit::assert(immig_rate == DAISIE_calc_clade_imm_rate(ps_imm_rate = gam, n_island_species = length(island_spec[,1]), n_mainland_species = mainland_n, carr_cap = K))
+  	
   			
   	totalrate = ext_rate + clado_rate + ana_rate + immig_rate
   	dt = rexp(1,totalrate)
@@ -375,13 +376,85 @@ DAISIE_ONEcolonist = function(time,island_spec,stt_table)
     }
   }
   
-return(descendants)  
+  descendants
 }
 
 
 
 
+#' Calculate the clade-wide extinction rate
+#' @param ps_ext_rate per species extinction rate
+#' @param n_species number of species in that clade
+#' @return the clade's extinction rate
+#' @author Richel J.C. Bilderbeek
+#' @export
+DAISIE_calc_clade_ext_rate <- function(ps_ext_rate, n_species) {
+  testit::assert(ps_ext_rate >= 0.0)
+  testit::assert(n_species >= 0)
+  ps_ext_rate * n_species
+}
 
+#' Calculate the clade-wide effective anagenesis rate.
+#' With 'effective', this means that if an immigrant
+#' undergoes anagenesis, it will become a new species.
+#' Would such a species undergo anagenesis again, no net new
+#' species is created; the species only gets renamed
+#' @param ps_ana_rate per species anagensis rate
+#' @param n_immigrants number of immigrants in that clade
+#' @return the clade's effective anagenesis rate
+#' @author Richel J.C. Bilderbeek
+#' @export
+DAISIE_calc_clade_ana_rate <- function(ps_ana_rate, n_immigrants) {
+  testit::assert(ps_ana_rate >= 0.0)
+  testit::assert(n_immigrants >= 0)
+  ps_ana_rate * n_immigrants
+}
 
+#' Calculate the clade-wide cladogenesis rate.
+#' @param ps_clado_rate per species cladogenesis rate
+#' @param n_species number of species in that clade
+#' @param carr_cap carrying capacity, number of species this clade will
+#'   grow to
+#' @return the clade's cladogenesis rate, which is at least zero. This
+#'   rate will be zero if there are more species than the carrying capacity
+#'   allows for
+#' @note For clade-specific carrying capacity, 
+#'   each clade is simulated seperately in \code{\link{DAISIE_sim}}
+#' @author Richel J.C. Bilderbeek
+#' @export
+DAISIE_calc_clade_clado_rate <- function(ps_clado_rate, n_species, carr_cap) {
+  testit::assert(ps_clado_rate >= 0.0)
+  testit::assert(n_species >= 0)
+  testit::assert(carr_cap >= 0)
+  max(
+    0.0,
+    n_species * ps_clado_rate * (1.0 - (n_species / carr_cap))
+  )
+}
 
-
+#' Calculate the clade-wide immigration rate.
+#' @param ps_imm_rate per species immigration rate
+#' @param n_island_species number of species in that clade on the island
+#' @param n_mainland_species number of species in that clade on the mainland
+#' @param carr_cap carrying capacity, number of species this clade will
+#'   grow to
+#' @return the clade's immigration rate, which is at least zero. This
+#'   rate will be zero if there are more species than the carrying capacity
+#'   allows for
+#' @author Richel J.C. Bilderbeek
+#' @export
+DAISIE_calc_clade_imm_rate <- function(
+  ps_imm_rate, 
+  n_island_species, 
+  n_mainland_species, 
+  carr_cap
+) {
+  testit::assert(ps_imm_rate >= 0.0)
+  testit::assert(n_island_species >= 0)
+  testit::assert(n_mainland_species >= 0)
+  testit::assert(carr_cap >= 0)
+  max(
+    0.0,
+     n_mainland_species * ps_imm_rate * (1.0 - (n_island_species / carr_cap))
+  )
+}
