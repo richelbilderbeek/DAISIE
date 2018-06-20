@@ -28,7 +28,6 @@
 \alias{DAISIE_loglik_all_choosepar2}
 \alias{DAISIE_simplex}
 \alias{DAISIE_sim_min_type2}
-\alias{DAISIE_sim_core}
 \alias{DAISIE_loglik_high_lambda}
 \alias{Add_brt_table}
 \alias{DAISIE_ONEcolonist}
