@@ -81,7 +81,7 @@ get_immig_rate <- function(timeval, totaltime,
 }
 
 get_thor <- function(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor) {
-
+  # Function calculates where the horizon for max(ext_rate) is.
   if (is.null(island_ontogeny)) {
     thor <- totaltime
     
