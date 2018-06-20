@@ -17,6 +17,14 @@ the clade's extinction rate
 \description{
 Calculate the clade-wide extinction rate
 }
+\examples{
+  testit::assert(
+    DAISIE_calc_clade_ext_rate(
+      ps_ext_rate = 0.2, 
+      n_species = 4
+    ) == 0.8
+  )
+}
 \author{
 Richel J.C. Bilderbeek
 }

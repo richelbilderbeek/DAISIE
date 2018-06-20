@@ -25,6 +25,14 @@ undergoes anagenesis, it will become a new species.
 Would such a species undergo anagenesis again, no net new
 species is created; the species only gets renamed
 }
+\examples{
+  testit::assert(
+    DAISIE_calc_clade_ana_rate(
+      ps_ana_rate = 0.3,  
+      n_immigrants = 5
+    ) == 1.5
+  )
+}
 \author{
 Richel J.C. Bilderbeek
 }
