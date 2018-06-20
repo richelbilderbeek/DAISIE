@@ -120,6 +120,21 @@ DAISIE_sim_core <- function(time,
   return(island)
 }
 
+#' Something
+#' @param timeval something
+#' @param totaltime something
+#' @param gam something
+#' @param mu something
+#' @param laa something
+#' @param lac something
+#' @param Apars something
+#' @param Epars something
+#' @param island_ontogeny something
+#' @param extcutoff something
+#' @param K something
+#' @param island_spec something
+#' @param mainland_n something
+#' @param thor something
 update_rates <- function(timeval, totaltime,
                          gam, mu, laa, lac, Apars, Epars,
                          island_ontogeny, 
@@ -174,6 +189,9 @@ update_rates <- function(timeval, totaltime,
   return(rates)
 }
 
+#' Something
+#' @param rates something
+#' @param timeval something
 pick_timeval <- function(rates, timeval) {
   # Calculates when next event will happen
   totalrate <- rates[[1]] + rates[[3]] + rates[[4]] + rates[[5]]
@@ -182,6 +200,12 @@ pick_timeval <- function(rates, timeval) {
   return(timeval)
 }
 
+#' Does something
+#' @param timeval something
+#' @param possible_event something
+#' @param maxspecID something
+#' @param mainland_spec something
+#' @param island_spec something
 DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_spec,island_spec)
 {  
   ##########################################

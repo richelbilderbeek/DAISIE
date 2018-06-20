@@ -1,6 +1,9 @@
-# Function to describe changes in area through time. Adapted from
-# Valente et al 2014 ProcB
-
+#' Function to describe changes in area through time. Adapted from
+#' Valente et al 2014 ProcB
+#' @param timeval something
+#' @param totaltime something
+#' @param Apars something
+#' @param island_function_shape something
 island_area <- function(timeval, totaltime, Apars, island_function_shape){
 
   Tmax <- Apars[4] # total time A PARS 1
@@ -53,7 +56,16 @@ get_ext_rate <- function(timeval, totaltime, mu,
   }
 }
 
-# Function to calculate anagenesis rate given number of immigrant species
+#' Function to calculate anagenesis rate given number of immigrant species
+#' @param timeval something
+#' @param totaltime something
+#' @param laa something
+#' @param Apars something
+#' @param Epars something
+#' @param island_function_shape something
+#' @param extcutoff something
+#' @param island_spec something
+#' @param K something
 get_ana_rate <- function(timeval, totaltime, laa,
                          Apars, Epars, island_function_shape,
                          extcutoff, island_spec, K) {
@@ -61,7 +73,16 @@ get_ana_rate <- function(timeval, totaltime, laa,
   return(ana_rate)
 } 
 
-# Function to calculate cladogenesis rate given number of island species
+#' Function to calculate cladogenesis rate given number of island species
+#' @param timeval something
+#' @param totaltime something
+#' @param laa something
+#' @param Apars something
+#' @param Epars something
+#' @param island_function_shape something
+#' @param extcutoff something
+#' @param island_spec something
+#' @param K something
 get_clado_rate <- function(timeval, totaltime,
                            lac, Apars, Epars,
                            island_function_shape, 
@@ -71,6 +92,16 @@ get_clado_rate <- function(timeval, totaltime,
   return(clado_rate)
 }
 
+#' Something
+#' @param timeval something
+#' @param totaltime something
+#' @param laa something
+#' @param Apars something
+#' @param Epars something
+#' @param island_function_shape something
+#' @param extcutoff something
+#' @param island_spec something
+#' @param K something
 get_immig_rate <- function(timeval, totaltime,
                            gam, Apars, Epars,
                            island_function_shape, 
@@ -80,6 +111,16 @@ get_immig_rate <- function(timeval, totaltime,
   return(immig_rate)
 }
 
+#' Something
+#' @param timeval something
+#' @param totaltime something
+#' @param laa something
+#' @param Apars something
+#' @param Epars something
+#' @param island_function_shape something
+#' @param extcutoff something
+#' @param island_spec something
+#' @param K something
 get_thor <- function(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor) {
   # Function calculates where the horizon for max(ext_rate) is.
   if (is.null(island_ontogeny)) {
