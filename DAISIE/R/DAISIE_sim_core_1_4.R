@@ -261,7 +261,10 @@ DAISIE_sim_core_1_4 = function(time,mainland_n,pars)
 }
 
 
-
+#' Does something
+#' @param time simulated amount of time
+#' @param island_spec something
+#' @param stt_table ?Species-Through-Time table
 DAISIE_ONEcolonist = function(time,island_spec,stt_table)
 {
   
