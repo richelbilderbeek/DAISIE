@@ -127,10 +127,13 @@ DAISIE_sim <- function(
       }
     }
 
-    island_replicates = DAISIE_format_CS(island_replicates = island_replicates,
-                                         time = totaltime,
-                                         M = M,
-                                         sample_freq = sample_freq)
+    island_replicates <- DAISIE_format_CS(
+      island_replicates = island_replicates,
+      time = totaltime,
+      M = M,
+      sample_freq = sample_freq,
+      verbose = verbose
+    )
   }
   if(plot_sims == TRUE)
   { 

@@ -1,4 +1,4 @@
-DAISIE_format_CS = function(island_replicates,time,M,sample_freq)
+DAISIE_format_CS = function(island_replicates,time,M,sample_freq, verbose = TRUE)
 {
   totaltime <- time
   several_islands = list()
@@ -137,7 +137,9 @@ DAISIE_format_CS = function(island_replicates,time,M,sample_freq)
     }
     
     several_islands[[rep]] = island_list
-    print(paste("Island being formatted: ",rep,"/",length(island_replicates),sep = ""))
+    if (verbose == TRUE) {
+      print(paste("Island being formatted: ",rep,"/",length(island_replicates),sep = ""))
+    }
   }
   
   return(several_islands)
