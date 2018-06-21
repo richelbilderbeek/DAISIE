@@ -61,3 +61,11 @@ Because the DAISIE package is located in the folder `DAISIE`, do:
 Remotes:
   rsetienne/DAISIE/DAISIE
 ```
+
+## `git` branching model
+
+ * `master`: build should always pass, merge with `rsetienne/DAISIE` iff build passes
+ * `develop`: merge of topic branches, merge with master iff build passes
+ * `pedro`: @Neves-P's topic branch
+ * `richel`: @richelbilderbeek's topic branch
+ * `gogogo`: an extra branch @richelbilderbeek works on iff `richel` is a possibly passing build being tested
