@@ -97,7 +97,8 @@ test_that("use", {
     island_spec = island_spec,
     stt_table = stt_table
   )
-  
+  # result:
+  #
   # $stt_table [RJCB: same as put in]
   #          Time nI nA nC
   # 1  10.0000000  0  0  0
@@ -140,7 +141,7 @@ test_that("use", {
     all.equal(
       result$branching_times, 
       c(10.000000, 9.411745), 
-      tolerance = 1.0e-7 # string conversion
+      tolerance = 1.0e-7 # OK, caused by string conversion
     )
   )
   expect_equal(result$stac, 3)
@@ -150,7 +151,7 @@ test_that("use", {
     all.equal(
       result$other_clades_same_ancestor[[1]]$brts_miss, 
       6.92581,
-      tolerance = 1.0e-7 # string conversion
+      tolerance = 1.0e-7 # OK, caused by string conversion
     )
   )
   expect_equal(
