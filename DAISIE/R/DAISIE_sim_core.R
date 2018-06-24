@@ -60,28 +60,43 @@ DAISIE_sim_core <- function(
   # Pick thor (before timeval, to set Amax thor)
   thor <- get_thor(0, totaltime, Apars, ext_multiplier, island_ontogeny, thor = NULL)
 
+  
   while(timeval <= totaltime) {
     if (timeval < thor) {
-
       rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                             mu = mu, laa = laa, lac = lac, Apars = Apars,
                             Epars = Epars, island_ontogeny = island_ontogeny,
                             extcutoff = extcutoff, K = K,
                             island_spec = island_spec, mainland_n, thor)
+      
       timeval <- pick_timeval(rates, timeval)
       
       # Determine event
-      possible_event <- DDD::sample2(1:5, 1, prob = c(rates[[1]], rates[[2]], 
+      # If statement prevents odd behaviour of sample when rates are 0
+      if (is.null(island_ontogeny)) {
+        possible_event <- sample(1:4, 1, prob = c(rates[[1]], rates[[2]], 
+                                                  rates[[3]], rates[[4]]), 
+                                 replace = FALSE)
+      } else {
+      possible_event <- sample(1:5, 1, prob = c(rates[[1]], rates[[2]], 
                                                       rates[[3]], rates[[4]], 
                                                       (rates[[5]] - rates[[2]])),
                                      replace = FALSE)
+      }
+
       if (timeval <= totaltime) {
         # Run event
-        new_state <- DAISIE_sim_update_state(timeval = timeval, possible_event = possible_event, maxspecID = maxspecID,
-                                             mainland_spec = mainland_spec, island_spec = island_spec)
+        
+
+        new_state <- DAISIE_sim_update_state(timeval = timeval,
+                                             possible_event = possible_event,
+                                             maxspecID = maxspecID,
+                                             mainland_spec = mainland_spec,
+                                             island_spec = island_spec)
+        
         island_spec <- new_state$island_spec
         maxspecID <- new_state$maxspecID
-      
+
       }
       stt_table <- rbind(stt_table,
                          c(totaltime - timeval,
@@ -89,15 +104,18 @@ DAISIE_sim_core <- function(
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
 
+      
+      
     } else {
       ##### After thor is reached ####
       # Recalculate thor
       thor <- get_thor(timeval = timeval, totaltime = totaltime, Apars = Apars,
                        ext_multiplier = ext_multiplier,
                        island_ontogeny = island_ontogeny, thor = thor)
+      
     }
   }
-  
+  stt_table[nrow(stt_table),1] <- 0
   ############# 
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
   if(length(island_spec[,1]) == 0)
@@ -190,7 +208,7 @@ update_rates <- function(timeval, totaltime,
   if (is.null(island_ontogeny)) {
     
     ext_rate_max <- ext_rate
-    
+
   } else if ((Apars[2] * Apars[4]) > timeval) {
     
     ext_rate_max <- ext_rate
@@ -203,7 +221,7 @@ update_rates <- function(timeval, totaltime,
                                  extcutoff = extcutoff, island_spec = island_spec,
                                  K = K)
   }
-  
+
   rates <- list(immig_rate, ext_rate, ana_rate, clado_rate, ext_rate_max)
   return(rates)
 }
