@@ -1,11 +1,5 @@
-DAISIE_sim_min_type2 = function(
-  time,
-  M,
-  pars,
-  replicates,
-  prop_type2_pool,
-  verbose = TRUE
-) {
+DAISIE_sim_min_type2 = function(totaltime,M,pars,replicates, prop_type2_pool)
+{
   island_replicates = list()
 
   n_islands_with_type2 = 0
