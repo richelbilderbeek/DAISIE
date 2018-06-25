@@ -1,7 +1,14 @@
-DAISIE_sim_min_type2 = function(totaltime,M,pars,replicates, prop_type2_pool)
-{
+DAISIE_sim_min_type2 = function(
+  time,
+  M,
+  pars,
+  replicates,
+  prop_type2_pool,
+  verbose = TRUE
+) {
+  time <- totaltime
   island_replicates = list()
-
+  
   n_islands_with_type2 = 0
   counter = 0
   while(n_islands_with_type2 < replicates)
@@ -20,23 +27,23 @@ DAISIE_sim_min_type2 = function(totaltime,M,pars,replicates, prop_type2_pool)
     K_2 = pars[8]
     gam_2 = pars[9]
     laa_2 = pars[10]
-      
+    
     full_list = list()
     
     #### species of pool1
     for (m_spec in 1:pool1)
     { 	
-      full_list[[m_spec]] = DAISIE_sim_core(time = time,mainland_n = 1,pars = c(lac_1,mu_1,K_1,gam_1,laa_1))
+      full_list[[m_spec]] = DAISIE_sim_core(totaltime = totaltime,mainland_n = 1,pars = c(lac_1,mu_1,K_1,gam_1,laa_1))
       full_list[[m_spec]]$type1or2 = 1
     }
     
     #### species of pool2
     for (m_spec in (pool1 + 1):(pool1 + pool2))
     { 	
-      full_list[[m_spec]] = DAISIE_sim_core(time = time,mainland_n = 1,pars = c(lac_2,mu_2,K_2,gam_2,laa_2))
+      full_list[[m_spec]] = DAISIE_sim_core(totaltime = totaltime,mainland_n = 1,pars = c(lac_2,mu_2,K_2,gam_2,laa_2))
       full_list[[m_spec]]$type1or2 = 2
     }
-      
+    
     type_2s = which(unlist(full_list)[which(names(unlist(full_list)) == "type1or2")] == 2)
     
     number_type2_species_colonized = 0
@@ -48,7 +55,7 @@ DAISIE_sim_min_type2 = function(totaltime,M,pars,replicates, prop_type2_pool)
         number_type2_species_colonized = number_type2_species_colonized + 1
       }
     }
-      
+    
     if(number_type2_species_colonized > 0)
     {
       n_islands_with_type2 = n_islands_with_type2 + 1
