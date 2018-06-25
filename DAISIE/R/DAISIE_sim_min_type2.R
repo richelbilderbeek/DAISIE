@@ -6,7 +6,7 @@ DAISIE_sim_min_type2 = function(
   prop_type2_pool,
   verbose = TRUE
 ) {
-  time <- totaltime
+  totaltime <- time
   island_replicates = list()
   
   n_islands_with_type2 = 0
