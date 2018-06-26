@@ -5,7 +5,7 @@
 \title{Plot island species-through-time (STT) plots}
 \usage{
 DAISIE_plot_sims(island_replicates, use_dev_new = TRUE,
-  plot_plus_one = TRUE)
+  plot_plus_one = TRUE, empirical_data = NULL)
 }
 \arguments{
 \item{island_replicates}{Island replicates in DAISIE format (Produced in
@@ -19,6 +19,9 @@ Set to \code{FALSE} when plotting within a vignette}
 Set to \code{TRUE} for default behavior.
 Set to \code{FALSE} to plot all values without adding one.
 Only works when there is one type of species}
+
+\item{empirical_data}{data to display the empirical LTT plot of.
+By default, this value is NULL, and no empirical LTT plot is shown.}
 }
 \value{
 R plot.
@@ -47,6 +50,15 @@ data(islands_2types_1000reps)
 DAISIE_plot_sims(island_replicates = islands_2types_1000reps)
 
 
+# Plot islands with single process
+# Start counting from zero on the Y axis
+# Also show the empirical data
+data(Galapagos_datatable)
+DAISIE_plot_sims(
+island_replicates = islands_1type_1000reps, 
+  plot_plus_one = FALSE,
+  empirical_data = Galapagos_datatable
+)
 }
 \references{
 Valente, L.M., A.B. Phillimore and R.S. Etienne (2015).

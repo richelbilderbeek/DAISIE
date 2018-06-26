@@ -18,6 +18,8 @@
 #'   Set to \code{TRUE} for default behavior.
 #'   Set to \code{FALSE} to plot all values without adding one.
 #'   Only works when there is one type of species
+#' @param empirical_data data to display the empirical LTT plot of.
+#'   By default, this value is NULL, and no empirical LTT plot is shown.  
 #' @return R plot.
 #' @author Luis Valente
 #' @seealso \code{\link{DAISIE_sim}} \code{\link{DAISIE_format_CS}}
@@ -38,10 +40,20 @@
 #' DAISIE_plot_sims(island_replicates = islands_2types_1000reps)
 #' 
 #' 
+#' # Plot islands with single process
+#' # Start counting from zero on the Y axis
+#' # Also show the empirical data
+#' data(Galapagos_datatable)
+#' DAISIE_plot_sims(
+#' island_replicates = islands_1type_1000reps, 
+#'   plot_plus_one = FALSE,
+#'   empirical_data = Galapagos_datatable
+#' )
 DAISIE_plot_sims <- function(
   island_replicates, 
   use_dev_new = TRUE,
-  plot_plus_one = TRUE
+  plot_plus_one = TRUE,
+  empirical_data = NULL
 ) {
     
     replicates <- length(island_replicates)
@@ -171,7 +183,7 @@ DAISIE_plot_sims <- function(
         lines(stt_average_type2[, "Time"], stt_average_type2[, "Endemic"] + 1, lwd = 2, col = "dodgerblue1")
         
     } else {
-        #
+        # Default behavior to open a new device, which hurts vignettes
         if (use_dev_new == TRUE) {
           dev.new(width = 6, height = 6)
         }
@@ -189,7 +201,8 @@ DAISIE_plot_sims <- function(
         suppressWarnings(
           plot(NULL, NULL, xlim = rev(c(0, time)), ylim = c(1, max(stt_q0.975_all)), 
             ylab = y_axis_label, 
-            bty = "l", xaxs = "i", xlab = "Time before present", main = "Species-through-time - All species", 
+            bty = "l", xaxs = "i", xlab = "Time before present", 
+            main = "Species-through-time - All species", 
             log = "y", cex.lab = 1.2, cex.main = 1.2, cex.axis = 1.2,
             yaxt = y_axis_type
           )
@@ -201,10 +214,27 @@ DAISIE_plot_sims <- function(
         lines(stt_average_all[, "Time"], stt_average_all[, "Total"] + 1, lwd = 2)
         lines(stt_average_all[, "Time"], stt_average_all[, "nI"] + 1, lwd = 2, col = "cyan3")
         lines(stt_average_all[, "Time"], stt_average_all[, "Endemic"] + 1, lwd = 2, col = "dodgerblue1")
-        
-        legend(time, max(stt_q0.975_all), c("Total", "Non-endemic", "Endemic"), lty = 1, lwd = 2, col = c("black", 
-            "cyan3", "dodgerblue1"), cex = 1.2, border = NA, bty = "n")
 
+        if (!is.null(empirical_data)) {
+          branching_times_mya <- DAISIE_get_brts_mya(Galapagos_datatable)
+          lines(
+            x = branching_times_mya, 
+            y = length(branching_times_mya) - seq_along(branching_times_mya) - 1,
+            lwd = 3,
+            col = "blue"
+          )
+        }
+
+        legend_names <- c("Total", "Non-endemic", "Endemic")
+        legend_colors <- c("black", "cyan3", "dodgerblue1")
+        if (!is.null(empirical_data)) {
+          legend_names <- c(legend_names, "Empirical total")
+          legend_colors <- c(legend_colors, "blue")
+        }
+        legend(
+          time, max(stt_q0.975_all), legend_names, lty = 1, lwd = 2, 
+          col = legend_colors, cex = 1.2, border = NA, bty = "n"
+        )
         if (plot_plus_one == FALSE) {
           y_axis_values <- c(1, 2, 5, 10, 20, 50, 100, 200, 500, 1000)  
           axis(2, at = y_axis_values, labels = y_axis_values - 1)
