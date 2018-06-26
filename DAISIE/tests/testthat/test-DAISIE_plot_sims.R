@@ -43,6 +43,24 @@ test_that("use", {
     sample_freq = 25,
     verbose = FALSE
   )
-  DAISIE_plot_sims(island_replicates, use_dev_new = FALSE)
-  # axis(2, at = c(1, 2, 5, 10), labels = c(0, 1, 4, 9))  
+  DAISIE_plot_sims(
+    island_replicates, 
+    use_dev_new = FALSE,
+    plot_plus_one = FALSE
+  )
+})
+
+test_that("Plot plus one", {
+
+  data(islands_1type_1000reps)
+  DAISIE_plot_sims(
+    island_replicates = islands_1type_1000reps, 
+    use_dev_new = FALSE,
+    plot_plus_one = TRUE
+  )
+  DAISIE_plot_sims(
+    island_replicates = islands_1type_1000reps, 
+    use_dev_new = FALSE,
+    plot_plus_one = FALSE
+  )
 })

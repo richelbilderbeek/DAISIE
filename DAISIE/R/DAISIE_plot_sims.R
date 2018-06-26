@@ -11,8 +11,12 @@
 #' 
 #' @param island_replicates Island replicates in DAISIE format (Produced in
 #' DAISIE_sim with format=TRUE option, or in DAISIE_format_sim)
-#' @param use_dev_new Default=TRUE. Use \code{dev.new} before plotting. Set to
-#' \code{FALSE} when plotting within a vignette
+#' @param use_dev_new Boolean to indicate to use \code{dev.new} before plotting. 
+#'   Set to \code{TRUE} for default behavior.
+#'   Set to \code{FALSE} when plotting within a vignette
+#' @param plot_plus_one Boolean to indicate to plot all values plus one.
+#'   Set to \code{TRUE} for default behavior.
+#'   Set to \code{FALSE} to plot all values without adding one
 #' @return R plot.
 #' @author Luis Valente
 #' @seealso \code{\link{DAISIE_sim}} \code{\link{DAISIE_format_CS}}
@@ -35,7 +39,8 @@
 #' 
 DAISIE_plot_sims <- function(
   island_replicates, 
-  use_dev_new = TRUE
+  use_dev_new = TRUE,
+  plot_plus_one = TRUE
 ) {
     
     replicates <- length(island_replicates)
@@ -165,13 +170,29 @@ DAISIE_plot_sims <- function(
         lines(stt_average_type2[, "Time"], stt_average_type2[, "Endemic"] + 1, lwd = 2, col = "dodgerblue1")
         
     } else {
+        #
         if (use_dev_new == TRUE) {
           dev.new(width = 6, height = 6)
         }
+      
         par(mfrow = c(1, 1))
-        suppressWarnings(plot(NULL, NULL, xlim = rev(c(0, time)), ylim = c(1, max(stt_q0.975_all)), ylab = "No of species + 1", 
+        
+        # Plot the y axis iff plus one
+        y_axis_type <- 'n'
+        y_axis_label <- "No of species" 
+        if (plot_plus_one == TRUE) {
+          y_axis_type <- 's'
+          y_axis_label <- "No of species + 1" 
+        }
+        
+        suppressWarnings(
+          plot(NULL, NULL, xlim = rev(c(0, time)), ylim = c(1, max(stt_q0.975_all)), 
+            ylab = y_axis_label, 
             bty = "l", xaxs = "i", xlab = "Time before present", main = "Species-through-time - All species", 
-            log = "y", cex.lab = 1.2, cex.main = 1.2, cex.axis = 1.2))
+            log = "y", cex.lab = 1.2, cex.main = 1.2, cex.axis = 1.2,
+            yaxt = y_axis_type
+          )
+        )
         polygon(c(stt_average_all[, "Time"], rev(stt_average_all[, "Time"])), c(stt_q0.025_all[, "Total"] + 
             1, rev(stt_q0.975_all[, "Total"] + 1)), col = "light grey", border = NA)
         polygon(c(stt_average_all[, "Time"], rev(stt_average_all[, "Time"])), c(stt_q0.25_all[, "Total"] + 
@@ -182,6 +203,11 @@ DAISIE_plot_sims <- function(
         
         legend(time, max(stt_q0.975_all), c("Total", "Non-endemic", "Endemic"), lty = 1, lwd = 2, col = c("black", 
             "cyan3", "dodgerblue1"), cex = 1.2, border = NA, bty = "n")
+
+        if (plot_plus_one == FALSE) {
+          y_axis_values <- c(1, 2, 5, 10, 20, 50, 100, 200, 500, 1000)  
+          axis(2, at = y_axis_values, labels = y_axis_values - 1)
+        }
         
     }
     

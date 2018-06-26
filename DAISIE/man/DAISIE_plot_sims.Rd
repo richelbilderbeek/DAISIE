@@ -4,14 +4,20 @@
 \alias{DAISIE_plot_sims}
 \title{Plot island species-through-time (STT) plots}
 \usage{
-DAISIE_plot_sims(island_replicates, use_dev_new = TRUE)
+DAISIE_plot_sims(island_replicates, use_dev_new = TRUE,
+  plot_plus_one = TRUE)
 }
 \arguments{
 \item{island_replicates}{Island replicates in DAISIE format (Produced in
 DAISIE_sim with format=TRUE option, or in DAISIE_format_sim)}
 
-\item{use_dev_new}{Default=TRUE. Use \code{dev.new} before plotting. Set to
-\code{FALSE} when plotting within a vignette}
+\item{use_dev_new}{Boolean to indicate to use \code{dev.new} before plotting. 
+Set to \code{TRUE} for default behavior.
+Set to \code{FALSE} when plotting within a vignette}
+
+\item{plot_plus_one}{Boolean to indicate to plot all values plus one.
+Set to \code{TRUE} for default behavior.
+Set to \code{FALSE} to plot all values without adding one}
 }
 \value{
 R plot.
