@@ -17,6 +17,12 @@ the sorted branching times, in million years ago
 Extract the sorted branching times, in million years ago.
 from a data table
 }
+\examples{
+  data(Galapagos_datatable)
+  brts_mya <- DAISIE_get_brts_mya(data_table = Galapagos_datatable)
+  testit::assert(length(brts_mya) > 1)
+  testit::assert(all(brts_mya > 0))
+}
 \author{
 Richel J.C. Bilderbeek
 }
