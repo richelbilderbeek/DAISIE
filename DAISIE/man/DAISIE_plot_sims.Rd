@@ -21,7 +21,8 @@ Set to \code{FALSE} to plot all values without adding one.
 Only works when there is one type of species}
 
 \item{empirical_data}{data to display the empirical LTT plot of.
-By default, this value is NULL, and no empirical LTT plot is shown.}
+By default, this value is NULL, and no empirical LTT plot is shown.  
+Only works when there is one type of species}
 }
 \value{
 R plot.

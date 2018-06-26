@@ -20,6 +20,7 @@
 #'   Only works when there is one type of species
 #' @param empirical_data data to display the empirical LTT plot of.
 #'   By default, this value is NULL, and no empirical LTT plot is shown.  
+#'   Only works when there is one type of species
 #' @return R plot.
 #' @author Luis Valente
 #' @seealso \code{\link{DAISIE_sim}} \code{\link{DAISIE_format_CS}}
