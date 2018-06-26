@@ -1,5 +1,22 @@
 context("DAISIE_plot_sims")
 
+test_that("Example 1", {
+
+  data(islands_1type_1000reps)
+  DAISIE_plot_sims(
+    island_replicates = islands_1type_1000reps, 
+    use_dev_new = FALSE
+  )
+})
+
+test_that("Example 2", {
+  data(islands_2types_1000reps)
+  DAISIE_plot_sims(
+    island_replicates = islands_2types_1000reps, 
+    use_dev_new = FALSE
+  )
+})
+
 test_that("use", {
 
   set.seed(42)
@@ -27,4 +44,5 @@ test_that("use", {
     verbose = FALSE
   )
   DAISIE_plot_sims(island_replicates, use_dev_new = FALSE)
+  # axis(2, at = c(1, 2, 5, 10), labels = c(0, 1, 4, 9))  
 })
