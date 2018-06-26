@@ -17,7 +17,8 @@ Set to \code{FALSE} when plotting within a vignette}
 
 \item{plot_plus_one}{Boolean to indicate to plot all values plus one.
 Set to \code{TRUE} for default behavior.
-Set to \code{FALSE} to plot all values without adding one}
+Set to \code{FALSE} to plot all values without adding one.
+Only works when there is one type of species}
 }
 \value{
 R plot.
