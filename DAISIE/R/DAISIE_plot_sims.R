@@ -18,9 +18,6 @@
 #'   Set to \code{TRUE} for default behavior.
 #'   Set to \code{FALSE} to plot all values without adding one.
 #'   Only works when there is one type of species
-#' @param empirical_data data to display the empirical LTT plot of.
-#'   By default, this value is NULL, and no empirical LTT plot is shown.  
-#'   Only works when there is one type of species
 #' @return R plot.
 #' @author Luis Valente
 #' @seealso \code{\link{DAISIE_sim}} \code{\link{DAISIE_format_CS}}
@@ -43,18 +40,14 @@
 #' 
 #' # Plot islands with single process
 #' # Start counting from zero on the Y axis
-#' # Also show the empirical data
-#' data(Galapagos_datatable)
 #' DAISIE_plot_sims(
 #' island_replicates = islands_1type_1000reps, 
-#'   plot_plus_one = FALSE,
-#'   empirical_data = Galapagos_datatable
+#'   plot_plus_one = FALSE
 #' )
 DAISIE_plot_sims <- function(
   island_replicates, 
   use_dev_new = TRUE,
-  plot_plus_one = TRUE,
-  empirical_data = NULL
+  plot_plus_one = TRUE
 ) {
     
     replicates <- length(island_replicates)
@@ -216,22 +209,8 @@ DAISIE_plot_sims <- function(
         lines(stt_average_all[, "Time"], stt_average_all[, "nI"] + 1, lwd = 2, col = "cyan3")
         lines(stt_average_all[, "Time"], stt_average_all[, "Endemic"] + 1, lwd = 2, col = "dodgerblue1")
 
-        if (!is.null(empirical_data)) {
-          branching_times_mya <- DAISIE_get_brts_mya(empirical_data)
-          lines(
-            x = branching_times_mya, 
-            y = length(branching_times_mya) - seq_along(branching_times_mya) - 1,
-            lwd = 3,
-            col = "blue"
-          )
-        }
-
         legend_names <- c("Total", "Non-endemic", "Endemic")
         legend_colors <- c("black", "cyan3", "dodgerblue1")
-        if (!is.null(empirical_data)) {
-          legend_names <- c(legend_names, "Empirical total extant")
-          legend_colors <- c(legend_colors, "blue")
-        }
         legend(
           time, max(stt_q0.975_all), legend_names, lty = 1, lwd = 2, 
           col = legend_colors, cex = 1.2, border = NA, bty = "n"

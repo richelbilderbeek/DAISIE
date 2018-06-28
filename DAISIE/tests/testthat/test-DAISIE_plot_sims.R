@@ -64,27 +64,3 @@ test_that("Plot plus one", {
     plot_plus_one = FALSE
   )
 })
-
-test_that("Plot plus empirical data", {
-
-  data(islands_1type_1000reps)
-  DAISIE_plot_sims(
-    island_replicates = islands_1type_1000reps, 
-    use_dev_new = FALSE,
-    plot_plus_one = TRUE,
-    empirical_data = NULL
-  )
-  data(Galapagos_datatable)
-  DAISIE_plot_sims(
-    island_replicates = islands_1type_1000reps, 
-    use_dev_new = FALSE,
-    plot_plus_one = FALSE,
-    empirical_data = Galapagos_datatable
-  )
-  DAISIE_plot_sims(
-    island_replicates = islands_1type_1000reps, 
-    use_dev_new = FALSE,
-    plot_plus_one = TRUE,
-    empirical_data = Galapagos_datatable
-  )
-})
