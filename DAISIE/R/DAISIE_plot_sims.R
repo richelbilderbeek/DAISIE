@@ -71,8 +71,8 @@ DAISIE_plot_sims <- function(
             sum_endemics, total)
     }
     
-    
     stt_average_all <- apply(complete_arr, c(1, 2), median)
+    testit::assert(stt_average_all == DAISIE_extract_stt_median(island_replicates))
     stt_q0.025_all <- apply(complete_arr, c(1, 2), quantile, 0.025)
     stt_q0.25_all <- apply(complete_arr, c(1, 2), quantile, 0.25)
     stt_q0.75_all <- apply(complete_arr, c(1, 2), quantile, 0.75)
