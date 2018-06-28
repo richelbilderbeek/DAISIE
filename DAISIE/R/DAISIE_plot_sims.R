@@ -217,7 +217,7 @@ DAISIE_plot_sims <- function(
         lines(stt_average_all[, "Time"], stt_average_all[, "Endemic"] + 1, lwd = 2, col = "dodgerblue1")
 
         if (!is.null(empirical_data)) {
-          branching_times_mya <- DAISIE_get_brts_mya(Galapagos_datatable)
+          branching_times_mya <- DAISIE_get_brts_mya(empirical_data)
           lines(
             x = branching_times_mya, 
             y = length(branching_times_mya) - seq_along(branching_times_mya) - 1,
@@ -229,7 +229,7 @@ DAISIE_plot_sims <- function(
         legend_names <- c("Total", "Non-endemic", "Endemic")
         legend_colors <- c("black", "cyan3", "dodgerblue1")
         if (!is.null(empirical_data)) {
-          legend_names <- c(legend_names, "Empirical total")
+          legend_names <- c(legend_names, "Empirical total extant")
           legend_colors <- c(legend_colors, "blue")
         }
         legend(
