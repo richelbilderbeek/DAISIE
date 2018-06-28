@@ -13,7 +13,8 @@
 #'   \code{\link{DAISIE_sim}} with \code{format = TRUE} option, 
 #'   or in \code{\link{DAISIE_format_sim}}). Minimally, this must be 
 #'   a list, that has as much elements as replicates. Each element must be a
-#'   list, with a data frame at its first element. This data frame must have
+#'   list with the elements \code{island_age}, \code{not_present} 
+#'   and \code{stt_all}. \code{stt_all} must be a data frame with
 #'   the column names \code{Time}, \code{nI}, \code{nA} and \code{nC}.
 #' @param use_dev_new Boolean to indicate to use \code{dev.new} before plotting. 
 #'   Set to \code{TRUE} for default behavior.
