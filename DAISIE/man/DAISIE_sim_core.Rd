@@ -26,9 +26,9 @@ this value is set to the number of mainland species.}
   \item{[5]: anagenesis rate}
 }}
 
-\item{Apars}{something}
+\item{Apars}{some area parameters}
 
-\item{Epars}{something}
+\item{Epars}{some extinction parameters}
 
 \item{island_ontogeny}{something}
 }

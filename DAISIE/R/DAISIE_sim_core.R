@@ -14,8 +14,8 @@
 #'   \item{[4]: immigration rate}
 #'   \item{[5]: anagenesis rate}
 #' }
-#' @param Apars something
-#' @param Epars something
+#' @param Apars some area parameters
+#' @param Epars some extinction parameters
 #' @param island_ontogeny something
 DAISIE_sim_core <- function(
   time,
