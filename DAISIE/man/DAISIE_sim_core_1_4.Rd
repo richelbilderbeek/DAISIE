@@ -24,12 +24,6 @@ this value is set to the number of mainland species.}
   \item{[4]: immigration rate}
   \item{[5]: anagenesis rate}
 }}
-
-\item{Apars}{something}
-
-\item{Epars}{something}
-
-\item{island_ontogeny}{something}
 }
 \description{
 Internal function of the DAISIE simulation

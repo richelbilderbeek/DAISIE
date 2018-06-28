@@ -8,6 +8,7 @@
 #' @param carr_cap carrying capacity
 #' @param imm_rate immigration rate
 #' @param ana_rate anagenesis rate
+#' @param island_ontogeny something
 #' @return a list with these elements:
 #' \describe{
 #'   \item{stt_table}{a species-through-time table}

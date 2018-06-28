@@ -23,6 +23,8 @@ DAISIE_sim_core_checked(sim_time, n_mainland_species, clado_rate, ext_rate,
 \item{imm_rate}{immigration rate}
 
 \item{ana_rate}{anagenesis rate}
+
+\item{island_ontogeny}{something}
 }
 \value{
 a list with these elements:
