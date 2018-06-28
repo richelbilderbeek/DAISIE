@@ -24,7 +24,7 @@
 #' }
 #' @param Epars a numeric vector:
 #' \itemize{
-#'   \item{[1]: minimum extinction (when area is at peak)}
+#'   \item{[1]: minimum extinction when area is at peak}
 #'   \item{[2]: extinction when current area is 10% of maximum area}
 #' }
 #' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
