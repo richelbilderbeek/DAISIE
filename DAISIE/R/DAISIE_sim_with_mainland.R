@@ -2,6 +2,9 @@
 #' mainland and island. If there are no processes,
 #' this results in equivalent results as Valente et al., 2015.
 #' @inheritParams DAISIE_sim
+#' @note This function is still a stub: \code{mainland_params} is
+#'   unused and a warning is emitted if this value is non-NULL
+#' @author Richel J.C. Bilderbeek
 DAISIE_sim_with_mainland <- function(
   time,
   M,
