@@ -9,8 +9,12 @@
 #' 2.5-97.5th percentiles are plotted in light grey, 25-75th percentiles
 #' plotted in dark grey.
 #' 
-#' @param island_replicates Island replicates in DAISIE format (Produced in
-#' DAISIE_sim with format=TRUE option, or in DAISIE_format_sim)
+#' @param island_replicates Island replicates in DAISIE format (produced in
+#'   \code{\link{DAISIE_sim}} with \code{format = TRUE} option, 
+#'   or in \code{\link{DAISIE_format_sim}}). Minimally, this must be 
+#'   a list, that has as much elements as replicates. Each element must be a
+#'   list, with a data frame at its first element. This data frame must have
+#'   the column names \code{Time}, \code{nI}, \code{nA} and \code{nC}.
 #' @param use_dev_new Boolean to indicate to use \code{dev.new} before plotting. 
 #'   Set to \code{TRUE} for default behavior.
 #'   Set to \code{FALSE} when plotting within a vignette
