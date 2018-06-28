@@ -8,9 +8,9 @@ Valente et al 2014 ProcB}
 island_area(timeval, totaltime, Apars, island_function_shape)
 }
 \arguments{
-\item{timeval}{something}
+\item{timeval}{current time of simulation}
 
-\item{totaltime}{something}
+\item{totaltime}{total time of simulation}
 
 \item{Apars}{something}
 
