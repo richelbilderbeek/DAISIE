@@ -14,9 +14,22 @@
 #'   \item{[4]: immigration rate}
 #'   \item{[5]: anagenesis rate}
 #' }
-#' @param Apars something
-#' @param Epars something
-#' @param island_ontogeny something
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param Epars a numeric vector:
+#' \itemize{
+#'   \item{[1]: minimum extinction (when area is at peak)}
+#'   \item{[2]: extinction when current area is 10% of maximum area}
+#' }
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
 DAISIE_sim_core <- function(
   time,
   mainland_n,
@@ -413,9 +426,9 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
   return(list(island_spec = island_spec, maxspecID = maxspecID))
 }
 
-DAISIE_ONEcolonist <- function(totaltime,island_spec,stt_table)
+DAISIE_ONEcolonist <- function(time,island_spec,stt_table)
 {
-  
+  totaltime <- time
   ### number of independent colonisations
   uniquecolonisation <- as.numeric(unique(island_spec[,"Colonisation time (BP)"]))
   number_colonisations <- length(uniquecolonisation) 

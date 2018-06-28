@@ -1,7 +1,7 @@
 #' Function to describe changes in area through time. Adapted from
 #' Valente et al 2014 ProcB
-#' @param timeval something
-#' @param totaltime something
+#' @param timeval current time of simulation
+#' @param totaltime total time of simulation
 #' @param Apars something
 #' @param island_function_shape something
 island_area <- function(timeval, totaltime, Apars, island_function_shape){
