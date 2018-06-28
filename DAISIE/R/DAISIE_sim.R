@@ -153,6 +153,7 @@ DAISIE_sim <- function(
   verbose = TRUE,
   ...
 ) {
+  # @richelbilderbeek
   if (!is.null(mainland_params)) {
     return(
       DAISIE_sim_with_mainland(
@@ -168,6 +169,7 @@ DAISIE_sim <- function(
       )
     )
   }
+  # Classic behavior
   totaltime <- time
   island_replicates  = list()
   
