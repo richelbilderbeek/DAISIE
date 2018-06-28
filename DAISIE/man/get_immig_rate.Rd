@@ -2,35 +2,31 @@
 % Please edit documentation in R/DAISIE_rates.R
 \name{get_immig_rate}
 \alias{get_immig_rate}
-\title{Something}
+\title{Function to calculate immigration rate given number of species on island
+ and mainland}
 \usage{
-get_immig_rate(timeval, totaltime, gam, Apars, Epars, island_function_shape,
-  extcutoff, island_spec, K, mainland_n)
+get_immig_rate(gam, island_spec, K, mainland_n)
 }
 \arguments{
-\item{timeval}{something}
+\item{gam}{per capita immigration rate}
 
-\item{totaltime}{something}
+\item{island_spec}{matrix with current state of system}
 
-\item{gam}{something}
+\item{K}{carrying capacity}
 
-\item{Apars}{something}
-
-\item{Epars}{something}
-
-\item{island_function_shape}{something}
-
-\item{extcutoff}{something}
-
-\item{island_spec}{something}
-
-\item{K}{something}
-
-\item{mainland_n}{something}
+\item{mainland_n}{total number of species present in the mainland}
 }
 \description{
-Something
+Function to calculate immigration rate given number of species on island
+ and mainland
 }
 \seealso{
 Does the same as \link{DAISIE_calc_clade_imm_rate}
+
+Other rates calculation: \code{\link{get_ana_rate}},
+  \code{\link{get_ext_rate}}, \code{\link{get_thor}},
+  \code{\link{island_area}}, \code{\link{update_rates}}
+}
+\author{
+Pedro Neves
 }

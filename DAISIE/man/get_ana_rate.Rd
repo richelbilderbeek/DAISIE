@@ -4,31 +4,23 @@
 \alias{get_ana_rate}
 \title{Function to calculate anagenesis rate given number of immigrant species}
 \usage{
-get_ana_rate(timeval, totaltime, laa, Apars, Epars, island_function_shape,
-  extcutoff, island_spec, K)
+get_ana_rate(laa, island_spec)
 }
 \arguments{
-\item{timeval}{something}
+\item{laa}{per capita anagenesis rate}
 
-\item{totaltime}{something}
-
-\item{laa}{something}
-
-\item{Apars}{something}
-
-\item{Epars}{something}
-
-\item{island_function_shape}{something}
-
-\item{extcutoff}{something}
-
-\item{island_spec}{something}
-
-\item{K}{something}
+\item{island_spec}{matrix with current state of system}
 }
 \description{
 Function to calculate anagenesis rate given number of immigrant species
 }
 \seealso{
 Does the same as \link{DAISIE_calc_clade_ana_rate}
+
+Other rates calculation: \code{\link{get_ext_rate}},
+  \code{\link{get_immig_rate}}, \code{\link{get_thor}},
+  \code{\link{island_area}}, \code{\link{update_rates}}
+}
+\author{
+Pedro Neves
 }

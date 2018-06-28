@@ -35,6 +35,12 @@ this value is set to the number of mainland species.}
   \item{[4]: total island age}
 }}
 
+\item{Epars}{a numeric vector:
+\itemize{
+  \item{[1]: minimum extinction when area is at peak}
+  \item{[2]: extinction rate when current area is 0.10 of maximum area}
+}}
+
 \item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
 \code{"quadratic"} for a beta function describing area through time,
  or \code{"linear"} for a linear function}
