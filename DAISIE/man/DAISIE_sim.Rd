@@ -4,10 +4,10 @@
 \alias{DAISIE_sim}
 \title{Simulate islands with given parameters.}
 \usage{
-DAISIE_sim(time, M, pars, replicates, divdepmodel = "CS",
-  prop_type2_pool = NA, replicates_apply_type2 = TRUE, sample_freq = 25,
-  plot_sims = TRUE, island_ontogeny = NULL, Apars = NULL, Epars = NULL,
-  verbose = TRUE, ...)
+DAISIE_sim(time, M, pars, replicates, mainland_params = NULL,
+  divdepmodel = "CS", prop_type2_pool = NA, replicates_apply_type2 = TRUE,
+  sample_freq = 25, plot_sims = TRUE, island_ontogeny = NULL,
+  Apars = NULL, Epars = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{time}{Length of the simulation in time units. For example, if an
@@ -33,6 +33,11 @@ lambda^a (anagenesis rate) for type 2 species\cr The elements 6:10 are
 optional and are required only when type 2 species are included.}
 
 \item{replicates}{Number of island replicates to be simulated.}
+
+\item{mainland_params}{parameters for simulation mainland processes.
+If NULL, the mainland is assumed to be static, following the
+assumptions of Valente et al., 2016.
+Else the parameters can be created by \code{DAISIE_create_mainland_params}}
 
 \item{divdepmodel}{Option divdepmodel='CS' runs model with clade-specific
 carrying capacity, where diversity-dependence operates only within single

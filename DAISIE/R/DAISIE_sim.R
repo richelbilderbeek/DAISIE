@@ -30,6 +30,10 @@
 #' lambda^a (anagenesis rate) for type 2 species\cr The elements 6:10 are
 #' optional and are required only when type 2 species are included.
 #' @param replicates Number of island replicates to be simulated.
+#' @param mainland_params parameters for simulation mainland processes.
+#'   If NULL, the mainland is assumed to be static, following the
+#'   assumptions of Valente et al., 2016.
+#'   Else the parameters can be created by \code{DAISIE_create_mainland_params}
 #' @param divdepmodel Option divdepmodel='CS' runs model with clade-specific
 #' carrying capacity, where diversity-dependence operates only within single
 #' clades, i.e. only among species originating from the same mainland colonist.
@@ -137,6 +141,7 @@ DAISIE_sim <- function(
   M,
   pars,
   replicates,
+  mainland_params = NULL,
   divdepmodel = 'CS',
   prop_type2_pool = NA,
   replicates_apply_type2 = TRUE,
@@ -148,6 +153,21 @@ DAISIE_sim <- function(
   verbose = TRUE,
   ...
 ) {
+  if (!is.null(mainland_params)) {
+    return(
+      DAISIE_sim_with_mainland(
+        time = time,
+        M = M,
+        pars = pars,
+        replicates = replicates,
+        mainland_params = mainland_params,
+        divdepmodel = divdepmodel,
+        prop_type2_pool = prop_type2_pool,
+        replicates_apply_type2 = replicates_apply_type2,
+        sample_freq = sample_freq
+      )
+    )
+  }
   totaltime <- time
   island_replicates  = list()
   
