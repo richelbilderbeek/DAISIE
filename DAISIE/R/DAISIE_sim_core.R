@@ -30,7 +30,7 @@
 #' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
 #' \code{"quadratic"} for a beta function describing area through time,
 #'  or \code{"linear"} for a linear function
-DAISIE_sim_core_island_ontogeny <- function(
+DAISIE_sim_core <- function(
   time,
   mainland_n,
   pars,
