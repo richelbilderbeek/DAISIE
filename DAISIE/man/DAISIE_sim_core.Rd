@@ -26,11 +26,24 @@ this value is set to the number of mainland species.}
   \item{[5]: anagenesis rate}
 }}
 
-\item{Apars}{some area parameters}
+\item{Apars}{a numeric vector:
+\itemize{
+  \item{[1]: maximum area}
+  \item{[2]: value from 0 to 1 indicating where in the island's history the 
+  peak area is achieved}
+  \item{[3]: sharpness of peak}
+  \item{[4]: total island age}
+}}
 
-\item{Epars}{some extinction parameters}
+\item{Epars}{a numeric vector:
+\itemize{
+  \item{[1]: minimum extinction when area is at peak}
+  \item{[2]: extinction rate when current area is 0.10 of maximum area}
+}}
 
-\item{island_ontogeny}{something}
+\item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
+\code{"quadratic"} for a beta function describing area through time,
+ or \code{"linear"} for a linear function}
 }
 \description{
 Internal function of the DAISIE simulation

@@ -2,33 +2,31 @@
 % Please edit documentation in R/DAISIE_rates.R
 \name{get_clado_rate}
 \alias{get_clado_rate}
-\title{Function to calculate cladogenesis rate given number of island species}
+\title{Calculate cladogenesis rate}
 \usage{
-get_clado_rate(timeval, totaltime, lac, Apars, Epars, island_function_shape,
-  extcutoff, island_spec, K)
+get_clado_rate(lac, island_ontogeny, island_spec, K)
 }
 \arguments{
-\item{timeval}{something}
+\item{lac}{per capita cladogenesis rate}
 
-\item{totaltime}{something}
+\item{island_ontogeny}{a string describing the type of island ontogeny. 
+Can be \code{NULL},
+\code{"quadratic"} for a beta function describing area through time,
+ or \code{"linear"} for a linear function}
 
-\item{lac}{something}
+\item{island_spec}{matrix with current state of system}
 
-\item{Apars}{something}
-
-\item{Epars}{something}
-
-\item{island_function_shape}{something}
-
-\item{extcutoff}{something}
-
-\item{island_spec}{something}
-
-\item{K}{something}
+\item{K}{carrying capacity}
 }
 \description{
-Function to calculate cladogenesis rate given number of island species
+Internal function. 
+Calculates the cladogenesis rate given the current number of
+species in the system, the carrying capacity and the per capita cladogenesis
+rate
 }
 \seealso{
 Does the same as \link{DAISIE_calc_clade_clado_rate}
+}
+\author{
+Pedro Neves
 }

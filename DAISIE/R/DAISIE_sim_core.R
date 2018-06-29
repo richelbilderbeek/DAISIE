@@ -14,9 +14,22 @@
 #'   \item{[4]: immigration rate}
 #'   \item{[5]: anagenesis rate}
 #' }
-#' @param Apars some area parameters
-#' @param Epars some extinction parameters
-#' @param island_ontogeny something
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param Epars a numeric vector:
+#' \itemize{
+#'   \item{[1]: minimum extinction when area is at peak}
+#'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
+#' }
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
 DAISIE_sim_core <- function(
   time,
   mainland_n,
@@ -49,7 +62,7 @@ DAISIE_sim_core <- function(
     stop("Please select valid island ontogeny model. Options are no ontogeny: NULL, 'linear' or 'quadratic'.")
   }
   
-  mainland_spec <- seq(1,mainland_n,1)
+  mainland_spec <- seq(1, mainland_n, 1)
   maxspecID <- mainland_n
   
   island_spec = c()
@@ -60,28 +73,43 @@ DAISIE_sim_core <- function(
   # Pick thor (before timeval, to set Amax thor)
   thor <- get_thor(0, totaltime, Apars, ext_multiplier, island_ontogeny, thor = NULL)
 
+  
   while(timeval <= totaltime) {
     if (timeval < thor) {
-
       rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                             mu = mu, laa = laa, lac = lac, Apars = Apars,
                             Epars = Epars, island_ontogeny = island_ontogeny,
                             extcutoff = extcutoff, K = K,
                             island_spec = island_spec, mainland_n, thor)
+      
       timeval <- pick_timeval(rates, timeval)
       
       # Determine event
-      possible_event <- DDD::sample2(1:5, 1, prob = c(rates[[1]], rates[[2]], 
+      # If statement prevents odd behaviour of sample when rates are 0
+      if (is.null(island_ontogeny)) {
+        possible_event <- sample(1:4, 1, prob = c(rates[[1]], rates[[2]], 
+                                                  rates[[3]], rates[[4]]), 
+                                 replace = FALSE)
+      } else {
+      possible_event <- sample(1:5, 1, prob = c(rates[[1]], rates[[2]], 
                                                       rates[[3]], rates[[4]], 
                                                       (rates[[5]] - rates[[2]])),
                                      replace = FALSE)
+      }
+
       if (timeval <= totaltime) {
         # Run event
-        new_state <- DAISIE_sim_update_state(timeval = timeval, possible_event = possible_event, maxspecID = maxspecID,
-                                             mainland_spec = mainland_spec, island_spec = island_spec)
+        
+
+        new_state <- DAISIE_sim_update_state(timeval = timeval,
+                                             possible_event = possible_event,
+                                             maxspecID = maxspecID,
+                                             mainland_spec = mainland_spec,
+                                             island_spec = island_spec)
+        
         island_spec <- new_state$island_spec
         maxspecID <- new_state$maxspecID
-      
+
       }
       stt_table <- rbind(stt_table,
                          c(totaltime - timeval,
@@ -89,14 +117,18 @@ DAISIE_sim_core <- function(
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
 
+      
+      
     } else {
       ##### After thor is reached ####
       # Recalculate thor
       thor <- get_thor(timeval = timeval, totaltime = totaltime, Apars = Apars,
                        ext_multiplier = ext_multiplier,
                        island_ontogeny = island_ontogeny, thor = thor)
+      
     }
   }
+  stt_table[nrow(stt_table),1] <- 0
   
   ############# 
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
@@ -139,21 +171,39 @@ DAISIE_sim_core <- function(
   return(island)
 }
 
-#' Something
-#' @param timeval something
-#' @param totaltime something
-#' @param gam something
-#' @param mu something
-#' @param laa something
-#' @param lac something
-#' @param Apars something
-#' @param Epars something
-#' @param island_ontogeny something
-#' @param extcutoff something
-#' @param K something
-#' @param island_spec something
-#' @param mainland_n something
-#' @param thor something
+#' Calculates algorithm rates
+#' @description Internal function that updates the all the rates and 
+#' max extinction horizon at time t.
+#' @family rates calculation
+#' @param timeval current time of simulation
+#' @param totaltime total time of simulation
+#' @param gam per capita immigration rate
+#' @param mu per capita extinction rate in no ontogeny model
+#' @param laa per capita anagenesis rate
+#' @param lac per capita cladogenesis rate
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param Epars a numeric vector:
+#' \itemize{
+#'   \item{[1]: minimum extinction when area is at peak}
+#'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
+#' }
+#' @param island_ontogeny a string describing the type of island ontogeny. 
+#' Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
+#' @param extcutoff cutoff for extinction rate preventing it from being too 
+#' large and slowing down simulation
+#' @param K carrying capacity
+#' @param island_spec matrix containing state of system
+#' @param mainland_n total number of species present in the mainland
+#' @param thor time of horizon for max extinction
 update_rates <- function(timeval, totaltime,
                          gam, mu, laa, lac, Apars, Epars,
                          island_ontogeny, 
@@ -163,34 +213,32 @@ update_rates <- function(timeval, totaltime,
   # Function to calculate rates at time = timeval. Returns list with each rate.
   
   
-  immig_rate <- get_immig_rate(timeval = timeval, totaltime = totaltime,
-                               gam = gam, Apars = Apars, Epars = Epars,
-                               island_function_shape = island_ontogeny, 
-                               extcutoff = extcutoff, island_spec = island_spec,
-                               K = K, mainland_n = mainland_n)
+  immig_rate <- get_immig_rate(gam = gam,
+                               island_spec = island_spec,
+                               K = K,
+                               mainland_n = mainland_n)
   
-  ext_rate <- get_ext_rate(timeval = timeval, totaltime = totaltime, mu = mu,
-                           Apars = Apars, Epars = Epars, 
-                           island_function_shape = island_ontogeny, 
-                           extcutoff = extcutoff, island_spec = island_spec,
+  ext_rate <- get_ext_rate(timeval = timeval,
+                           totaltime = totaltime,
+                           mu = mu,
+                           Apars = Apars,
+                           Epars = Epars, 
+                           island_ontogeny = island_ontogeny, 
+                           extcutoff = extcutoff,
+                           island_spec = island_spec,
                            K = K)
   
-  ana_rate <- get_ana_rate(timeval = timeval, totaltime = totaltime, laa = laa,
-                           Apars = Apars, Epars = Epars,
-                           island_function_shape = island_ontogeny, 
-                           extcutoff = extcutoff, island_spec = island_spec,
-                           K = K)
+  ana_rate <- get_ana_rate(laa = laa, island_spec = island_spec)
   
-  clado_rate <- get_clado_rate(timeval = timeval, totaltime = totaltime,
-                               lac = lac, Apars = Apars, Epars = Epars,
-                               island_function_shape = island_ontogeny, 
-                               extcutoff = extcutoff, island_spec = island_spec,
+  clado_rate <- get_clado_rate(lac = lac,
+                               island_ontogeny = island_ontogeny, 
+                               island_spec = island_spec,
                                K = K)
   
   if (is.null(island_ontogeny)) {
     
     ext_rate_max <- ext_rate
-    
+
   } else if ((Apars[2] * Apars[4]) > timeval) {
     
     ext_rate_max <- ext_rate
@@ -199,11 +247,11 @@ update_rates <- function(timeval, totaltime,
     
     ext_rate_max <- get_ext_rate(timeval = thor, totaltime = totaltime, mu = mu,
                                  Apars = Apars, Epars = Epars,
-                                 island_function_shape = island_ontogeny, 
+                                 island_ontogeny = island_ontogeny, 
                                  extcutoff = extcutoff, island_spec = island_spec,
                                  K = K)
   }
-  
+
   rates <- list(immig_rate, ext_rate, ana_rate, clado_rate, ext_rate_max)
   return(rates)
 }
@@ -227,6 +275,9 @@ pick_timeval <- function(rates, timeval) {
 #' @param island_spec something
 DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_spec,island_spec)
 {  
+  if (possible_event > 4) {
+    # Nothing happens
+  }
   ##########################################
   #IMMIGRATION
   if(possible_event == 1)
@@ -389,15 +440,12 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
       maxspecID = maxspecID + 2
     } 
   }
-  if (possible_event > 4) {
-    # Nothing happens
-  }
   return(list(island_spec = island_spec, maxspecID = maxspecID))
 }
 
-DAISIE_ONEcolonist <- function(totaltime,island_spec,stt_table)
+DAISIE_ONEcolonist <- function(time,island_spec,stt_table)
 {
-  
+  totaltime <- time
   ### number of independent colonisations
   uniquecolonisation <- as.numeric(unique(island_spec[,"Colonisation time (BP)"]))
   number_colonisations <- length(uniquecolonisation) 

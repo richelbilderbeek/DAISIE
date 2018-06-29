@@ -8,6 +8,9 @@
 #' @param carr_cap carrying capacity
 #' @param imm_rate immigration rate
 #' @param ana_rate anagenesis rate
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
 #' @return a list with these elements:
 #' \describe{
 #'   \item{stt_table}{a species-through-time table}
@@ -32,7 +35,8 @@ DAISIE_sim_core_checked <- function(
   ext_rate,
   carr_cap,
   imm_rate,
-  ana_rate
+  ana_rate,
+  island_ontogeny
 ) {
   testit::assert(sim_time > 0.0)
   testit::assert(n_mainland_species > 0)
@@ -44,6 +48,7 @@ DAISIE_sim_core_checked <- function(
   DAISIE_sim_core(
     time = sim_time,
     mainland_n = n_mainland_species,
-    pars = c(clado_rate, ext_rate, carr_cap, imm_rate, ana_rate)
+    pars = c(clado_rate, ext_rate, carr_cap, imm_rate, ana_rate),
+    island_ontogeny = island_ontogeny
   )
 }

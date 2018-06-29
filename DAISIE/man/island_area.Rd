@@ -5,18 +5,32 @@
 \title{Function to describe changes in area through time. Adapted from
 Valente et al 2014 ProcB}
 \usage{
-island_area(timeval, totaltime, Apars, island_function_shape)
+island_area(timeval, totaltime, Apars, island_ontogeny)
 }
 \arguments{
-\item{timeval}{something}
+\item{timeval}{current time of simulation}
 
-\item{totaltime}{something}
+\item{totaltime}{total time of simulation}
 
-\item{Apars}{something}
+\item{Apars}{a numeric vector:
+\itemize{
+  \item{[1]: maximum area}
+  \item{[2]: value from 0 to 1 indicating where in the island's history the 
+  peak area is achieved}
+  \item{[3]: sharpness of peak}
+  \item{[4]: total island age}
+}}
 
-\item{island_function_shape}{something}
+\item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
+\code{"quadratic"} for a beta function describing area through time,
+ or \code{"linear"} for a linear function}
 }
 \description{
 Function to describe changes in area through time. Adapted from
 Valente et al 2014 ProcB
+}
+\seealso{
+Other rates calculation: \code{\link{get_ana_rate}},
+  \code{\link{get_ext_rate}}, \code{\link{get_immig_rate}},
+  \code{\link{get_thor}}, \code{\link{update_rates}}
 }
