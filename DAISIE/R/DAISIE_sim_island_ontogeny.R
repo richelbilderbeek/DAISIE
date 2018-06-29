@@ -1,4 +1,43 @@
-DAISIE_sim <- function(
+#' Simulate islands with given parameters.
+#' @description This function simulates islands with given cladogenesis,
+#'  extinction, Kprime, immigration and anagenesis parameters.
+#'   If a single parameter set is provided (5 parameters) it simulates islands
+#'    where all species have the same macro-evolutionary process.
+#'     If two paramater sets (10 parameters) are provided, it simulates islands
+#'      where two different macro-evolutionary processes operate, one applying
+#'       to type 1 species and other to type 2 species.
+#' @param time simulated amount of time
+#' @param mainland_n number of mainland species, that
+#'   is, the number of species that can potentially colonize the island.
+#'   If \code{\link{DAISIE_sim}} uses a clade-specific diversity dependence,
+#'   this value is set to 1. 
+#'   If \code{\link{DAISIE_sim}} uses an island-specific diversity dependence,
+#'   this value is set to the number of mainland species.
+#' @param pars a numeric vector:
+#' \itemize{
+#'   \item{[1]: cladogenesis rate}
+#'   \item{[2]: extinction rate}
+#'   \item{[3]: carrying capacity}
+#'   \item{[4]: immigration rate}
+#'   \item{[5]: anagenesis rate}
+#' }
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param Epars a numeric vector:
+#' \itemize{
+#'   \item{[1]: minimum extinction when area is at peak}
+#'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
+#' }
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
+DAISIE_sim_island_ontogeny <- function(
   time,
   M,
   pars,
@@ -26,7 +65,7 @@ DAISIE_sim <- function(
     
     for(rep in 1:replicates)
     {
-      island_replicates[[rep]] <- DAISIE_sim_core(
+      island_replicates[[rep]] <- DAISIE_sim_core_island_ontogeny(
         time = totaltime,
         mainland_n = M,
         pars = pars,
@@ -53,7 +92,7 @@ DAISIE_sim <- function(
         full_list = list()
         for(m_spec in 1:M) 
         { 	
-          full_list[[m_spec]] <- DAISIE_sim_core(
+          full_list[[m_spec]] <- DAISIE_sim_core_island_ontogeny(
             time = totaltime,
             mainland_n = 1,
             pars = pars,
@@ -109,14 +148,14 @@ DAISIE_sim <- function(
           #### species of pool1
           for(m_spec in 1:pool1) 
           { 	
-            full_list[[m_spec]] = DAISIE_sim_core(time = totaltime,mainland_n = 1,pars = c(lac_1,mu_1,K_1,gam_1,laa_1))
+            full_list[[m_spec]] = DAISIE_sim_core_island_ontogeny(time = totaltime,mainland_n = 1,pars = c(lac_1,mu_1,K_1,gam_1,laa_1))
             full_list[[m_spec]]$type1or2  = 1
           }
           
           #### species of pool2
           for(m_spec in (pool1 + 1):(pool1 + pool2)) 
           { 	
-            full_list[[m_spec]] = DAISIE_sim_core(time = totaltime,mainland_n = 1,pars = c(lac_2,mu_2,K_2,gam_2,laa_2))
+            full_list[[m_spec]] = DAISIE_sim_core_island_ontogeny(time = totaltime,mainland_n = 1,pars = c(lac_2,mu_2,K_2,gam_2,laa_2))
             full_list[[m_spec]]$type1or2 = 2
           }
           island_replicates[[rep]] = full_list

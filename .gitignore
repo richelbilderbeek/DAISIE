@@ -4,3 +4,7 @@
 .Ruserdata
 DAISIE.Rcheck/
 DAISIE/.Rhistory
+*.Rproj
+DAISIE.Rproj
+*.out
+*.txt
