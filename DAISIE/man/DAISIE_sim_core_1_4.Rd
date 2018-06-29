@@ -2,7 +2,8 @@
 % Please edit documentation in R/DAISIE_sim_core_1_4.R
 \name{DAISIE_sim_core_1_4}
 \alias{DAISIE_sim_core_1_4}
-\title{Internal function of the DAISIE simulation. Taken from CRAN, commit https://github.com/richelbilderbeek/DAISIE/commit/c700b0fcf9e2c2b5d7248f02af7596fac5a2f573#diff-ddae7ad3ae2def3cb66ecf8a8a45cc41}
+\title{Internal function of the DAISIE simulation
+Taken from CRAN, commit https://github.com/richelbilderbeek/DAISIE/commit/c700b0fcf9e2c2b5d7248f02af7596fac5a2f573#diff-ddae7ad3ae2def3cb66ecf8a8a45cc41}
 \usage{
 DAISIE_sim_core_1_4(time, mainland_n, pars)
 }

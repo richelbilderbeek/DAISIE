@@ -36,7 +36,7 @@ DAISIE_sim_core_checked <- function(
   carr_cap,
   imm_rate,
   ana_rate,
-  island_ontogeny
+  island_ontogeny = NULL
 ) {
   testit::assert(sim_time > 0.0)
   testit::assert(n_mainland_species > 0)

@@ -177,7 +177,6 @@ DAISIE_plot_sims <- function(
     lines(stt_average_type2[, "Time"], stt_average_type2[, "nI"] + 1, lwd = 2, col = "cyan3")
     lines(stt_average_type2[, "Time"], stt_average_type2[, "Endemic"] + 1, lwd = 2, col = "dodgerblue1")
         
-    } else {
     par(mfrow = c(1, 3))
     
     suppressWarnings(plot(NULL, NULL, xlim = rev(c(0, time)), ylim = c(1, max(stt_q0.975_all)), ylab = "No of species + 1", 
