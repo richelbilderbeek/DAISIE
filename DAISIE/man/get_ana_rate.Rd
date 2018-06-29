@@ -2,7 +2,7 @@
 % Please edit documentation in R/DAISIE_rates.R
 \name{get_ana_rate}
 \alias{get_ana_rate}
-\title{Function to calculate anagenesis rate given number of immigrant species}
+\title{Calculate anagenesis rate}
 \usage{
 get_ana_rate(laa, island_spec)
 }
@@ -12,7 +12,9 @@ get_ana_rate(laa, island_spec)
 \item{island_spec}{matrix with current state of system}
 }
 \description{
-Function to calculate anagenesis rate given number of immigrant species
+Internal function. 
+Calculates the anagenesis rate given the current number of
+immigrant species and the per capita rate.
 }
 \seealso{
 Does the same as \link{DAISIE_calc_clade_ana_rate}

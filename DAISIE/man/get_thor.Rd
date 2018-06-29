@@ -30,7 +30,9 @@ Can be \code{NULL}, \code{"quadratic"} for a beta function
 \item{thor}{time of horizon for max extinction}
 }
 \description{
-Function to calculate and update horizon for maximum extinction rate
+Internal function. 
+Calculates when the next horizon for maximum extinction will be in the 
+simulation
 }
 \seealso{
 Other rates calculation: \code{\link{get_ana_rate}},

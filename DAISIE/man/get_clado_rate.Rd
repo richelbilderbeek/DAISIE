@@ -2,7 +2,7 @@
 % Please edit documentation in R/DAISIE_rates.R
 \name{get_clado_rate}
 \alias{get_clado_rate}
-\title{Function to calculate cladogenesis rate given number of species on island}
+\title{Calculate cladogenesis rate}
 \usage{
 get_clado_rate(lac, island_ontogeny, island_spec, K)
 }
@@ -19,7 +19,10 @@ Can be \code{NULL},
 \item{K}{carrying capacity}
 }
 \description{
-Function to calculate cladogenesis rate given number of species on island
+Internal function. 
+Calculates the cladogenesis rate given the current number of
+species in the system, the carrying capacity and the per capita cladogenesis
+rate
 }
 \seealso{
 Does the same as \link{DAISIE_calc_clade_clado_rate}

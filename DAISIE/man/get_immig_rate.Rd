@@ -2,8 +2,7 @@
 % Please edit documentation in R/DAISIE_rates.R
 \name{get_immig_rate}
 \alias{get_immig_rate}
-\title{Function to calculate immigration rate given number of species on island
- and mainland}
+\title{Calculate immigration rate}
 \usage{
 get_immig_rate(gam, island_spec, K, mainland_n)
 }
@@ -17,8 +16,9 @@ get_immig_rate(gam, island_spec, K, mainland_n)
 \item{mainland_n}{total number of species present in the mainland}
 }
 \description{
-Function to calculate immigration rate given number of species on island
- and mainland
+Internal function. 
+Calculates the immigration rate given the current number of
+species in the system, the carrying capacity
 }
 \seealso{
 Does the same as \link{DAISIE_calc_clade_imm_rate}
