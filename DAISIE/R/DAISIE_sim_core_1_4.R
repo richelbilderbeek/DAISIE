@@ -1,4 +1,5 @@
 #' Internal function of the DAISIE simulation
+#' Taken from CRAN, commit https://github.com/richelbilderbeek/DAISIE/commit/c700b0fcf9e2c2b5d7248f02af7596fac5a2f573#diff-ddae7ad3ae2def3cb66ecf8a8a45cc41
 #' @param time simulated amount of time
 #' @param mainland_n number of mainland species, that
 #'   is, the number of species that can potentially colonize the island.
@@ -212,7 +213,7 @@ DAISIE_sim_core_1_4 = function(time,mainland_n,pars)
   }
   
   stt_table[nrow(stt_table),1] = 0
-  
+
   ############# 
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
   if(length(island_spec[,1])==0)
@@ -221,42 +222,134 @@ DAISIE_sim_core_1_4 = function(time,mainland_n,pars)
   else{
     
     cnames <- c("Species","Mainland Ancestor","Colonisation time (BP)",
-                "Species type","branch_code","branching time (BP)","Anagenetic_origin")
+      "Species type","branch_code","branching time (BP)","Anagenetic_origin")
     colnames(island_spec) <- cnames
-    
-    ### set ages as counting backwards from present
-    island_spec[,"branching time (BP)"] = time - as.numeric(island_spec[,"branching time (BP)"])
-    island_spec[,"Colonisation time (BP)"] = time - as.numeric(island_spec[,"Colonisation time (BP)"])
-    
-    if(mainland_n==1) {
-      island <- DAISIE_ONEcolonist(time,island_spec,stt_table)
-    }
-    
-    if(mainland_n>1) {  
+
+      ### set ages as counting backwards from present
+      island_spec[,"branching time (BP)"] = time - as.numeric(island_spec[,"branching time (BP)"])
+      island_spec[,"Colonisation time (BP)"] = time - as.numeric(island_spec[,"Colonisation time (BP)"])
       
-      ### number of colonists present
-      colonists_present = sort(as.numeric(unique(island_spec[,'Mainland Ancestor'])))
-      number_colonists_present = length(colonists_present) 
+      if(mainland_n==1) {
+        island <- DAISIE_ONEcolonist(time,island_spec,stt_table)
+       }
       
-      island_clades_info<-list()  
+      if(mainland_n>1) {  
       
-      for (i in 1:number_colonists_present) {
+        ### number of colonists present
+        colonists_present = sort(as.numeric(unique(island_spec[,'Mainland Ancestor'])))
+        number_colonists_present = length(colonists_present) 
         
-        subset_island<-island_spec[which(island_spec[,'Mainland Ancestor']==colonists_present[i]),] 
+        island_clades_info<-list()  
         
-        if(class(subset_island)!='matrix') { subset_island<-rbind(subset_island[1:7])
-        colnames(subset_island) = cnames}
+        for (i in 1:number_colonists_present) {
+          
+          subset_island<-island_spec[which(island_spec[,'Mainland Ancestor']==colonists_present[i]),] 
+          
+            if(class(subset_island)!='matrix') { subset_island<-rbind(subset_island[1:7])
+            colnames(subset_island) = cnames}
+          
+          island_clades_info[[i]]<-DAISIE_ONEcolonist(time,island_spec=subset_island,stt_table=NULL)
+          island_clades_info[[i]]$stt_table<-NULL
+          
+         }
         
-        island_clades_info[[i]]<-DAISIE_ONEcolonist(time,island_spec=subset_island,stt_table=NULL)
-        island_clades_info[[i]]$stt_table<-NULL
-        
-      }
+        island = list(stt_table = stt_table, taxon_list = island_clades_info)
       
-      island = list(stt_table = stt_table, taxon_list = island_clades_info)
-      
-    }
+        }
   }
   return(island) 
+}
+
+
+#' Does something
+#' @param time simulated amount of time
+#' @param island_spec something
+#' @param stt_table ?Species-Through-Time table
+#' @return a list with these elements:
+#' \itemize{
+#'   item{[1]: stt_table, the same stt_table as put in}
+#'   item{[2]: branching_times, branching times}
+#'   item{[3]: stac, ?statuses}
+#'   item{[4]: missing_species, ?the number of missing species}
+#'   item{[5]: other_clades_same_ancestor, ?no idea}
+#' }
+DAISIE_ONEcolonist = function(time,island_spec,stt_table)
+{
+  
+  ### number of independent colonisations
+  uniquecolonisation = as.numeric(unique(island_spec[,"Colonisation time (BP)"]))
+  number_colonisations = length(uniquecolonisation) 
+  
+  ### if there is only one independent colonisation - anagenetic and cladogenetic
+  #species are classed as stac=2; immigrant classed as stac=4: 
+  if(number_colonisations == 1)
+  {
+    if (island_spec[1,"Species type"] == "I")
+    {
+      descendants = list(stt_table = stt_table, branching_times = c(time,as.numeric(island_spec[1,"Colonisation time (BP)"])),
+                         stac = 4, missing_species = 0)
+    }
+    if (island_spec[1,"Species type"] == "A")
+    {
+      descendants = list(stt_table = stt_table, branching_times = c(time,as.numeric(island_spec[1,"Colonisation time (BP)"])),
+                         stac = 2,missing_species = 0)
+    } 
+    if (island_spec[1,"Species type"] == "C")
+    {
+      descendants = list(stt_table = stt_table, branching_times = c(time,rev(sort(as.numeric(island_spec[,"branching time (BP)"])))),
+                         stac = 2,missing_species = 0)
+    }
+  }
+  
+  ### if there are two or more independent colonisations, all species are classed as stac=3 and put within same list item: 
+  if(number_colonisations > 1)
+  {
+    descendants = list(stt_table = stt_table, branching_times = NA,stac = 3,missing_species = 0,
+                       other_clades_same_ancestor = list())
+    
+    btimes_all_clado_desc = rev(sort(as.numeric(island_spec[,'branching time (BP)'])))
+    
+    if(length(btimes_all_clado_desc)!=0) { descendants$branching_times= c(time, btimes_all_clado_desc)}
+    if(length(btimes_all_clado_desc)==0) { descendants$branching_times= c(time, max(as.numeric(island_spec[,"Colonisation time (BP)"])))}
+    
+    ### create table with information on other clades with same ancestor, but this information is not used in DAISIE_ML
+    oldest = which(as.numeric(island_spec[,"Colonisation time (BP)"]) == max(as.numeric(island_spec[,"Colonisation time (BP)"])))
+    
+    youngest_table = island_spec[-oldest,]
+    if(class(youngest_table)=='character')
+    { 
+      youngest_table = t(as.matrix(youngest_table))
+    }
+    
+    uniquecol = as.numeric(unique(youngest_table[,"Colonisation time (BP)"]))
+    
+    for(colonisation in 1:length(uniquecol))
+    {
+      descendants$other_clades_same_ancestor[[colonisation]] = list(brts_miss = NA,species_type = NA)	
+      
+      samecolonisation = which(as.numeric(youngest_table[,"Colonisation time (BP)"]) == uniquecol[colonisation])
+      
+      if (youngest_table[samecolonisation[1],"Species type"] == "I")
+      {
+        descendants$other_clades_same_ancestor[[colonisation]]$brts_miss = as.numeric(youngest_table[samecolonisation,"Colonisation time (BP)"])
+        descendants$other_clades_same_ancestor[[colonisation]]$species_type = "I"
+      }
+      
+      if (youngest_table[samecolonisation[1],"Species type"] == "A")
+      {
+        descendants$other_clades_same_ancestor[[colonisation]]$brts_miss =  as.numeric(youngest_table[samecolonisation,"Colonisation time (BP)"])
+        descendants$other_clades_same_ancestor[[colonisation]]$species_type = "A"
+      }
+      
+      if (youngest_table[samecolonisation[1],"Species type"] == "C")
+      {
+        descendants$other_clades_same_ancestor[[colonisation]]$brts_miss = rev(sort(as.numeric(youngest_table[samecolonisation,"branching time (BP)"])))
+        descendants$other_clades_same_ancestor[[colonisation]]$species_type = "C"
+      }
+    }
+  }
+  
+return(descendants)
 }
 
 #' Runs one DAISIE simulation with a clade-specific carrying capacity.
