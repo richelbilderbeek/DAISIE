@@ -152,7 +152,7 @@ DAISIE_plot_sims <- function(
     lines(stt_average_all[, "Time"], stt_average_all[, "nI"] + 1, lwd = 2, col = "cyan3")
     lines(stt_average_all[, "Time"], stt_average_all[, "Endemic"] + 1, lwd = 2, col = "dodgerblue1")
 
-    legend(time, max(stt_q0.975_all), c("Total", "Non-endemic", "Endemic"), lty = 1, lwd = 2, col = c("black", 
+    legend(time, max(stt_q0.975_all), c("Total", "Non-endemic", "Endemic"), lty = 1, lwd = 2, col = c("black",
         "cyan3", "dodgerblue1"), cex = 1.2, border = NA, bty = "n")
 
     suppressWarnings(plot(NULL, NULL, xlim = rev(c(0, time)), ylim = c(1, max(stt_q0.975_type1)), 
