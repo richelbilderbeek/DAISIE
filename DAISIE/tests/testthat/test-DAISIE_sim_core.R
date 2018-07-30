@@ -34,9 +34,9 @@ test_that("new and v1.4 should give same results", {
   expect_true(length(new$other_clades_same_ancestor) == length(old$other_clades_same_ancestor))
   expect_true(new$other_clades_same_ancestor[[1]]$species_type == old$other_clades_same_ancestor[[1]]$species_type)
 
-  skip("For Pedro")
-  expect_true(new$stt_table == old$stt_table)
-  expect_true(new$branching_times == old$branching_times)
+  # stt_table, branching_times, missing species are different
+  expect_equal(new$stt_table, old$stt_table)
+  expect_equal(new$branching_times, old$branching_times)
   expect_true(new$other_clades_same_ancestor[[1]]$brts_miss == old$other_clades_same_ancestor[[1]]$brts_miss)
 })
 

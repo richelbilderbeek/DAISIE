@@ -1,3 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.travis\.yml$
+^DAISIE_extinction_test\.R$
+^DAISIE_checks\.R$

@@ -133,7 +133,7 @@ get_clado_rate <- function(timeval,
                            island_ontogeny,
                            island_spec,
                            K) {
-  if (is.null(island_ontogeny) {
+  if (is.null(island_ontogeny)) {
     clado_rate <- max(c(length(island_spec[,1])
                         * (lac * (1 - length(island_spec[, 1]) / K)),
                         0),
@@ -174,21 +174,18 @@ get_immig_rate <- function(timeval,
                            island_spec,
                            K, 
                            mainland_n) {
-  if (is.null(island_ontongey)) {
+  if (is.null(island_ontogeny)) {
     immig_rate <- max(c(mainland_n 
                        * gam * (1 - length(island_spec[, 1]) / K), 0), na.rm = T)
     return(immig_rate)
   } else {
     
-    immig_rate <-
-      max(c(mainland_n * gam * (1 - length(island_spec[, 1]) / (
+    immig_rate <- max(c(mainland_n * gam * (1 - length(island_spec[, 1]) / (
         island_area(timeval,
                     totaltime,
                     Apars,
-                    island_ontogeny) * K
-                  ))
+                    island_ontogeny) * K)), 0), na.rm = T)
   }
-  
   immig_rate
 }
 

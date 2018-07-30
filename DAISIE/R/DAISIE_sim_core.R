@@ -213,10 +213,14 @@ update_rates <- function(timeval, totaltime,
   # Function to calculate rates at time = timeval. Returns list with each rate.
   
   
-  immig_rate <- get_immig_rate(gam = gam,
-                               island_spec = island_spec,
-                               K = K,
-                               mainland_n = mainland_n)
+  immig_rate <- get_immig_rate(timeval,
+                               totaltime,
+                               gam,
+                               Apars,
+                               island_ontogeny,
+                               island_spec,
+                               K, 
+                               mainland_n)
   
   ext_rate <- get_ext_rate(timeval = timeval,
                            totaltime = totaltime,
@@ -230,10 +234,13 @@ update_rates <- function(timeval, totaltime,
   
   ana_rate <- get_ana_rate(laa = laa, island_spec = island_spec)
   
-  clado_rate <- get_clado_rate(lac = lac,
-                               island_ontogeny = island_ontogeny, 
-                               island_spec = island_spec,
-                               K = K)
+  clado_rate <- get_clado_rate(timeval, 
+                               totaltime,
+                               lac,
+                               Apars,
+                               island_ontogeny,
+                               island_spec,
+                               K)
   
   if (is.null(island_ontogeny)) {
     
