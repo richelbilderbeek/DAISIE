@@ -72,10 +72,14 @@ island_area <- function(timeval, totaltime, Apars, island_ontogeny){
 #' @seealso Does the same as \link{DAISIE_calc_clade_ext_rate}
 #' @family rates calculation
 #' @author Pedro Neves
-get_ext_rate <- function(timeval, totaltime, mu,
-                         Apars, Epars, 
+get_ext_rate <- function(timeval, 
+                         totaltime,
+                         mu,
+                         Apars,
+                         Epars, 
                          island_ontogeny, 
-                         extcutoff, island_spec,
+                         extcutoff,
+                         island_spec,
                          K){
   # Epars[1] and Epars[2] (mu_min, mu_p) must be user specified
   if (is.null(island_ontogeny)){
@@ -122,12 +126,33 @@ get_ana_rate <- function(laa, island_spec) {
 #' @param K carrying capacity
 #' @seealso Does the same as \link{DAISIE_calc_clade_clado_rate}
 #' @author Pedro Neves
-get_clado_rate <- function(lac, island_ontogeny, island_spec, K) {
-  clado_rate = max(c(length(island_spec[,1])
-                     * (lac * (1 - length(island_spec[, 1]) / K)),
-                     0),
-                   na.rm = T)
-  clado_rate
+get_clado_rate <- function(timeval, 
+                           totaltime,
+                           lac,
+                           Apars,
+                           island_ontogeny,
+                           island_spec,
+                           K) {
+  if (is.null(island_ontogeny) {
+    clado_rate <- max(c(length(island_spec[,1])
+                        * (lac * (1 - length(island_spec[, 1]) / K)),
+                        0),
+                      na.rm = T)
+    return(clado_rate)
+  } else {
+    
+  
+    clado_rate <-  max(c(length(island_spec[, 1]) * lac * 
+                         island_area(timeval,
+                                     totaltime,
+                                     Apars,
+                                     island_ontogeny) *
+                         (1 - length(island_spec[, 1]) / (island_area(timeval, 
+                                             totaltime, 
+                                             Apars, 
+                                             island_ontogeny) * K)), 0), na.rm = T)
+    clado_rate
+  }
 }
 
 #' Calculate immigration rate
@@ -141,11 +166,29 @@ get_clado_rate <- function(lac, island_ontogeny, island_spec, K) {
 #' @seealso Does the same as \link{DAISIE_calc_clade_imm_rate}
 #' @family rates calculation
 #' @author Pedro Neves
-get_immig_rate <- function(gam,
+get_immig_rate <- function(timeval,
+                           totaltime,
+                           gam,
+                           Apars,
+                           island_ontogeny,
                            island_spec,
-                           K, mainland_n) {
-  immig_rate = max(c(mainland_n 
-                     * gam * (1 - length(island_spec[,1]) / K), 0), na.rm = T)
+                           K, 
+                           mainland_n) {
+  if (is.null(island_ontongey)) {
+    immig_rate <- max(c(mainland_n 
+                       * gam * (1 - length(island_spec[, 1]) / K), 0), na.rm = T)
+    return(immig_rate)
+  } else {
+    
+    immig_rate <-
+      max(c(mainland_n * gam * (1 - length(island_spec[, 1]) / (
+        island_area(timeval,
+                    totaltime,
+                    Apars,
+                    island_ontogeny) * K
+                  ))
+  }
+  
   immig_rate
 }
 
