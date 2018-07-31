@@ -24,6 +24,14 @@ DAISIE_plot_area <- function(totaltime,
                              Apars,
                              island_ontogeny = "quadratic",
                              resolution) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package \"ggplot2\" needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
+  
+  
+  
   axis <- seq(0, totaltime, by = resolution)
   area <- c()
   for (i in seq_along(axis)) {
@@ -35,7 +43,11 @@ DAISIE_plot_area <- function(totaltime,
     
   }
   island_area_time <- data.frame(Area = area, Time = axis, Totaltime = totaltime)
-  plot(island_area_time$time, island_area_time$area) 
+  
+  Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
+  Area <- NULL; rm(Area) # nolint, fixes warning: no visible binding for global variable
+  ggplot2::ggplot(data = island_area_time, ggplot2::aes(x = Time, y = Area)) +
+    ggplot2::geom_line(size = 1.5)
   invisible(island_area_time)
 }
 
@@ -58,6 +70,12 @@ DAISIE_plot_extinction <- function(island_area_time,
                                    Epars, 
                                    island_ontogeny = "quadratic", 
                                    removed_timepoints) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package \"ggplot2\" needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
+  
   ext_rate <- c()
   for (i in seq_along(island_area_time$Time)) {
     ext_rate[i] <- DAISIE::get_ext_rate(timeval = island_area_time$Time[i],
@@ -73,6 +91,11 @@ DAISIE_plot_extinction <- function(island_area_time,
   }
   
   ext_rate_time <- data.frame(Extinction = ext_rate[removed_timepoints:length(ext_rate)], Time = island_area_time$Time[removed_timepoints:length(island_area_time$Time)])
-  plot(ext_rate_time$Extinction, ext_rate_time$Time, ylim = c(0, 10))
+  
+  Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
+  Extinction <- NULL; rm(Extinction) # nolint, fixes warning: no visible binding for global variable
+  ggplot2::ggplot(data = ext_rate_time, ggplot2::aes(x = Time, y = Extinction)) +
+    ggplot2::geom_line(size = 1) +
+    ggplot2::ylim(0, 10)
   invisible(ext_rate_time)
 }
