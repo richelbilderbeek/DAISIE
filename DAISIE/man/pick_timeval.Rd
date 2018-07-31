@@ -2,15 +2,15 @@
 % Please edit documentation in R/DAISIE_sim_core.R
 \name{pick_timeval}
 \alias{pick_timeval}
-\title{Something}
+\title{Calculates when the next timestep will be.}
 \usage{
 pick_timeval(rates, timeval)
 }
 \arguments{
-\item{rates}{something}
+\item{rates}{list of numeric with probabilities of each event}
 
-\item{timeval}{something}
+\item{timeval}{current time of simulation}
 }
 \description{
-Something
+Calculates when the next timestep will be.
 }

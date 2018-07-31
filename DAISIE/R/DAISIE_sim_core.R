@@ -294,12 +294,12 @@ update_rates <- function(timeval, totaltime,
   return(rates)
 }
 
-#' Something
-#' @param rates something
-#' @param timeval something
+#' Calculates when the next timestep will be.
+#' @param rates list of numeric with probabilities of each event
+#' @param timeval current time of simulation
 pick_timeval <- function(rates, timeval) {
   # Calculates when next event will happen
-  totalrate <- rates[[1]] + rates[[3]] + rates[[4]] + rates[[5]]
+  totalrate <- rates[[6]] + rates[[3]] + rates[[7]] + rates[[5]]
   dt <- rexp(1, totalrate)
   timeval <- timeval + dt
   return(timeval)
