@@ -74,7 +74,7 @@ DAISIE_sim_core <- function(
   thor <- get_thor(0, totaltime, Apars, ext_multiplier, island_ontogeny, thor = NULL)
 
   #### Start Gillespie ####
-  while(timeval <= totaltime) {
+  while (timeval <= totaltime) {
     if (timeval < thor) {
       rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                             mu = mu, laa = laa, lac = lac, Apars = Apars,
@@ -91,15 +91,18 @@ DAISIE_sim_core <- function(
                                                   rates[[3]], rates[[4]]), 
                                  replace = FALSE)
       } else {
-      possible_event <- sample(1:5, 1, prob = c(rates[[1]], rates[[2]], 
-                                                      rates[[3]], rates[[4]], 
-                                                      (rates[[5]] - rates[[2]])),
-                                     replace = FALSE)
+      possible_event <- sample(1:5, 1, prob = c(rates[[1]], 
+                                                rates[[2]],
+                                                rates[[3]],
+                                                rates[[4]], 
+                                                (rates[[5]] - rates[[2]]),
+                                                (rates[[6]] - rates[[1]]),
+                                                (rates[[7]] - rates[[3]])),
+                               replace = FALSE)
       }
 
       if (timeval <= totaltime) {
         # Run event
-        
 
         new_state <- DAISIE_sim_update_state(timeval = timeval,
                                              possible_event = possible_event,
@@ -244,22 +247,50 @@ update_rates <- function(timeval, totaltime,
   
   if (is.null(island_ontogeny)) {
     
+    immig_rate_max <- immig_rate
     ext_rate_max <- ext_rate
-
+    clado_rate_max <- clado_rate
+    
   } else if ((Apars[2] * Apars[4]) > timeval) {
     
+    immig_rate_max <- immig_rate
     ext_rate_max <- ext_rate
-
+    clado_rate_max <- clado_rate
+    
   } else {
     
+    
+    immig_rate_max <- get_immig_rate(thor,
+                                     totaltime,
+                                     gam,
+                                     Apars,
+                                     island_ontogeny,
+                                     island_spec,
+                                     K, 
+                                     mainland_n)
     ext_rate_max <- get_ext_rate(timeval = thor, totaltime = totaltime, mu = mu,
                                  Apars = Apars, Epars = Epars,
                                  island_ontogeny = island_ontogeny, 
                                  extcutoff = extcutoff, island_spec = island_spec,
                                  K = K)
+    clado_rate_max <- get_clado_rate(thor, 
+                                     totaltime,
+                                     lac,
+                                     Apars,
+                                     island_ontogeny,
+                                     island_spec,
+                                     K)
+    
+    
   }
 
-  rates <- list(immig_rate, ext_rate, ana_rate, clado_rate, ext_rate_max)
+  rates <- list(immig_rate,
+                ext_rate,
+                ana_rate,
+                clado_rate,
+                ext_rate_max,
+                immig_rate_max,
+                clado_rate_max)
   return(rates)
 }
 

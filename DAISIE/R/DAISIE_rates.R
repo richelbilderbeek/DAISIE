@@ -20,21 +20,21 @@ island_area <- function(timeval, totaltime, Apars, island_ontogeny){
   Amax <- Apars[1] # maximum area
   Topt <- Apars[2] # peak position in %
   peak <- Apars[3] # peakiness - we specify a value of 1 but this is flexible.
-  proptime<- timeval/Tmax	
+  proptime <- timeval/Tmax	
   # Constant
-  if (is.null(island_ontogeny)){
+  if (is.null(island_ontogeny)) {
     return(Apars[1])
   }	
-  if(island_ontogeny == "quadratic"){
+  if (island_ontogeny == "quadratic") {
 
     f <- Topt / (1 - Topt)
-    a <- f * peak/ ( 1 + f)
+    a <- f * peak / (1 + f)
     b <- peak / (1 + f) 
-    At <- Amax * proptime^a * (1 - proptime)^ b/ ((a / (a + b))^a * (b / (a + b))^b)
+    At <- Amax * proptime ^ a * (1 - proptime) ^ b / ((a / (a + b)) ^ a * (b / (a + b)) ^ b)
     return(At)}
   
   #Linear decline
-  if(island_ontogeny == "linear"){
+  if (island_ontogeny == "linear") {
     b <- Amax # intercept (peak area)
     m <- -(b / Topt) # slope
     At <- m * timeval + b
@@ -145,12 +145,15 @@ get_clado_rate <- function(timeval,
                            island_ontogeny,
                            island_spec,
                            K) {
+  # No ontogeny scenario
   if (is.null(island_ontogeny)) {
     clado_rate <- max(c(length(island_spec[,1])
                         * (lac * (1 - length(island_spec[, 1]) / K)),
                         0),
                       na.rm = T)
     return(clado_rate)
+    
+    # Ontogeny scenario
   } else {
     
   
