@@ -1,3 +1,6 @@
+#### THESE FUNCTIONS NEED MORE TESTING
+
+
 #' Plots island area function through time
 #'
 #' @param totaltime total time of simulation
@@ -32,14 +35,14 @@ DAISIE_plot_area <- function(totaltime,
     
   }
   island_area_time <- data.frame(Area = area, Time = axis, Totaltime = totaltime)
-  ggplot2::ggplot(data = island_area_time, ggplot2::aes(x = Time, y = Area)) +
-    ggplot2::geom_line(size = 1.5)
+  plot(island_area_time$time, island_area_time$area) 
   invisible(island_area_time)
 }
 
 #' Plots extinction rate function through time
 #'
 #' @param island_area_time something
+#' @param totaltime something
 #' @param K something
 #' @param Apars something
 #' @param Epars something
@@ -48,7 +51,8 @@ DAISIE_plot_area <- function(totaltime,
 #'
 #' @return extinction rate through time plot
 #' @export
-DAISIE_plot_extinction <- function(island_area_time, 
+DAISIE_plot_extinction <- function(island_area_time,
+                                   totaltime,
                                    K, 
                                    Apars, 
                                    Epars, 
@@ -69,9 +73,6 @@ DAISIE_plot_extinction <- function(island_area_time,
   }
   
   ext_rate_time <- data.frame(Extinction = ext_rate[removed_timepoints:length(ext_rate)], Time = island_area_time$Time[removed_timepoints:length(island_area_time$Time)])
-  # str(ext_rate_time)
-  ggplot2::ggplot(data = ext_rate_time, ggplot2::aes(x = Time, y = Extinction)) +
-    ggplot2::geom_line(size = 1) +
-    ggplot2::ylim(0, 10)
+  plot(ext_rate_time$Extinction, ext_rate_time$Time, ylim = c(0, 10))
   invisible(ext_rate_time)
 }

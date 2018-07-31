@@ -4,11 +4,13 @@
 \alias{DAISIE_plot_extinction}
 \title{Plots extinction rate function through time}
 \usage{
-DAISIE_plot_extinction(island_area_time, K, Apars, Epars,
+DAISIE_plot_extinction(island_area_time, totaltime, K, Apars, Epars,
   island_ontogeny = "quadratic", removed_timepoints)
 }
 \arguments{
 \item{island_area_time}{something}
+
+\item{totaltime}{something}
 
 \item{K}{something}
 
