@@ -1,3 +1,22 @@
+#' Plots island area function through time
+#'
+#' @param totaltime total time of simulation
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
+#' @param resolution numeric indicating resolution of plot. Should be < 0.
+#' @family rates calculation
+#'
+#' @return a plot with the area size through time
+#' @export
 DAISIE_plot_area <- function(totaltime,
                              Apars,
                              island_ontogeny = "quadratic",
@@ -18,6 +37,17 @@ DAISIE_plot_area <- function(totaltime,
   invisible(island_area_time)
 }
 
+#' Plots extinction rate function through time
+#'
+#' @param island_area_time something
+#' @param K something
+#' @param Apars something
+#' @param Epars something
+#' @param island_ontogeny something
+#' @param removed_timepoints something
+#'
+#' @return extinction rate through time plot
+#' @export
 DAISIE_plot_extinction <- function(island_area_time, 
                                    K, 
                                    Apars, 

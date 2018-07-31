@@ -35,9 +35,10 @@ Calculates when the next horizon for maximum extinction will be in the
 simulation
 }
 \seealso{
-Other rates calculation: \code{\link{get_ana_rate}},
-  \code{\link{get_ext_rate}}, \code{\link{get_immig_rate}},
-  \code{\link{island_area}}, \code{\link{update_rates}}
+Other rates calculation: \code{\link{DAISIE_plot_area}},
+  \code{\link{get_ana_rate}}, \code{\link{get_ext_rate}},
+  \code{\link{get_immig_rate}}, \code{\link{island_area}},
+  \code{\link{update_rates}}
 }
 \author{
 Pedro Neves

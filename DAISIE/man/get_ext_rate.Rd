@@ -49,9 +49,10 @@ Valente et al 2014 ProcB
 \seealso{
 Does the same as \link{DAISIE_calc_clade_ext_rate}
 
-Other rates calculation: \code{\link{get_ana_rate}},
-  \code{\link{get_immig_rate}}, \code{\link{get_thor}},
-  \code{\link{island_area}}, \code{\link{update_rates}}
+Other rates calculation: \code{\link{DAISIE_plot_area}},
+  \code{\link{get_ana_rate}}, \code{\link{get_immig_rate}},
+  \code{\link{get_thor}}, \code{\link{island_area}},
+  \code{\link{update_rates}}
 }
 \author{
 Pedro Neves

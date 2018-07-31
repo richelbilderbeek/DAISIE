@@ -25,14 +25,14 @@ imm_rate <- 0.00933207 # immigration rate
 ana_rate <- 1.010073119 # anagenesis rate
 
 island_replicates <- DAISIE_sim( 
-  time = island_age, 
+  time = island_age,
   M = n_mainland_species, 
   pars = c(clado_rate, ext_rate, clade_carr_cap, imm_rate, ana_rate),
   replicates = n_replicates,
   plot_sims = FALSE,
   verbose = FALSE
 )
-DAISIE_plot_sims(island_replicates, use_dev_new = FALSE)
+DAISIE_plot_sims(island_replicates = island_replicates, use_dev_new = FALSE)
 
 ## ----fig.width=7, fig.height=7-------------------------------------------
 clado_rate <- 2.550687345 # cladogenesis rate

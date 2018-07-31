@@ -8,7 +8,25 @@ get_immig_rate(timeval, totaltime, gam, Apars, island_ontogeny, island_spec, K,
   mainland_n)
 }
 \arguments{
+\item{timeval}{current time of simulation}
+
+\item{totaltime}{total time of simulation}
+
 \item{gam}{per capita immigration rate}
+
+\item{Apars}{a numeric vector:
+\itemize{
+  \item{[1]: maximum area}
+  \item{[2]: value from 0 to 1 indicating where in the island's history the 
+  peak area is achieved}
+  \item{[3]: sharpness of peak}
+  \item{[4]: total island age}
+}}
+
+\item{island_ontogeny}{a string describing the type of island ontogeny. 
+Can be \code{NULL},
+\code{"quadratic"} for a beta function describing area through time,
+ or \code{"linear"} for a linear function}
 
 \item{island_spec}{matrix with current state of system}
 
@@ -24,9 +42,10 @@ species in the system, the carrying capacity
 \seealso{
 Does the same as \link{DAISIE_calc_clade_imm_rate}
 
-Other rates calculation: \code{\link{get_ana_rate}},
-  \code{\link{get_ext_rate}}, \code{\link{get_thor}},
-  \code{\link{island_area}}, \code{\link{update_rates}}
+Other rates calculation: \code{\link{DAISIE_plot_area}},
+  \code{\link{get_ana_rate}}, \code{\link{get_ext_rate}},
+  \code{\link{get_thor}}, \code{\link{island_area}},
+  \code{\link{update_rates}}
 }
 \author{
 Pedro Neves

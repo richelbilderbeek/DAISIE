@@ -274,12 +274,18 @@ pick_timeval <- function(rates, timeval) {
   return(timeval)
 }
 
-#' Does something
-#' @param timeval something
-#' @param possible_event something
-#' @param maxspecID something
-#' @param mainland_spec something
-#' @param island_spec something
+#' Updates state of island given sampled event
+#' 
+#' Makes the event happen by updating island species matrix and species IDs.
+#' What event happens is determined by the sampling in the algorithm.
+#' !!!!!!!!!!!!THIS DOCUMENTATION MUST BE CONFIRMED!!!!!!!!!!!!
+#' 
+#' 
+#' @param timeval current time of simulation
+#' @param possible_event numeric indicating what event will happen.
+#' @param maxspecID current species IDs
+#' @param mainland_spec number of mainland species
+#' @param island_spec matrix with species on island (state of system at each time point)
 DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_spec,island_spec)
 {  
   if (possible_event > 4) {

@@ -117,13 +117,25 @@ get_ana_rate <- function(laa, island_spec) {
 #' Calculates the cladogenesis rate given the current number of
 #' species in the system, the carrying capacity and the per capita cladogenesis
 #' rate
+#'
+#' @param timeval current time of simulation
+#' @param totaltime total time of simulation
 #' @param lac per capita cladogenesis rate
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
 #' @param island_ontogeny a string describing the type of island ontogeny. 
 #' Can be \code{NULL},
 #' \code{"quadratic"} for a beta function describing area through time,
 #'  or \code{"linear"} for a linear function
 #' @param island_spec matrix with current state of system
 #' @param K carrying capacity
+#'
 #' @seealso Does the same as \link{DAISIE_calc_clade_clado_rate}
 #' @author Pedro Neves
 get_clado_rate <- function(timeval, 
@@ -159,7 +171,21 @@ get_clado_rate <- function(timeval,
 #' @description Internal function. 
 #' Calculates the immigration rate given the current number of
 #' species in the system, the carrying capacity
+#' @param timeval current time of simulation
+#' @param totaltime total time of simulation
 #' @param gam per capita immigration rate
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param island_ontogeny a string describing the type of island ontogeny. 
+#' Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
 #' @param island_spec matrix with current state of system
 #' @param K carrying capacity
 #' @param mainland_n total number of species present in the mainland
