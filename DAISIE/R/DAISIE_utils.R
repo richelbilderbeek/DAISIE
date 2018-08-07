@@ -187,3 +187,15 @@ antidiagSums = function(mat)
     }
     return(out)
 }
+
+#' Determine if list has only numerical values.
+#' 
+#'
+#' @param x Object to determine
+#'
+#' @return
+#' @note do not forget: NAs are removed from a list!
+#' @examples
+is_numeric_list <- function(x) {
+  is.list(x) && is.numeric(unlist(x))
+}

@@ -83,6 +83,7 @@ get_ext_rate <- function(timeval,
   # Epars[1] and Epars[2] (mu_min, mu_p) must be user specified
   if (is.null(island_ontogeny)) {
     extrate <- mu * length(island_spec[,1])
+    testit::assert(is.numeric(extrate))
     return(extrate)
     
     } else {
@@ -92,6 +93,8 @@ get_ext_rate <- function(timeval,
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate <- extrate * length(island_spec[,1])
+    #print(island_area(timeval, totaltime, Apars, island_ontogeny))
+    testit::assert(is.numeric(extrate))
     extrate
   }
 }
@@ -243,6 +246,7 @@ get_thor <- function(timeval,
                      ext_multiplier,
                      island_ontogeny,
                      thor) {
+  testit::assert(are_area_params(Apars))
   # Function calculates where the horizon for max(ext_rate) is.
   if (is.null(island_ontogeny)) {
     thor <- totaltime
