@@ -99,3 +99,41 @@ DAISIE_plot_extinction <- function(island_area_time,
     ggplot2::ylim(0, 10)
   invisible(ext_rate_time)
 }
+
+DAISIE_plot_immigration <- function(island_area_time,
+                                   totaltime,
+                                   K, 
+                                   Apars, 
+                                   gam,
+                                   mainland_n,
+                                   island_ontogeny = "quadratic", 
+                                   removed_timepoints) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package \"ggplot2\" needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
+  
+  ext_rate <- c()
+  for (i in seq_along(island_area_time$Time)) {
+    ext_rate[i] <- get_immig_rate(timeval = island_area_time$Time[i],
+                                        totaltime = totaltime,
+                                        Apars = Apars,
+                                        gam = NA, 
+                                        K = K, 
+                                        mainland_n = 1000, 
+                                        island_spec = matrix(ncol = 1),
+                                        island_ontogeny = island_ontogeny
+    )
+  }
+  
+  immig_rate_time <- data.frame(Immigration = immig_rate[removed_timepoints:length(immig_rate)], Time = island_area_time$Time[removed_timepoints:length(island_area_time$Time)])
+  
+  Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
+  Immigration <- NULL; rm(Immigration) # nolint, fixes warning: no visible binding for global variable
+  ggplot2::ggplot(data = immig_rate_time, ggplot2::aes(x = Time, y = Immigration)) +
+    ggplot2::geom_line(size = 1) +
+    ggplot2::ylim(0, 10)
+  invisible(immig_rate_time)
+}
+

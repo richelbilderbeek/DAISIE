@@ -42,7 +42,6 @@ island_area <- function(timeval, totaltime, Apars, island_ontogeny){
   }
 }
 
-
 #' Function to describe changes in extinction rate through time. From
 #' Valente et al 2014 ProcB
 #' @param timeval current time of simulation
@@ -82,12 +81,11 @@ get_ext_rate <- function(timeval,
                          island_spec,
                          K){
   # Epars[1] and Epars[2] (mu_min, mu_p) must be user specified
-  if (is.null(island_ontogeny)){
+  if (is.null(island_ontogeny)) {
     extrate <- mu * length(island_spec[,1])
     return(extrate)
     
     } else {
-      
       
     X <- log(Epars[1] / Epars[2]) / log(0.1)
     extrate <- Epars[1]/((island_area(timeval, totaltime, Apars, island_ontogeny) / Apars[1])^X)
@@ -156,7 +154,6 @@ get_clado_rate <- function(timeval,
     # Ontogeny scenario
   } else {
     
-  
     clado_rate <-  max(c(length(island_spec[, 1]) * lac * 
                          island_area(timeval,
                                      totaltime,
@@ -165,7 +162,7 @@ get_clado_rate <- function(timeval,
                          (1 - length(island_spec[, 1]) / (island_area(timeval, 
                                              totaltime, 
                                              Apars, 
-                                             island_ontogeny) * K)), 0), na.rm = T)
+                                             island_ontogeny) * 0.05)), 0), na.rm = T)
     clado_rate
   }
 }
@@ -213,7 +210,7 @@ get_immig_rate <- function(timeval,
         island_area(timeval,
                     totaltime,
                     Apars,
-                    island_ontogeny) * K)), 0), na.rm = T)
+                    island_ontogeny) * 0.05)), 0), na.rm = T)
   }
   immig_rate
 }
@@ -252,7 +249,7 @@ get_thor <- function(timeval,
     return(thor)
   } else {
     
-    if (is.null(thor)){
+    if (is.null(thor)) {
       thor <- Apars[2] * Apars[4]
       return(thor)
       
@@ -261,9 +258,35 @@ get_thor <- function(timeval,
       thor <- timeval + ext_multiplier * (totaltime - timeval)
       thor <- min(totaltime, thor)
       thor
-    } 
+    }
   }
 }
+
+get_thor_half <- function(timeval,
+                     totaltime,
+                     Apars,
+                     ext_multiplier,
+                     island_ontogeny,
+                     thor_2) {
+  # Function calculates where the horizon for max(immig_rate and clado_rate) is.
+  if (is.null(island_ontogeny)) {
+    thor_2 <- totaltime
+    return(thor_2)
+  } else {
+    
+    if (is.null(thor_2)) {
+      thor_2 <- (Apars[2] * Apars[4]) / 2
+      return(thor_2)
+      
+    } else if (timeval >= thor_2 & ((Apars[2] * Apars[4]) / 2) < timeval) {
+      
+      thor_2 <- timeval + ext_multiplier * (totaltime - timeval)
+      thor_2 <- min(totaltime, thor_2)
+      thor_2
+    }
+  }
+}
+
 
 #' Calculate the clade-wide extinction rate
 #' @param ps_ext_rate per species extinction rate

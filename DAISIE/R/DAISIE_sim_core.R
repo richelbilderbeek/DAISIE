@@ -71,19 +71,44 @@ DAISIE_sim_core <- function(
   stt_table[1,] <- c(totaltime,0,0,0)
 
   # Pick thor (before timeval, to set Amax thor)
-  thor <- get_thor(0, totaltime, Apars, ext_multiplier, island_ontogeny, thor = NULL)
-
+  thor <- get_thor(0,
+                   totaltime,
+                   Apars,
+                   ext_multiplier,
+                   island_ontogeny, 
+                   thor = NULL
+                   )
+  
+  thor_2 <- get_thor_half(0,
+                          totaltime,
+                          Apars,
+                          ext_multiplier,
+                          island_ontogeny, 
+                          thor_2 = NULL
+                          )
+  
+  # print(thor)
   #### Start Gillespie ####
   while (timeval <= totaltime) {
     if (timeval < thor) {
+      if (timeval < thor_2) {
+        
       rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                             mu = mu, laa = laa, lac = lac, Apars = Apars,
                             Epars = Epars, island_ontogeny = island_ontogeny,
                             extcutoff = extcutoff, K = K,
-                            island_spec = island_spec, mainland_n, thor)
-      
+                            island_spec = island_spec, mainland_n, thor, thor_2)
+      # cat("gam: ", rates[[1]],
+      #     "mu: ", rates[[2]],
+      #     "laa: ", rates[[3]],
+      #     "lac: ", rates[[4]],
+      #     "mumax: ", rates[[5]],
+      #     "gammax: ", rates[[6]],
+      #     "lacmax: ", rates[[7]], 
+      #     "\n")
       timeval <- pick_timeval(rates, timeval)
-      
+      # print(timeval)
+      # print(timeval)
       # Determine event
       # If statement prevents odd behaviour of sample when rates are 0
       if (is.null(island_ontogeny)) {
@@ -91,16 +116,25 @@ DAISIE_sim_core <- function(
                                                   rates[[3]], rates[[4]]), 
                                  replace = FALSE)
       } else {
-      possible_event <- sample(1:5, 1, prob = c(rates[[1]], 
+        # cat("gam: ", rates[[1]],
+        #     "mu: ", rates[[2]],
+        #     "laa: ", rates[[3]],
+        #     "lac: ", rates[[4]],
+        #     "mumax: ", rates[[5]],
+        #     "gammax: ", rates[[6]],
+        #     "lacmax: ", rates[[7]],
+        #     "\n")
+      possible_event <- sample(1:7, 1, prob = c(rates[[1]], 
                                                 rates[[2]],
                                                 rates[[3]],
                                                 rates[[4]], 
                                                 (rates[[5]] - rates[[2]]),
                                                 (rates[[6]] - rates[[1]]),
-                                                (rates[[7]] - rates[[3]])),
+                                                (rates[[7]] - rates[[4]])),
                                replace = FALSE)
+      # print(possible_event)
       }
-
+# print(rates)
       if (timeval <= totaltime) {
         # Run event
 
@@ -119,16 +153,28 @@ DAISIE_sim_core <- function(
                            length(which(island_spec[,4] == "I")),
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
-
-      
-      
+# print(stt_table)
+      } else {
+      thor_2 <- get_thor_half(timeval = timeval,
+                              totaltime = totaltime,
+                              Apars = Apars,
+                              ext_multiplier = ext_multiplier,
+                              island_ontogeny = island_ontogeny, 
+                              thor_2 = thor_2)
+      }
     } else {
       #### After thor is reached ####
       # Recalculate thor
-      thor <- get_thor(timeval = timeval, totaltime = totaltime, Apars = Apars,
+      thor <- get_thor(timeval = timeval,
+                       totaltime = totaltime,
+                       Apars = Apars,
                        ext_multiplier = ext_multiplier,
-                       island_ontogeny = island_ontogeny, thor = thor)
+                       island_ontogeny = island_ontogeny, 
+                       thor = thor)
       
+      
+      # print(thor)
+      # print(thor_2)
     }
   }
   stt_table[nrow(stt_table),1] <- 0
@@ -212,19 +258,23 @@ update_rates <- function(timeval, totaltime,
                          island_ontogeny, 
                          extcutoff,
                          K, 
-                         island_spec, mainland_n, thor) {
+                         island_spec, mainland_n, thor, thor_2) {
   # Function to calculate rates at time = timeval. Returns list with each rate.
   
   
-  immig_rate <- get_immig_rate(timeval,
-                               totaltime,
-                               gam,
-                               Apars,
-                               island_ontogeny,
-                               island_spec,
-                               K, 
-                               mainland_n)
-  
+  immig_rate <- get_immig_rate(timeval = timeval,
+                               totaltime = totaltime,
+                               gam = gam,
+                               Apars = Apars,
+                               island_ontogeny = island_ontogeny,
+                               island_spec = island_spec,
+                               K = 0.05,
+                               mainland_n = mainland_n)
+  # print(timeval)
+  # print(gam)
+  # print(island_spec)
+  # cat("immig_rate: ", immig_rate, "\n")
+  # print(island_spec)
   ext_rate <- get_ext_rate(timeval = timeval,
                            totaltime = totaltime,
                            mu = mu,
@@ -235,53 +285,126 @@ update_rates <- function(timeval, totaltime,
                            island_spec = island_spec,
                            K = K)
   
-  ana_rate <- get_ana_rate(laa = laa, island_spec = island_spec)
+  ana_rate <- get_ana_rate(laa = laa,
+                           island_spec = island_spec)
   
-  clado_rate <- get_clado_rate(timeval, 
-                               totaltime,
-                               lac,
-                               Apars,
-                               island_ontogeny,
-                               island_spec,
-                               K)
+  clado_rate <- get_clado_rate(timeval = timeval, 
+                               totaltime = totaltime,
+                               lac = lac,
+                               Apars = Apars,
+                               island_ontogeny = island_ontogeny,
+                               island_spec = island_spec,
+                               K = 0.05)
   
   if (is.null(island_ontogeny)) {
     
     immig_rate_max <- immig_rate
     ext_rate_max <- ext_rate
     clado_rate_max <- clado_rate
-    
+
   } else if ((Apars[2] * Apars[4]) > timeval) {
-    
-    immig_rate_max <- immig_rate
+
     ext_rate_max <- ext_rate
-    clado_rate_max <- clado_rate
     
   } else {
+    # No ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
+    immig_rate_max <- get_immig_rate(timeval = thor,
+                                     totaltime = totaltime,
+                                     gam = gam,
+                                     Apars = Apars,
+                                     island_ontogeny = island_ontogeny,
+                                     island_spec = island_spec,
+                                     K = 0.05, 
+                                     mainland_n = mainland_n)
     
     
-    immig_rate_max <- get_immig_rate(thor,
-                                     totaltime,
-                                     gam,
-                                     Apars,
-                                     island_ontogeny,
-                                     island_spec,
-                                     K, 
-                                     mainland_n)
-    ext_rate_max <- get_ext_rate(timeval = thor, totaltime = totaltime, mu = mu,
-                                 Apars = Apars, Epars = Epars,
+    ext_rate_max <- get_ext_rate(timeval = thor,
+                                 totaltime = totaltime,
+                                 mu = mu,
+                                 Apars = Apars, 
+                                 Epars = Epars,
                                  island_ontogeny = island_ontogeny, 
-                                 extcutoff = extcutoff, island_spec = island_spec,
+                                 extcutoff = extcutoff, 
+                                 island_spec = island_spec,
                                  K = K)
-    clado_rate_max <- get_clado_rate(thor, 
-                                     totaltime,
-                                     lac,
-                                     Apars,
-                                     island_ontogeny,
-                                     island_spec,
-                                     K)
     
-    
+    clado_rate_max <- get_clado_rate(timeval = thor, 
+                                     totaltime = totaltime,
+                                     lac = lac,
+                                     Apars = Apars,
+                                     island_ontogeny = island_ontogeny,
+                                     island_spec = island_spec,
+                                     K = 0.05)
+
+  }
+  
+  if ((((Apars[2] * Apars[4]) / 2) > timeval) && !is.null(island_ontogeny)) {
+    clado_rate_max <- get_clado_rate(((Apars[2] * Apars[4]) / 2),
+                                     totaltime = totaltime, 
+                                     lac = lac,
+                                     Apars = Apars, 
+                                     island_ontogeny = island_ontogeny,
+                                     island_spec = island_spec,
+                                     K = 0.05)
+    # cat("clado max: ", clado_rate_max, "\n")
+    # cat("clado: ", clado_rate, "\n2")
+  
+    immig_rate_max <- get_immig_rate(((Apars[2] * Apars[4]) / 2),
+                                     totaltime = totaltime, 
+                                     gam = gam,
+                                     Apars = Apars, 
+                                     island_ontogeny = island_ontogeny,
+                                     island_spec = island_spec,
+                                     K = 0.05,
+                                     mainland_n = mainland_n)
+    # print(island_area(timeval = timeval, totaltime = 10, Apars = Apars, island_ontogeny = "quadratic"))
+    # 
+    # print((1 - length(island_spec[, 1]) / (
+    #   island_area(timeval,
+    #               totaltime,
+    #               Apars,
+    #               island_ontogeny) * 0.05)))
+    # 
+    # print(island_area(((Apars[2] * Apars[4]) / 2), totaltime = 10, Apars = Apars, island_ontogeny = island_ontogeny))
+    # print((1 - length(island_spec[, 1]) / (
+    #   island_area(((Apars[2] * Apars[4]) / 2),
+    #               totaltime,
+    #               Apars,
+    #               island_ontogeny) * 0.05)))
+    # print(timeval)
+    # IMMIG RATE IS DECREASING DUE TO DIVERSITY DEPENDENCE!!!!
+    # print(immig_rate)
+    # print(immig_rate_max)
+    # print(get_immig_rate(timeval,
+    #                      totaltime = totaltime, 
+    #                      gam = gam,
+    #                      Apars = Apars, 
+    #                      island_ontogeny = island_ontogeny,
+    #                      island_spec = island_spec,
+    #                      K = K,
+    #                      mainland_n = mainland_n))
+    # print(island_area(timeval,
+    #             10,
+    #             Apars,
+    #             "quadratic"))
+  } else {
+    print("hey")
+    clado_rate_max <- get_clado_rate(thor_2,
+                                     totaltime = totaltime, 
+                                     lac = lac,
+                                     Apars = Apars, 
+                                     island_ontogeny = island_ontogeny,
+                                     island_spec = island_spec,
+                                     K = K)
+    print(thor_2)
+    immig_rate_max <- get_immig_rate(thor_2,
+                                     totaltime = totaltime, 
+                                     gam = gam,
+                                     Apars = Apars, 
+                                     island_ontogeny = island_ontogeny,
+                                     island_spec = island_spec,
+                                     K = K,
+                                     mainland_n = mainland_n)
   }
 
   rates <- list(immig_rate,
@@ -291,6 +414,14 @@ update_rates <- function(timeval, totaltime,
                 ext_rate_max,
                 immig_rate_max,
                 clado_rate_max)
+  cat("gam: ", rates[[1]],
+      "mu: ", rates[[2]],
+      "laa: ", rates[[3]],
+      "lac: ", rates[[4]],
+      "mumax: ", rates[[5]],
+      "gammax: ", rates[[6]],
+      "lacmax: ", rates[[7]],
+      "\n")
   return(rates)
 }
 
@@ -324,11 +455,11 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
   }
   ##########################################
   #IMMIGRATION
-  if(possible_event == 1)
+  if (possible_event == 1)
   {  	
     colonist = DDD::sample2(mainland_spec,1)
     
-    if(length(island_spec[,1]) != 0)
+    if (length(island_spec[,1]) != 0)
     {
       isitthere = which(island_spec[,1] == colonist)
     } else
@@ -336,12 +467,12 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
       isitthere = c()
     }
     
-    if(length(isitthere) == 0)
+    if (length(isitthere) == 0)
     {
       island_spec = rbind(island_spec,c(colonist,colonist,timeval,"I",NA,NA,NA))
     }
     
-    if(length(isitthere) != 0)
+    if (length(isitthere) != 0)
     {
       island_spec[isitthere,] = c(colonist,colonist,timeval,"I",NA,NA,NA)
     }
@@ -349,7 +480,7 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
   
   ##########################################
   #EXTINCTION
-  if(possible_event == 2)
+  if (possible_event == 2)
   { 	
     extinct = DDD::sample2(1:length(island_spec[,1]),1)
     #this chooses the row of species data to remove
