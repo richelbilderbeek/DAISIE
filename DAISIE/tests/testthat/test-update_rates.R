@@ -27,7 +27,7 @@ test_that("update rates use", {
     thor_ext = 0.5, 
     thor_c_i = 0.25
   )
-
+  are_rates
 })
 
 test_that("update_rates classic behavior", {

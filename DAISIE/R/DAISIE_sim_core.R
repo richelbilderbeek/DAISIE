@@ -104,6 +104,7 @@ DAISIE_sim_core <- function(
                             Epars = Epars, island_ontogeny = island_ontogeny,
                             extcutoff = extcutoff, K = K,
                             island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
+      testit::assert(are_rates(rates))
 
       timeval <- calc_next_timeval(rates, timeval)
 
