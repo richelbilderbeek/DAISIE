@@ -395,36 +395,6 @@ update_rates <- function(timeval, totaltime,
                                      K = 0.05,
                                      mainland_n = mainland_n)
     testit::assert(is.numeric(immig_rate_max))
-    # print(island_area(timeval = timeval, totaltime = 10, Apars = Apars, island_ontogeny = "quadratic"))
-    # 
-    # print((1 - length(island_spec[, 1]) / (
-    #   island_area(timeval,
-    #               totaltime,
-    #               Apars,
-    #               island_ontogeny) * 0.05)))
-    # 
-    # print(island_area(((Apars$proportional_peak_t * Apars[4]) / 2), totaltime = 10, Apars = Apars, island_ontogeny = island_ontogeny))
-    # print((1 - length(island_spec[, 1]) / (
-    #   island_area(((Apars$proportional_peak_t * Apars[4]) / 2),
-    #               totaltime,
-    #               Apars,
-    #               island_ontogeny) * 0.05)))
-    # print(timeval)
-    # IMMIG RATE IS DECREASING DUE TO DIVERSITY DEPENDENCE!!!!
-    # print(immig_rate)
-    # print(immig_rate_max)
-    # print(get_immig_rate(timeval,
-    #                      totaltime = totaltime, 
-    #                      gam = gam,
-    #                      Apars = Apars, 
-    #                      island_ontogeny = island_ontogeny,
-    #                      island_spec = island_spec,
-    #                      K = K,
-    #                      mainland_n = mainland_n))
-    # print(island_area(timeval,
-    #             10,
-    #             Apars,
-    #             "quadratic"))
   } else {
 
     clado_rate_max <- get_clado_rate(thor_c_i,
