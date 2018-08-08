@@ -73,7 +73,7 @@ DAISIE_sim_core <- function(
   stt_table <- matrix(ncol = 4)
   colnames(stt_table) <- c("Time","nI","nA","nC")
   stt_table[1,] <- c(totaltime,0,0,0)
-  testit::assert(are_area_params(Apars))
+  testit::assert(is.null(Apars) || are_area_params(Apars))
   # Pick thor (before timeval, to set Amax thor)
   thor_ext <- get_thor(
     0,
