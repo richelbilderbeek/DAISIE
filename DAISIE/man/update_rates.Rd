@@ -41,7 +41,7 @@ Can be \code{NULL},
  or \code{"linear"} for a linear function}
 
 \item{extcutoff}{cutoff for extinction rate preventing it from being too 
-large and slowing down simulation}
+large and slowing down simulation. Should be big}
 
 \item{K}{carrying capacity}
 
