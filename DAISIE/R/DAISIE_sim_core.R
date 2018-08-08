@@ -105,26 +105,29 @@ DAISIE_sim_core <- function(
                             extcutoff = extcutoff, K = K,
                             island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
 
-      timeval <- pick_timeval(rates, timeval)
+      timeval <- calc_next_timeval(rates, timeval)
 
       # Determine event
       # If statement prevents odd behaviour of sample when rates are 0
       if (is.null(island_ontogeny)) {
-        possible_event <- sample(1:4, 1, prob = c(rates[[1]], rates[[2]], 
-                                                  rates[[3]], rates[[4]]), 
+        possible_event <- sample(1:4, 1, prob = c(rates$immig_rate,
+                                                  rates$ext_rate,
+                                                  rates$ana_rate,
+                                                  rates$clado_rate), 
                                  replace = FALSE)
       } else {
 
       testit::assert(is_numeric_list(rates))  
-      possible_event <- sample(1:7, 1, prob = c(rates[[1]], 
-                                                rates[[2]],
-                                                rates[[3]],
-                                                rates[[4]], 
-                                                (rates[[5]] - rates[[2]]),
-                                                (rates[[6]] - rates[[1]]),
-                                                (rates[[7]] - rates[[4]])),
-                               replace = FALSE)
-
+        possible_event <- sample(1:7, 1, prob = c(
+          rates$immig_rate,
+          rates$ext_rate,
+          rates$ana_rate,
+          rates$clado_rate,
+          (rates$ext_rate_max - rates$ext_rate),
+          (rates$immig_rate_max - rates$immig_rate),
+          (rates$clado_rate_max - rates$clado_rate)),
+          replace = FALSE)
+        
       }
 
       if (timeval <= totaltime) {
@@ -385,35 +388,27 @@ update_rates <- function(timeval, totaltime,
     }
 
 
-  # One day ...  
-  # rates <- list(
-  #   immig_rate = immig_rate,
-  #   ext_rate = ext_rate,
-  #   ana_rate = ana_rate,
-  #   clado_rate = clado_rate,
-  #   ext_rate_max = ext_rate_max,
-  #   immig_rate_max = immig_rate_max,
-  #   clado_rate_max = clado_rate_max
-  # )
-  
-  rates <- list(immig_rate,
-                ext_rate,
-                ana_rate,
-                clado_rate,
-                ext_rate_max,
-                immig_rate_max,
-                clado_rate_max)
+  rates <- create_rates(
+    immig_rate = immig_rate,
+    ext_rate = ext_rate,
+    ana_rate = ana_rate,
+    clado_rate = clado_rate,
+    ext_rate_max = ext_rate_max,
+    immig_rate_max = immig_rate_max,
+    clado_rate_max = clado_rate_max
+  )
 
-  testit::assert(is_numeric_list(rates))
   return(rates)
 }
 
 #' Calculates when the next timestep will be.
 #' @param rates list of numeric with probabilities of each event
 #' @param timeval current time of simulation
-pick_timeval <- function(rates, timeval) {
+calc_next_timeval <- function(rates, timeval) {
   # Calculates when next event will happen
-  totalrate <- rates[[6]] + rates[[3]] + rates[[7]] + rates[[5]]
+  testit::assert(are_rates(rates))
+  testit::assert(timeval >= 0)
+  totalrate <- rates$immig_rate_max + rates$ana_rate + rates$clado_rate_max + rates$ext_rate_max
   dt <- rexp(1, totalrate)
   timeval <- timeval + dt
   return(timeval)

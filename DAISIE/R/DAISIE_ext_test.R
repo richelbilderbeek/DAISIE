@@ -90,8 +90,10 @@ DAISIE_exinction_test <- function(
       # Determine event
       # If statement prevents odd behaviour of sample when rates are 0
       if (is.null(island_ontogeny)) {
-        possible_event <- sample(1:4, 1, prob = c(rates[[1]], rates[[2]], 
-                                                  rates[[3]], rates[[4]]), 
+        possible_event <- sample(
+          1:4, 1, 
+          prob = c(rates[[1]], rates[[2]], 
+                   rates[[3]], rates[[4]]), 
                                  replace = FALSE)
       } else if (sum(rates[[1]], rates[[2]], 
                      rates[[3]], rates[[4]], 
