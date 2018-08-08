@@ -73,7 +73,7 @@ DAISIE_sim_core <- function(
   stt_table <- matrix(ncol = 4)
   colnames(stt_table) <- c("Time","nI","nA","nC")
   stt_table[1,] <- c(totaltime,0,0,0)
-
+  testit::assert(are_area_params(Apars))
   # Pick thor (before timeval, to set Amax thor)
   thor_ext <- get_thor(
     0,
@@ -83,7 +83,6 @@ DAISIE_sim_core <- function(
     island_ontogeny, 
     thor = NULL
   )
-  
   thor_c_i <- get_thor_half(0,
                           totaltime,
                           Apars,
@@ -147,17 +146,20 @@ DAISIE_sim_core <- function(
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
       } else {
-      thor_c_i <- get_thor_half(timeval = timeval,
-                              totaltime = totaltime,
-                              Apars = Apars,
-                              ext_multiplier = ext_multiplier,
-                              island_ontogeny = island_ontogeny, 
-                              thor_2 = thor_2)
+        thor_c_i <- get_thor_half(
+          timeval = timeval,
+          totaltime = totaltime,
+          Apars = Apars,
+          ext_multiplier = ext_multiplier,
+          island_ontogeny = island_ontogeny, 
+          thor_c_i = thor_c_i
+          )
       }
     } else {
       #### After thor is reached ####
       # Recalculate thor
-      thor <- get_thor(timeval = timeval,
+      testit::assert(are_area_params(Apars))
+      thor_ext <- get_thor(timeval = timeval,
                        totaltime = totaltime,
                        Apars = Apars,
                        ext_multiplier = ext_multiplier,

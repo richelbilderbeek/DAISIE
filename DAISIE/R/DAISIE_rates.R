@@ -252,44 +252,69 @@ get_thor <- function(timeval,
   testit::assert(is.null(Apars) || are_area_params(Apars))
   # Function calculates where the horizon for max(ext_rate) is.
   if (is.null(island_ontogeny)) {
+    testit::assert(totaltime > 0.0)
     return(totaltime)
   } else {
     
     if (is.null(thor)) {
       testit::assert(are_area_params(Apars))
       thor <- Apars$proportional_peak_t * Apars$total_island_age
+      testit::assert(thor > 0.0)
       return(thor)
       
     } else if (timeval >= thor) {
       
       thor <- timeval + ext_multiplier * (totaltime - timeval)
       thor <- min(totaltime, thor)
+      testit::assert(thor > 0.0)
       thor
     }
   }
 }
 
-get_thor_half <- function(timeval,
-                     totaltime,
-                     Apars,
-                     ext_multiplier,
-                     island_ontogeny,
-                     thor_2) {
+
+
+#' Creates the horizon time for the cladogenesis and immigration
+#' rate.
+#'
+#' @param timeval 
+#' @param totaltime 
+#' @param Apars area parameters, 
+#'   as created by \link{create_area_params}
+#' @param ext_multiplier 
+#' @param island_ontogeny 
+#' @param thor_c_i time horizon clagogesis and immigration
+#'
+#' @return
+#' @export
+#'
+#' @examples
+get_thor_half <- function(
+  timeval,
+  totaltime,
+  Apars,
+  ext_multiplier,
+  island_ontogeny,
+  thor_c_i
+) {
   # Function calculates where the horizon for max(immig_rate and clado_rate) is.
   if (is.null(island_ontogeny)) {
-    thor_2 <- totaltime
-    return(thor_2)
+    thor_c_i <- totaltime
+    testit::assert(thor_c_i > 0.0)
+    return(thor_c_i)
   } else {
     
-    if (is.null(thor_2)) {
-      thor_2 <- (Apars$proportional_peak_t * Apars$total_island_age) / 2
-      return(thor_2)
+    if (is.null(thor_c_i)) {
+      thor_c_i <- (Apars$proportional_peak_t * Apars$total_island_age) / 2
+      testit::assert(thor_c_i > 0.0)
+      return(thor_c_i)
       
-    } else if (timeval >= thor_2 & ((Apars$proportional_peak_t * Apars$total_island_age) / 2) < timeval) {
+    } else if (timeval >= thor_c_i & ((Apars$proportional_peak_t * Apars$total_island_age) / 2) < timeval) {
       
-      thor_2 <- timeval + ext_multiplier * (totaltime - timeval)
-      thor_2 <- min(totaltime, thor_2)
-      thor_2
+      thor_c_i <- timeval + ext_multiplier * (totaltime - timeval)
+      thor_c_i <- min(totaltime, thor_c_i)
+      testit::assert(thor_c_i > 0.0)
+      thor_c_i
     }
   }
 }
