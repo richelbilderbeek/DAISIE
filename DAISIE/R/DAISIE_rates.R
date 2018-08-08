@@ -250,8 +250,7 @@ get_thor <- function(timeval,
   testit::assert(is.null(Apars) || are_area_params(Apars))
   # Function calculates where the horizon for max(ext_rate) is.
   if (is.null(island_ontogeny)) {
-    thor <- totaltime
-    return(thor)
+    return(totaltime)
   } else {
     
     if (is.null(thor)) {

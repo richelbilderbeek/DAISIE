@@ -75,13 +75,14 @@ DAISIE_sim_core <- function(
   stt_table[1,] <- c(totaltime,0,0,0)
 
   # Pick thor (before timeval, to set Amax thor)
-  thor_ext <- get_thor(0,
-                   totaltime,
-                   Apars,
-                   ext_multiplier,
-                   island_ontogeny, 
-                   thor = NULL
-                   )
+  thor_ext <- get_thor(
+    0,
+    totaltime,
+    Apars,
+    ext_multiplier,
+    island_ontogeny, 
+    thor = NULL
+  )
   
   thor_c_i <- get_thor_half(0,
                           totaltime,
