@@ -62,32 +62,33 @@ test_that("Clean run should be silent", {
 })
 
 test_that("Pedro's should run silent", {
-  
+
   skip("WIP")
   set.seed(234567890)
   DAISIE_sim_core(
-    time = 10, 
-    mainland_n = 1, 
-    pars = c(2.5, 2.2, 10, 0.009, 1.01), 
+    time = 10,
+    mainland_n = 1,
+    pars = c(2.5, 2.2, 10, 0.009, 1.01),
     Apars = create_area_params(
-                               max_area = 10,
-                               proportional_peak_t = 0.5,
-                               peak_sharpness = 1,
-                               total_island_age = 5), 
-    Epars = c(1.7, 100), 
+      max_area = 10,
+      proportional_peak_t = 0.5,
+      peak_sharpness = 1,
+      total_island_age = 5
+    ), 
+    Epars = c(1.7, 100),
     island_ontogeny = "quadratic"
   )
-  
+
   expect_silent(
     DAISIE_sim_core(
-      time = 10, 
-      mainland_n = 1, 
-      pars = c(2.5, 2.2, 10, 0.009, 1.01), 
-      Apars = create_area_params(5000, 0.2, 1, 15), 
-      Epars = c(1.7, 100), 
+      time = 10,
+      mainland_n = 1,
+      pars = c(2.5, 2.2, 10, 0.009, 1.01),
+      Apars = create_area_params(5000, 0.2, 1, 15),
+      Epars = c(1.7, 100),
       island_ontogeny = "quadratic"
     )
   )
-  
+
 })
 
