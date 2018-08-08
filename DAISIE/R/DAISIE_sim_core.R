@@ -382,6 +382,18 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(immig_rate_max))
     }
 
+
+  # One day ...  
+  # rates <- list(
+  #   immig_rate = immig_rate,
+  #   ext_rate = ext_rate,
+  #   ana_rate = ana_rate,
+  #   clado_rate = clado_rate,
+  #   ext_rate_max = ext_rate_max,
+  #   immig_rate_max = immig_rate_max,
+  #   clado_rate_max = clado_rate_max
+  # )
+  
   rates <- list(immig_rate,
                 ext_rate,
                 ana_rate,

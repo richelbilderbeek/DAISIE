@@ -196,14 +196,16 @@ get_clado_rate <- function(timeval,
 #' @seealso Does the same as \link{DAISIE_calc_clade_imm_rate}
 #' @family rates calculation
 #' @author Pedro Neves
-get_immig_rate <- function(timeval,
-                           totaltime,
-                           gam,
-                           Apars,
-                           island_ontogeny,
-                           island_spec,
-                           K, 
-                           mainland_n) {
+get_immig_rate <- function(
+  timeval,
+  totaltime,
+  gam,
+  Apars,
+  island_ontogeny,
+  island_spec,
+  K, 
+  mainland_n
+) {
   if (is.null(island_ontogeny)) {
     immig_rate <- max(c(mainland_n 
                        * gam * (1 - length(island_spec[, 1]) / K), 0), na.rm = T)
