@@ -63,6 +63,7 @@ test_that("Clean run should be silent", {
 
 test_that("Pedro's should run silent", {
   
+  skip("WIP")
   set.seed(234567890)
   DAISIE_sim_core(
     time = 10, 
