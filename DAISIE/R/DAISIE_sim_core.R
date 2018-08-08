@@ -88,7 +88,7 @@ DAISIE_sim_core <- function(
                           Apars,
                           ext_multiplier,
                           island_ontogeny, 
-                          thor_2 = NULL
+                          thor_c_i = NULL
                           )
   
 
