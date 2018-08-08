@@ -247,7 +247,7 @@ get_thor <- function(timeval,
                      ext_multiplier,
                      island_ontogeny,
                      thor) {
-  testit::assert(are_area_params(Apars))
+  testit::assert(is.null(Apars) || are_area_params(Apars))
   # Function calculates where the horizon for max(ext_rate) is.
   if (is.null(island_ontogeny)) {
     thor <- totaltime
@@ -255,6 +255,7 @@ get_thor <- function(timeval,
   } else {
     
     if (is.null(thor)) {
+      testit::assert(are_area_params(Apars))
       thor <- Apars$proportional_peak_t * Apars$total_island_age
       return(thor)
       

@@ -83,7 +83,7 @@ test_that("Pedro's should run silent", {
       time = 10, 
       mainland_n = 1, 
       pars = c(2.5, 2.2, 10, 0.009, 1.01), 
-      Apars = c(5000, 0.2, 1, 15), 
+      Apars = create_area_params(5000, 0.2, 1, 15), 
       Epars = c(1.7, 100), 
       island_ontogeny = "quadratic"
     )

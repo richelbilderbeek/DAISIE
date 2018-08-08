@@ -39,13 +39,13 @@ DAISIE_sim_core <- function(
   island_ontogeny = NULL
 ) {
   testit::assert(length(pars) == 5)
-  testit::assert(are_area_params(Apars))
+  testit::assert(is.null(Apars) || are_area_params(Apars))
   if(pars[4] == 0) 
   {
     stop('Rate of colonisation is zero. Island cannot be colonised.')
   }  
   
-  if (!is.null(Apars) && is.null(island_ontogeny)){
+  if (are_area_params(Apars) && is.null(island_ontogeny)){
     stop("Apars specified for contant island_ontogeny. Set Apars to NULL")
   }
   
@@ -98,12 +98,12 @@ DAISIE_sim_core <- function(
       if (timeval < thor_c_i) {
         
         
-      print(paste(timeval, totaltime, gam,
-        mu, laa, lac, Apars,
-        Epars, island_ontogeny,
-        extcutoff, K,
-        island_spec, mainland_n, thor_ext, thor_c_i, sep = "==="))
-        
+      # print(paste(timeval, totaltime, gam,
+      #   mu, laa, lac, Apars,
+      #   Epars, island_ontogeny,
+      #   extcutoff, K,
+      #   island_spec, mainland_n, thor_ext, thor_c_i, sep = "==="))
+      #   
       rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                             mu = mu, laa = laa, lac = lac, Apars = Apars,
                             Epars = Epars, island_ontogeny = island_ontogeny,
@@ -128,14 +128,14 @@ DAISIE_sim_core <- function(
                                                   rates[[3]], rates[[4]]), 
                                  replace = FALSE)
       } else {
-        cat("gam: ", rates[[1]],
-            "mu: ", rates[[2]],
-            "laa: ", rates[[3]],
-            "lac: ", rates[[4]],
-            "mumax: ", rates[[5]],
-            "gammax: ", rates[[6]],
-            "lacmax: ", rates[[7]],
-            "\n")
+        # cat("gam: ", rates[[1]],
+        #     "mu: ", rates[[2]],
+        #     "laa: ", rates[[3]],
+        #     "lac: ", rates[[4]],
+        #     "mumax: ", rates[[5]],
+        #     "gammax: ", rates[[6]],
+        #     "lacmax: ", rates[[7]],
+        #     "\n")
       testit::assert(is_numeric_list(rates))  
       possible_event <- sample(1:7, 1, prob = c(rates[[1]], 
                                                 rates[[2]],
@@ -280,8 +280,8 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(mu))
   testit::assert(is.numeric(laa))
   testit::assert(is.numeric(lac))
-  testit::assert(are_area_params(Apars))
-  testit::assert(is.numeric(Epars))
+  testit::assert(is.null(Apars) || are_area_params(Apars))
+  testit::assert(is.null(Epars) || is.numeric(Epars))
   testit::assert(is.character(island_ontogeny) || is.null(island_ontogeny))
   testit::assert(is.numeric(extcutoff))
   testit::assert(is.numeric(K))
@@ -424,9 +424,9 @@ update_rates <- function(timeval, totaltime,
                 ext_rate_max,
                 immig_rate_max,
                 clado_rate_max)
-  print("hey")
-  print(rates)
-  print("bye")
+  # print("hey")
+  # print(rates)
+  # print("bye")
   # cat("gam: ", rates[[1]],
   #     "mu: ", rates[[2]],
   #     "laa: ", rates[[3]],
