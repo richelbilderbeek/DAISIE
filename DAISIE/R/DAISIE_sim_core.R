@@ -147,7 +147,7 @@ DAISIE_sim_core <- function(
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
       } else {
-      thor_2 <- get_thor_half(timeval = timeval,
+      thor_c_i <- get_thor_half(timeval = timeval,
                               totaltime = totaltime,
                               Apars = Apars,
                               ext_multiplier = ext_multiplier,
@@ -162,7 +162,7 @@ DAISIE_sim_core <- function(
                        Apars = Apars,
                        ext_multiplier = ext_multiplier,
                        island_ontogeny = island_ontogeny, 
-                       thor = thor)
+                       thor = thor_ext)
       
     }
   }
@@ -273,7 +273,7 @@ update_rates <- function(timeval, totaltime,
                                Apars = Apars,
                                island_ontogeny = island_ontogeny,
                                island_spec = island_spec,
-                               K = 0.05,
+                               K = K,
                                mainland_n = mainland_n)
   testit::assert(is.numeric(immig_rate))
   ext_rate <- get_ext_rate(timeval = timeval,
@@ -296,7 +296,7 @@ update_rates <- function(timeval, totaltime,
                                Apars = Apars,
                                island_ontogeny = island_ontogeny,
                                island_spec = island_spec,
-                               K = 0.05)
+                               K = K)
   testit::assert(is.numeric(clado_rate))
   if (is.null(island_ontogeny)) {
     
