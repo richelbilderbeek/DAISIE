@@ -54,7 +54,7 @@ DAISIE_exinction_test <- function(
   #   stop('Rate of colonisation is zero. Island cannot be colonised.')
   # }  
   
-  if (!is.null(Apars) && is.null(island_ontogeny)){
+  if (are_area_params(Apars) && is.null(island_ontogeny)){
     stop("Apars specified for contant island_ontogeny. Set Apars to NULL")
   }
   

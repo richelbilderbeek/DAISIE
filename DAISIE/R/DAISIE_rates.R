@@ -15,15 +15,16 @@
 #'  or \code{"linear"} for a linear function
 #' @family rates calculation
 island_area <- function(timeval, totaltime, Apars, island_ontogeny){
-
-  Tmax <- Apars[4] # total time used to be Apars[4] in ProcB paper
-  Amax <- Apars[1] # maximum area
-  Topt <- Apars[2] # peak position in %
-  peak <- Apars[3] # peakiness - we specify a value of 1 but this is flexible.
+  testit::assert(are_area_params(Apars))
+  
+  Tmax <- Apars$total_island_age
+  Amax <- Apars$max_area
+  Topt <- Apars$proportional_peak_t
+  peak <- Apars$peak_sharpness
   proptime <- timeval/Tmax	
   # Constant
   if (is.null(island_ontogeny)) {
-    return(Apars[1])
+    return(Apars$max_area)
   }	
   if (island_ontogeny == "quadratic") {
 
@@ -89,7 +90,7 @@ get_ext_rate <- function(timeval,
     } else {
       
     X <- log(Epars[1] / Epars[2]) / log(0.1)
-    extrate <- Epars[1]/((island_area(timeval, totaltime, Apars, island_ontogeny) / Apars[1])^X)
+    extrate <- Epars[1]/((island_area(timeval, totaltime, Apars, island_ontogeny) / Apars$max_area)^X)
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate <- extrate * length(island_spec[,1])
@@ -254,7 +255,7 @@ get_thor <- function(timeval,
   } else {
     
     if (is.null(thor)) {
-      thor <- Apars[2] * Apars[4]
+      thor <- Apars$proportional_peak_t * Apars$total_island_age
       return(thor)
       
     } else if (timeval >= thor) {
@@ -279,10 +280,10 @@ get_thor_half <- function(timeval,
   } else {
     
     if (is.null(thor_2)) {
-      thor_2 <- (Apars[2] * Apars[4]) / 2
+      thor_2 <- (Apars$proportional_peak_t * Apars$total_island_age) / 2
       return(thor_2)
       
-    } else if (timeval >= thor_2 & ((Apars[2] * Apars[4]) / 2) < timeval) {
+    } else if (timeval >= thor_2 & ((Apars$proportional_peak_t * Apars$total_island_age) / 2) < timeval) {
       
       thor_2 <- timeval + ext_multiplier * (totaltime - timeval)
       thor_2 <- min(totaltime, thor_2)

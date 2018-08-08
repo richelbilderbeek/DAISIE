@@ -23,7 +23,9 @@
 DAISIE_plot_area <- function(totaltime,
                              Apars,
                              island_ontogeny = "quadratic",
-                             resolution) {
+                             resolution
+) {
+  testit::assert(are_area_params(Apars))
   
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package \"ggplot2\" needed for this function to work. Please install it.",
@@ -35,6 +37,7 @@ DAISIE_plot_area <- function(totaltime,
   axis <- seq(0, totaltime, by = resolution)
   area <- c()
   for (i in seq_along(axis)) {
+    testit::assert(are_area_params(Apars))
     area[i] <- DAISIE::island_area(timeval = axis[i],
                                 totaltime = totaltime,
                                 Apars = Apars,

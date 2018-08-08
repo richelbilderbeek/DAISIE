@@ -1,6 +1,6 @@
 context("get_immig_rate")
 
-test_that("multiplication works", {
+test_that("immig rate plots", {
   immig <- c()
   timepoints <- seq(0, 10, by = 0.01)
   
@@ -9,7 +9,7 @@ test_that("multiplication works", {
                                Apars = c(5000, 0.2, 1, 15), 
                                island_spec = matrix(ncol = 1,), 
                                island_ontogeny = "quadratic", 
-                               mainland_n = 1000)                        
+                               mainland_n = 1000, K = 0.05)                        
   }
   return()
   plot(immig)

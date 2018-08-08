@@ -1,14 +1,14 @@
 # Integrate test by Giovanni Laudanno
 island_area_for_test <- function(timeval, totaltime, Apars, island_function_shape){
   
-  Tmax <- Apars[4] # total time A PARS 1
-  Amax <- Apars[1] # maximum area
-  Topt <- Apars[2] # peak position in %
-  peak <- Apars[3] # peakiness - we specify a value of 1 but this is flexible.
+  Tmax <- Apars$total_island_age # total time A PARS 1
+  Amax <- Apars$max_area # maximum area
+  Topt <- Apars$proportional_peak_t # peak position in %
+  peak <- Apars$peak_sharpness # peakiness - we specify a value of 1 but this is flexible.
   proptime <- timeval/Tmax
   # Constant
   if (is.null(island_function_shape)){
-    return(Apars[1])
+    return(Apars$max_area)
   }
   # Beta function
   if(island_function_shape == "quadratic") {
@@ -45,7 +45,7 @@ get_ext_rate_for_test <- function(timeval, totaltime, mu,
     
     X <- log(Epars[1] / Epars[2]) / log(0.1)
     extrate <- Epars[1]/((island_area_for_test(timeval, totaltime, Apars,
-                                      island_function_shape) / Apars[1])^X)
+                                      island_function_shape) / Apars$max_area)^X)
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate <- extrate * N
     return(extrate)

@@ -12,7 +12,12 @@ test_that("update rates use", {
     mu = 2.0, 
     laa = 1.0, 
     lac = 2.5, 
-    Apars = c(1.0, 0.5, 1.0, 1.0), 
+    Apars = create_area_params(
+      max_area = 1.0, 
+      proportional_peak_t = 0.5, 
+      peak_sharpness = 1.0, 
+      total_island_age = 1.0
+    ), 
     Epars = c(0.5, 10.0),
     island_ontogeny = "quadratic", 
     extcutoff = 1000.0, 

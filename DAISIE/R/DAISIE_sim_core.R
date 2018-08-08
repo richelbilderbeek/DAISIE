@@ -279,12 +279,12 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(mu))
   testit::assert(is.numeric(laa))
   testit::assert(is.numeric(lac))
-  testit::assert(is.numeric(Apars))
+  testit::assert(are_area_params(Apars))
   testit::assert(is.numeric(Epars))
   testit::assert(is.character(island_ontogeny) || is.null(island_ontogeny))
   testit::assert(is.numeric(extcutoff))
   testit::assert(is.numeric(K))
-  testit::assert( is.matrix(island_spec) || is.null(island_spec))
+  testit::assert(is.matrix(island_spec) || is.null(island_spec))
   testit::assert(is.numeric(mainland_n))
   testit::assert(is.numeric(thor_ext))
   testit::assert(is.numeric(thor_c_i))
@@ -337,7 +337,7 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(ext_rate_max))
     clado_rate_max <- clado_rate
     testit::assert(is.numeric(clado_rate_max))
-  } else if ((Apars[2] * Apars[4]) > timeval) {
+  } else if ((Apars$proportional_peak_t * Apars$total_island_age) > timeval) {
 
     ext_rate_max <- ext_rate
     testit::assert(is.numeric(ext_rate_max))
@@ -373,8 +373,8 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(clado_rate_max))
   }
   
-  if ((((Apars[2] * Apars[4]) / 2) > timeval) && !is.null(island_ontogeny)) {
-    clado_rate_max <- get_clado_rate(((Apars[2] * Apars[4]) / 2),
+  if ((((Apars$proportional_peak_t * Apars$total_island_age) / 2) > timeval) && !is.null(island_ontogeny)) {
+    clado_rate_max <- get_clado_rate(((Apars$proportional_peak_t * Apars$total_island_age) / 2),
                                      totaltime = totaltime, 
                                      lac = lac,
                                      Apars = Apars, 
@@ -386,7 +386,7 @@ update_rates <- function(timeval, totaltime,
     # cat("clado max: ", clado_rate_max, "\n")
     # cat("clado: ", clado_rate, "\n2")
   
-    immig_rate_max <- get_immig_rate(((Apars[2] * Apars[4]) / 2),
+    immig_rate_max <- get_immig_rate(((Apars$proportional_peak_t * Apars$total_island_age) / 2),
                                      totaltime = totaltime, 
                                      gam = gam,
                                      Apars = Apars, 
@@ -403,9 +403,9 @@ update_rates <- function(timeval, totaltime,
     #               Apars,
     #               island_ontogeny) * 0.05)))
     # 
-    # print(island_area(((Apars[2] * Apars[4]) / 2), totaltime = 10, Apars = Apars, island_ontogeny = island_ontogeny))
+    # print(island_area(((Apars$proportional_peak_t * Apars[4]) / 2), totaltime = 10, Apars = Apars, island_ontogeny = island_ontogeny))
     # print((1 - length(island_spec[, 1]) / (
-    #   island_area(((Apars[2] * Apars[4]) / 2),
+    #   island_area(((Apars$proportional_peak_t * Apars[4]) / 2),
     #               totaltime,
     #               Apars,
     #               island_ontogeny) * 0.05)))
