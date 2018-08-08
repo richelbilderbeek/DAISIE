@@ -118,7 +118,7 @@ DAISIE_sim_core <- function(
                                  replace = FALSE)
       } else {
 
-      testit::assert(is_numeric_list(rates))  
+      testit::assert(are_rates(rates))  
         possible_event <- sample(1:7, 1, prob = c(
           rates$immig_rate,
           rates$ext_rate,
@@ -337,7 +337,7 @@ update_rates <- function(timeval, totaltime,
                                  extcutoff = extcutoff, 
                                  island_spec = island_spec,
                                  K = K)
-    testit::assert(is.numeric(ext_rate_max))
+    testit::assert(is.numeric(ext_rate_max) && ext_rate_max > 0.0)
     clado_rate_max <- get_clado_rate(timeval = thor_c_i, 
                                      totaltime = totaltime,
                                      lac = lac,
