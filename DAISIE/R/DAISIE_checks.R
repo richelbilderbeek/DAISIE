@@ -1,6 +1,6 @@
 # Integrate test by Giovanni Laudanno
 island_area_for_test <- function(timeval, totaltime, Apars, island_function_shape){
-  
+  testit::assert(are_area_params(Apars))
   Tmax <- Apars$total_island_age # total time A PARS 1
   Amax <- Apars$max_area # maximum area
   Topt <- Apars$proportional_peak_t # peak position in %
@@ -38,6 +38,7 @@ get_ext_rate_for_test <- function(timeval, totaltime, mu,
                          extcutoff, N,
                          K){
   # Epars[1] and Epars[2] (mu_min, mu_p) must be user specified
+  testit::assert(are_area_params(Apars))
   if (is.null(island_function_shape)){
     extrate <- mu * N
     
@@ -54,7 +55,7 @@ get_ext_rate_for_test <- function(timeval, totaltime, mu,
 
 MU   <- function(s, N = 1000){
   totaltime <- 10
-  Apars <- c(1000, 0.2, 1, totaltime * 1.5)
+  Apars <- create_area_params(1000, 0.2, 1, totaltime * 1.5)
   Epars <- c(1.7, 20)
   island_function_shape <- 'quadratic'
   extcutoff <- 1000

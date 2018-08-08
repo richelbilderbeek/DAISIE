@@ -39,6 +39,7 @@ DAISIE_sim_core <- function(
   island_ontogeny = NULL
 ) {
   testit::assert(length(pars) == 5)
+  testit::assert(are_area_params(Apars))
   if(pars[4] == 0) 
   {
     stop('Rate of colonisation is zero. Island cannot be colonised.')
