@@ -96,7 +96,6 @@ DAISIE_exinction_test <- function(
       } else if (sum(rates[[1]], rates[[2]], 
                      rates[[3]], rates[[4]], 
                      rates[[5]]) > 0) {
-        # print(rates)
         possible_event <- sample(1:5, 1, prob = c(rates[[1]], rates[[2]], 
                                                   rates[[3]], rates[[4]], 
                                                   (rates[[5]] - rates[[2]])),

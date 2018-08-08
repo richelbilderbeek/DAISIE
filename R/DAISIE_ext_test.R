@@ -97,14 +97,11 @@ DAISIE_exinction_test <- function(
       } else if (sum(rates[[1]], rates[[2]], 
                      rates[[3]], rates[[4]], 
                      rates[[5]]) > 0){
-        # print(rates)
         possible_event <- sample(1:5, 1, prob = c(rates[[1]], rates[[2]], 
                                                   rates[[3]], rates[[4]], 
                                                   (rates[[5]] - rates[[2]])),
                                  replace = FALSE)
-        # print(possible_event)
-        # cat("ext rate: ", rates[[2]], "no ext rate: ", rates[[5]], "\n")
-        # assertthat::assert_that(possible_event == 2)
+
       }
       if (is.nan(timeval) == T) {
         timeval <- totaltime

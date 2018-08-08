@@ -217,7 +217,7 @@ DAISIE_sim <- function(
             Apars = Apars,
             Epars = Epars
           )
-          # print(full_list)
+
         }
         
         island_replicates[[rep]] = full_list

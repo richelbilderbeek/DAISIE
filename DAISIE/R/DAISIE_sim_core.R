@@ -92,36 +92,22 @@ DAISIE_sim_core <- function(
                           thor_2 = NULL
                           )
   
-  # print(thor)
+
   #### Start Gillespie ####
   while (timeval <= totaltime) {
     if (timeval < thor_ext) {
       if (timeval < thor_c_i) {
         
         
-      # print(paste(timeval, totaltime, gam,
-      #   mu, laa, lac, Apars,
-      #   Epars, island_ontogeny,
-      #   extcutoff, K,
-      #   island_spec, mainland_n, thor_ext, thor_c_i, sep = "==="))
-      #   
+
       rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                             mu = mu, laa = laa, lac = lac, Apars = Apars,
                             Epars = Epars, island_ontogeny = island_ontogeny,
                             extcutoff = extcutoff, K = K,
                             island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
 
-      # cat("gam: ", rates[[1]],
-      #     "mu: ", rates[[2]],
-      #     "laa: ", rates[[3]],
-      #     "lac: ", rates[[4]],
-      #     "mumax: ", rates[[5]],
-      #     "gammax: ", rates[[6]],
-      #     "lacmax: ", rates[[7]], 
-      #     "\n")
       timeval <- pick_timeval(rates, timeval)
-      # print(timeval)
-      # print(timeval)
+
       # Determine event
       # If statement prevents odd behaviour of sample when rates are 0
       if (is.null(island_ontogeny)) {
@@ -129,14 +115,7 @@ DAISIE_sim_core <- function(
                                                   rates[[3]], rates[[4]]), 
                                  replace = FALSE)
       } else {
-        # cat("gam: ", rates[[1]],
-        #     "mu: ", rates[[2]],
-        #     "laa: ", rates[[3]],
-        #     "lac: ", rates[[4]],
-        #     "mumax: ", rates[[5]],
-        #     "gammax: ", rates[[6]],
-        #     "lacmax: ", rates[[7]],
-        #     "\n")
+
       testit::assert(is_numeric_list(rates))  
       possible_event <- sample(1:7, 1, prob = c(rates[[1]], 
                                                 rates[[2]],
@@ -146,9 +125,9 @@ DAISIE_sim_core <- function(
                                                 (rates[[6]] - rates[[1]]),
                                                 (rates[[7]] - rates[[4]])),
                                replace = FALSE)
-      # print(possible_event)
+
       }
-# print(rates)
+
       if (timeval <= totaltime) {
         # Run event
 
@@ -167,7 +146,6 @@ DAISIE_sim_core <- function(
                            length(which(island_spec[,4] == "I")),
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
-# print(stt_table)
       } else {
       thor_2 <- get_thor_half(timeval = timeval,
                               totaltime = totaltime,
@@ -186,9 +164,6 @@ DAISIE_sim_core <- function(
                        island_ontogeny = island_ontogeny, 
                        thor = thor)
       
-      
-      # print(thor)
-      # print(thor_2)
     }
   }
   stt_table[nrow(stt_table),1] <- 0
@@ -301,14 +276,6 @@ update_rates <- function(timeval, totaltime,
                                K = 0.05,
                                mainland_n = mainland_n)
   testit::assert(is.numeric(immig_rate))
-  
-  # print(timeval)
-  # print(gam)
-  # print(island_spec)
-  # cat("immig_rate: ", immig_rate, "\n")
-  # print(island_spec)
-  
-  
   ext_rate <- get_ext_rate(timeval = timeval,
                            totaltime = totaltime,
                            mu = mu,
@@ -385,9 +352,6 @@ update_rates <- function(timeval, totaltime,
                                      K = 0.05)
     testit::assert(is.numeric(clado_rate_max))
     
-    # cat("clado max: ", clado_rate_max, "\n")
-    # cat("clado: ", clado_rate, "\n2")
-  
     immig_rate_max <- get_immig_rate(((Apars$proportional_peak_t * Apars$total_island_age) / 2),
                                      totaltime = totaltime, 
                                      gam = gam,
@@ -425,17 +389,7 @@ update_rates <- function(timeval, totaltime,
                 ext_rate_max,
                 immig_rate_max,
                 clado_rate_max)
-  # print("hey")
-  # print(rates)
-  # print("bye")
-  # cat("gam: ", rates[[1]],
-  #     "mu: ", rates[[2]],
-  #     "laa: ", rates[[3]],
-  #     "lac: ", rates[[4]],
-  #     "mumax: ", rates[[5]],
-  #     "gammax: ", rates[[6]],
-  #     "lacmax: ", rates[[7]],
-  #     "\n")
+
   testit::assert(is_numeric_list(rates))
   return(rates)
 }
