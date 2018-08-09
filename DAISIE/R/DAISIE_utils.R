@@ -193,9 +193,20 @@ antidiagSums = function(mat)
 #'
 #' @param x Object to determine
 #'
-#' @return
+#' @return Boolean indicating if object is list with only numerical values
 #' @note do not forget: NAs are removed from a list!
-#' @examples
+#' @examples 
+#'   testit::assert(
+#'     is_numeric_list(
+#'       x = list(char = "character", numerical = 1)
+#'     ) == FALSE
+#'   )
+#'   
+#'   testit::assert(
+#'     is_numeric_list(
+#'       x = list(numerical_1 = 1, numerical_2 = 2)
+#'     ) == TRUE
+#'   )
 is_numeric_list <- function(x) {
   is.list(x) && is.numeric(unlist(x))
 }

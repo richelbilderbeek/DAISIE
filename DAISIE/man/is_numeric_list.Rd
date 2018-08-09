@@ -9,9 +9,25 @@ is_numeric_list(x)
 \arguments{
 \item{x}{Object to determine}
 }
+\value{
+Boolean indicating if object is list with only numerical values
+}
 \description{
 Determine if list has only numerical values.
 }
 \note{
 do not forget: NAs are removed from a list!
+}
+\examples{
+  testit::assert(
+    is_numeric_list(
+      x = list(char = "character", numerical = 1)
+    ) == FALSE
+  )
+  
+  testit::assert(
+    is_numeric_list(
+      x = list(numerical_1 = 1, numerical_2 = 2)
+    ) == TRUE
+  )
 }

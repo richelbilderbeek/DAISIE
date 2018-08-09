@@ -103,6 +103,21 @@ DAISIE_plot_extinction <- function(island_area_time,
   invisible(ext_rate_time)
 }
 
+#' Plot immigration rate through time
+#'
+#' @param island_area_time Something
+#' @param totaltime Something
+#' @param K Something
+#' @param Apars Something
+#' @param gam Something
+#' @param mainland_n Something
+#' @param island_ontogeny Something
+#' @param removed_timepoints Something
+#' @param immig_rate Something
+#'
+#' @return a plot with immigration rate through time
+#' @export
+#'
 DAISIE_plot_immigration <- function(island_area_time,
                                    totaltime,
                                    K, 
@@ -110,7 +125,8 @@ DAISIE_plot_immigration <- function(island_area_time,
                                    gam,
                                    mainland_n,
                                    island_ontogeny = "quadratic", 
-                                   removed_timepoints) {
+                                   removed_timepoints,
+                                   immig_rate) {
   
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package \"ggplot2\" needed for this function to work. Please install it.",
@@ -120,13 +136,13 @@ DAISIE_plot_immigration <- function(island_area_time,
   ext_rate <- c()
   for (i in seq_along(island_area_time$Time)) {
     ext_rate[i] <- get_immig_rate(timeval = island_area_time$Time[i],
-                                        totaltime = totaltime,
-                                        Apars = Apars,
-                                        gam = NA, 
-                                        K = K, 
-                                        mainland_n = 1000, 
-                                        island_spec = matrix(ncol = 1),
-                                        island_ontogeny = island_ontogeny
+                                  totaltime = totaltime,
+                                  Apars = Apars,
+                                  gam = NA, 
+                                  K = K, 
+                                  mainland_n = 1000, 
+                                  island_spec = matrix(ncol = 1),
+                                  island_ontogeny = island_ontogeny
     )
   }
   

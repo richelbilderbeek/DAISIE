@@ -9,18 +9,38 @@ get_thor_half(timeval, totaltime, Apars, ext_multiplier, island_ontogeny,
   thor_c_i)
 }
 \arguments{
-\item{timeval}{}
+\item{timeval}{current time of simulation}
 
-\item{totaltime}{}
+\item{totaltime}{total time of simulation}
 
 \item{Apars}{area parameters, 
 as created by \link{create_area_params}}
 
-\item{ext_multiplier}{}
+\item{ext_multiplier}{reduces or increases distance of horizon to current
+simulation time}
 
-\item{island_ontogeny}{}
+\item{island_ontogeny}{a string describing the type of island ontogeny.
+Can be \code{NULL}, \code{"quadratic"} for a beta function
+describing area through time, or \code{"linear"} for a linear function}
 
-\item{thor_c_i}{time horizon clagogesis and immigration}
+\item{thor_c_i}{time horizon for clagogesis and immigration}
+}
+\value{
+the time horizon for cladogenesis and immigration
+#' @examples 
+  testit::assert(
+    get_thor_half(
+      timeval = 0.2, 
+      totaltime = 10,
+      Apars = create_area_params(Amax= 1000,
+                                 proportional_peak_t = 0.2,
+                                 peak_sharpness = 1,
+                                 total_island_age = 15),
+      ext_multiplier = 0.5,
+      island_ontogeny = "quadratic",
+      thor_c_i = NULL
+    ) == 1.5
+  )
 }
 \description{
 Creates the horizon time for the cladogenesis and immigration

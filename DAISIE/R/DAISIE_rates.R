@@ -277,18 +277,33 @@ get_thor <- function(timeval,
 #' Creates the horizon time for the cladogenesis and immigration
 #' rate.
 #'
-#' @param timeval 
-#' @param totaltime 
+#' @param timeval current time of simulation
+#' @param totaltime total time of simulation
 #' @param Apars area parameters, 
 #'   as created by \link{create_area_params}
-#' @param ext_multiplier 
-#' @param island_ontogeny 
-#' @param thor_c_i time horizon clagogesis and immigration
+#' @param ext_multiplier reduces or increases distance of horizon to current
+#' simulation time
+#' @param island_ontogeny a string describing the type of island ontogeny.
+#'  Can be \code{NULL}, \code{"quadratic"} for a beta function
+#'  describing area through time, or \code{"linear"} for a linear function
+#' @param thor_c_i time horizon for clagogesis and immigration
 #'
-#' @return
+#' @return the time horizon for cladogenesis and immigration
+#' #' @examples 
+#'   testit::assert(
+#'     get_thor_half(
+#'       timeval = 0.2, 
+#'       totaltime = 10,
+#'       Apars = create_area_params(Amax= 1000,
+#'                                  proportional_peak_t = 0.2,
+#'                                  peak_sharpness = 1,
+#'                                  total_island_age = 15),
+#'       ext_multiplier = 0.5,
+#'       island_ontogeny = "quadratic",
+#'       thor_c_i = NULL
+#'     ) == 1.5
+#'   )
 #' @export
-#'
-#' @examples
 get_thor_half <- function(
   timeval,
   totaltime,
