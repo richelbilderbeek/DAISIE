@@ -94,7 +94,7 @@ get_ext_rate <- function(timeval,
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate <- extrate * length(island_spec[,1])
-    #print(island_area(timeval, totaltime, Apars, island_ontogeny))
+
     testit::assert(is.numeric(extrate))
     extrate
   }

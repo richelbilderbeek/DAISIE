@@ -40,6 +40,7 @@ DAISIE_sim_core <- function(
 ) {
   testit::assert(length(pars) == 5)
   testit::assert(is.null(Apars) || are_area_params(Apars))
+  
   if(pars[4] == 0) 
   {
     stop('Rate of colonisation is zero. Island cannot be colonised.')
@@ -64,6 +65,7 @@ DAISIE_sim_core <- function(
   extcutoff <- max(1000, 1000 * (laa + lac + gam))
   testit::assert(is.numeric(extcutoff))
   ext_multiplier <- 0.5
+  testit::assert((totaltime <= Apars$total_island_age) || is.null(Apars))
   
   
   mainland_spec <- seq(1, mainland_n, 1)
@@ -169,7 +171,6 @@ DAISIE_sim_core <- function(
                        ext_multiplier = ext_multiplier,
                        island_ontogeny = island_ontogeny, 
                        thor = thor_ext)
-      
     }
   }
   stt_table[nrow(stt_table),1] <- 0
@@ -272,7 +273,6 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(thor_ext))
   testit::assert(is.numeric(thor_c_i))
   
-  
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,
                                gam = gam,
@@ -327,7 +327,7 @@ update_rates <- function(timeval, totaltime,
                                      K = 0.05, 
                                      mainland_n = mainland_n)
     testit::assert(is.numeric(immig_rate_max))
-    
+
     ext_rate_max <- get_ext_rate(timeval = thor_ext,
                                  totaltime = totaltime,
                                  mu = mu,
