@@ -337,7 +337,7 @@ update_rates <- function(timeval, totaltime,
                                  extcutoff = extcutoff, 
                                  island_spec = island_spec,
                                  K = K)
-    testit::assert(is.numeric(ext_rate_max) && ext_rate_max > 0.0)
+    testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
     clado_rate_max <- get_clado_rate(timeval = thor_c_i, 
                                      totaltime = totaltime,
                                      lac = lac,
