@@ -8,4 +8,4 @@ DAISIE/.Rhistory
 DAISIE.Rproj
 *.out
 *.txt
-DAISIE/tests/testthat/Rplots.pdf
+DAISIE/tests/testthat/Rplots.pdf.RData
