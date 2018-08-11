@@ -9,3 +9,4 @@ DAISIE.Rproj
 *.out
 *.txt
 DAISIE/tests/testthat/Rplots.pdf.RData
+DAISIE/.Rproj.user/
