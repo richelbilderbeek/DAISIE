@@ -21,11 +21,11 @@ island_area <- function(timeval, totaltime, Apars, island_ontogeny){
   Amax <- Apars$max_area
   Topt <- Apars$proportional_peak_t
   peak <- Apars$peak_sharpness
-  proptime <- timeval/Tmax	
+  proptime <- timeval/Tmax  
   # Constant
   if (is.null(island_ontogeny)) {
     return(Apars$max_area)
-  }	
+  } 
   if (island_ontogeny == "quadratic") {
 
     f <- Topt / (1 - Topt)

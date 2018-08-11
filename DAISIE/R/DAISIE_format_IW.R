@@ -15,7 +15,7 @@ DAISIE_format_IW = function(island_replicates,time,M,sample_freq)
     
     for(i in 2:nrow(stt_all))
     { 
-      the_age = stt_all[i,"Time"]	
+      the_age = stt_all[i,"Time"] 
       stt_all[i,2:4] = the_stt[max(which(the_stt[,"Time"] >= the_age)),2:4]
     }
     island_list = list()

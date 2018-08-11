@@ -435,7 +435,7 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
   ##########################################
   #IMMIGRATION
   if (possible_event == 1)
-  {  	
+  {   
     colonist = DDD::sample2(mainland_spec,1)
     
     if (length(island_spec[,1]) != 0)
@@ -460,7 +460,7 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
   ##########################################
   #EXTINCTION
   if (possible_event == 2)
-  { 	
+  {   
     extinct = DDD::sample2(1:length(island_spec[,1]),1)
     #this chooses the row of species data to remove
     
@@ -487,7 +487,7 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
       
       if(length(sisters) == 2)
       {
-        #survivors status becomes anagenetic	
+        #survivors status becomes anagenetic  
         island_spec[survivors,4] = "A"
         island_spec[survivors,c(5,6)] = c(NA,NA)
         island_spec[survivors,7] = "Clado_extinct"
@@ -495,7 +495,7 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
       }
       
       if(length(sisters) >= 3)
-      {		
+      {   
         numberofsplits = nchar(island_spec[extinct,5])
         
         mostrecentspl = substring(island_spec[extinct,5],numberofsplits)
@@ -514,22 +514,22 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
         possiblesister = survivors[which(substring(island_spec[survivors,5],1,numberofsplits) == motiftofind)]
         
         #different rules depending on whether a B or A is removed. B going extinct is simpler because it only 
-        #carries a record of the most recent speciation			
+        #carries a record of the most recent speciation     
         if(mostrecentspl == "A")
-        {								
+        {               
           #change the splitting date of the sister species so that it inherits the early splitting that used to belong to A.
           tochange = possiblesister[which(island_spec[possiblesister,6] == max(as.numeric(island_spec[possiblesister,6])))]
-          island_spec[tochange,6] = island_spec[extinct,6]	
+          island_spec[tochange,6] = island_spec[extinct,6]  
         }
         
         #remove the offending A/B from these species
         island_spec[possiblesister,5] = paste(substring(island_spec[possiblesister,5],1,numberofsplits - 1),
                                               substring(island_spec[possiblesister,5],numberofsplits + 1,
-                                                        nchar(island_spec[possiblesister,5])),sep = "")	
+                                                        nchar(island_spec[possiblesister,5])),sep = "") 
         island_spec = island_spec[-extinct,]
       }
     }
-    island_spec = rbind(island_spec)	
+    island_spec = rbind(island_spec)  
   }
   
   ##########################################
@@ -557,7 +557,7 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
   ##########################################
   #CLADOGENESIS - this splits species into two new species - both of which receive 
   if(possible_event == 4)
-  { 		
+  {     
     tosplit = DDD::sample2(1:length(island_spec[,1]),1)
     
     #if the species that speciates is cladogenetic
@@ -664,7 +664,7 @@ DAISIE_ONEcolonist <- function(time,island_spec,stt_table)
     descendants$missing_species <- length(which(youngest_table[,"Species type"]!='I'))
     for(colonisation in 1:length(uniquecol))
     {
-      descendants$other_clades_same_ancestor[[colonisation]] <- list(brts_miss = NA,species_type = NA)	
+      descendants$other_clades_same_ancestor[[colonisation]] <- list(brts_miss = NA,species_type = NA)  
       
       samecolonisation <- which(as.numeric(youngest_table[,"Colonisation time (BP)"]) == uniquecol[colonisation])
       

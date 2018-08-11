@@ -39,7 +39,7 @@ DAISIE_format_CS = function(island_replicates,time,M,sample_freq, verbose = TRUE
     
     for(i in 2:nrow(stt_all))
     { 
-      the_age = stt_all[i,"Time"]	
+      the_age = stt_all[i,"Time"] 
       
       store_richness_time_slice = matrix(nrow = M,ncol = 3)
       colnames(store_richness_time_slice) = c("I","A","C")
@@ -69,8 +69,8 @@ DAISIE_format_CS = function(island_replicates,time,M,sample_freq, verbose = TRUE
       stt_type1[1,2:5] = c(0,0,0,0)
       
       for(i in 2:nrow(stt_type1))
-      { 	
-        the_age = stt_type1[i,"Time"]		
+      {   
+        the_age = stt_type1[i,"Time"]   
         store_richness_time_slice = matrix(nrow=max(which(type_vec == 1)),ncol = 3)
         colnames(store_richness_time_slice) = c("I","A","C")
         for(x in 1:max(which(type_vec == 1))) 
@@ -100,7 +100,7 @@ DAISIE_format_CS = function(island_replicates,time,M,sample_freq, verbose = TRUE
       
       for(i in 2:nrow(stt_type2))
       { 
-        the_age = stt_type2[i,"Time"]		
+        the_age = stt_type2[i,"Time"]   
         store_richness_time_slice = matrix(nrow = type2len,ncol = 3)
         colnames(store_richness_time_slice) = c("I","A","C")
         for(x in 1:type2len) 

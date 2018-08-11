@@ -257,15 +257,15 @@ divdepvec = function(lacgam,K,lx,k1,ddep)
 {
    if(ddep == 1 | ddep == 11)
    {
-	    vec = pmax(rep(0,lx + 1),lacgam * (1 - ((0:lx)+k1) / K))
+      vec = pmax(rep(0,lx + 1),lacgam * (1 - ((0:lx)+k1) / K))
    } else {
       if(ddep == 2 | ddep == 21)
       {
          vec = pmax(rep(0,lx + 1),lacgam * exp(-((0:lx)+k1) / K))
       } else {
          if(ddep == 0 | ddep == 3)
-  		   {
-		        vec = lacgam * rep(1,lx + 1)
+         {
+            vec = lacgam * rep(1,lx + 1)
          }
       }
    }
@@ -413,12 +413,12 @@ if(lac == Inf & mu != Inf & missnumspec == 0)
           cp = checkprobs2(lx,loglik,probs); loglik = cp[[1]]; probs = cp[[2]]
           if(stac == 4)
           # if stac = 4, we're done and we take an element from Q_M,n
-         	{
-           	loglik = loglik + log(probs[2 * lx + 1 + missnumspec])
+          {
+            loglik = loglik + log(probs[2 * lx + 1 + missnumspec])
           } else {         
           # for stac = 2 and 3, at the first branching point all probabilities of states Q_M,n are transferred to probabilities where only endemics are present. Then go through the branching points.
             S1 = length(brts) - 1
-          	if(S1 >= 3)
+            if(S1 >= 3)
             {
                lacvec = divdepvec(lac,K,lx,k1,ddep)
                probs[1:lx] = lacvec[1:lx] * (probs[1:lx] + probs[(2 * lx + 1):(3 * lx)])
@@ -426,20 +426,20 @@ if(lac == Inf & mu != Inf & missnumspec == 0)
                probs = probs[-c((2 * lx + 2):(3 * lx))]
                probs[2 * lx + 1] = 0
                for(k in 3:S1)
-       	       {
-        	        k1 = k - 1
-       		        y = ode(probs,brts[k:(k+1)],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
+               {
+                  k1 = k - 1
+                  y = ode(probs,brts[k:(k+1)],DAISIE_loglik_rhs,c(pars1,k1,ddep),rtol = reltol,atol = abstol,method = methode)
                   probs = y[2,2:(2 * lx + 2)]
-       		        if(k < S1)
-        	        {
+                  if(k < S1)
+                  {
                      # speciation event      
                      lacvec = divdepvec(lac,K,lx,k1,ddep)
-    		             probs[1:(2 * lx)] = c(lacvec[1:lx],lacvec[2:(lx + 1)]) * probs[1:(2 * lx)]
-       		        }
+                     probs[1:(2 * lx)] = c(lacvec[1:lx],lacvec[2:(lx + 1)]) * probs[1:(2 * lx)]
+                  }
                }            
             }
             # we evaluate the probability of the phylogeny with any missing species at the present without (stac = 2) or with (stac = 3) the immigrant species; there can be no missing species for stac = 4
-           	loglik = loglik + log(probs[(stac == 3) * lx + 1 + missnumspec])
+            loglik = loglik + log(probs[(stac == 3) * lx + 1 + missnumspec])
           }   
         }     
      }           
