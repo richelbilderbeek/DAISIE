@@ -153,6 +153,7 @@ get_clado_rate <- function(timeval,
                         * (lac * (1 - length(island_spec[, 1]) / K)),
                         0),
                       na.rm = T)
+
     return(clado_rate)
     
     # Ontogeny scenario
@@ -166,8 +167,8 @@ get_clado_rate <- function(timeval,
                          (1 - length(island_spec[, 1]) / (island_area(timeval, 
                                              totaltime, 
                                              Apars, 
-                                             island_ontogeny) * 0.05)), 0), na.rm = T)
-    clado_rate
+                                             island_ontogeny) * K)), 0), na.rm = T)
+       clado_rate
   }
 }
 
@@ -216,7 +217,8 @@ get_immig_rate <- function(
         island_area(timeval,
                     totaltime,
                     Apars,
-                    island_ontogeny) * 0.05)), 0), na.rm = T)
+                    island_ontogeny) * K)), 0), na.rm = T)
+
   }
   immig_rate
 }

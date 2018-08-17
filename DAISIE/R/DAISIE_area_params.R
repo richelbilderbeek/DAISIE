@@ -22,6 +22,7 @@ are_area_params <- function(area_params) {
   if (area_params$proportional_peak_t >= 1.0) return(FALSE)
   if (area_params$peak_sharpness <= 0) return(FALSE)
   if (area_params$total_island_age <= 0.0) return(FALSE)
+  if (is.null(area_params) == TRUE) return(TRUE)
   TRUE
 }
 #' Title

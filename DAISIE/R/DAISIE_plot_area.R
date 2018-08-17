@@ -105,7 +105,6 @@ DAISIE_plot_extinction <- function(island_area_time,
 
 #' Plot immigration rate through time
 #'
-#' @param island_area_time Something
 #' @param totaltime Something
 #' @param K Something
 #' @param Apars Something
@@ -118,27 +117,26 @@ DAISIE_plot_extinction <- function(island_area_time,
 #' @return a plot with immigration rate through time
 #' @export
 #'
-DAISIE_plot_immigration <- function(island_area_time,
-                                   totaltime,
-                                   K, 
-                                   Apars, 
-                                   gam,
-                                   mainland_n,
-                                   island_ontogeny = "quadratic", 
-                                   removed_timepoints,
-                                   immig_rate) {
+DAISIE_plot_immigration <- function(totaltime,
+                                    K, 
+                                    Apars, 
+                                    gam,
+                                    mainland_n,
+                                    island_ontogeny = "quadratic", 
+                                    removed_timepoints,
+                                    immig_rate) {
   
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package \"ggplot2\" needed for this function to work. Please install it.",
          call. = FALSE)
   }
-  
-  ext_rate <- c()
-  for (i in seq_along(island_area_time$Time)) {
-    ext_rate[i] <- get_immig_rate(timeval = island_area_time$Time[i],
+  island_area_time <- seq(0, totaltime, by = 0.001)
+  immig_rate <- c()
+  for (i in seq_along(island_area_time)) {
+    immig_rate[i] <- get_immig_rate(timeval = island_area_time[i],
                                   totaltime = totaltime,
                                   Apars = Apars,
-                                  gam = NA, 
+                                  gam = gam, 
                                   K = K, 
                                   mainland_n = 1000, 
                                   island_spec = matrix(ncol = 1),
@@ -146,7 +144,7 @@ DAISIE_plot_immigration <- function(island_area_time,
     )
   }
   
-  immig_rate_time <- data.frame(Immigration = immig_rate[removed_timepoints:length(immig_rate)], Time = island_area_time$Time[removed_timepoints:length(island_area_time$Time)])
+  immig_rate_time <- data.frame(Immigration = immig_rate[removed_timepoints:length(immig_rate)], Time = island_area_time[removed_timepoints:length(island_area_time)])
   
   Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
   Immigration <- NULL; rm(Immigration) # nolint, fixes warning: no visible binding for global variable
