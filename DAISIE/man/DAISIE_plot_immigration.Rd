@@ -4,12 +4,10 @@
 \alias{DAISIE_plot_immigration}
 \title{Plot immigration rate through time}
 \usage{
-DAISIE_plot_immigration(island_area_time, totaltime, K, Apars, gam, mainland_n,
+DAISIE_plot_immigration(totaltime, K, Apars, gam, mainland_n,
   island_ontogeny = "quadratic", removed_timepoints, immig_rate)
 }
 \arguments{
-\item{island_area_time}{Something}
-
 \item{totaltime}{Something}
 
 \item{K}{Something}
