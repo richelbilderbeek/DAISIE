@@ -54,7 +54,7 @@ DAISIE_sim_core <- function(
     stop("Please select valid island ontogeny model. Options are no ontogeny: NULL, 'linear' or 'quadratic'.")
   }
   
-  
+  immig <- c()
   timeval <- 0
   totaltime <- time
   lac <- pars[1]
@@ -93,12 +93,12 @@ DAISIE_sim_core <- function(
                           thor_c_i = NULL
                           )
   
-
+  counter <- 0
   #### Start Gillespie ####
   while (timeval <= totaltime) {
     if (timeval < thor_ext) {
       if (timeval < thor_c_i) {
-        
+        counter <- counter + 1
         
 
       rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
@@ -130,7 +130,8 @@ DAISIE_sim_core <- function(
           (rates$immig_rate_max - rates$immig_rate),
           (rates$clado_rate_max - rates$clado_rate)),
           replace = FALSE)
-        
+        cat(rates$immig_rate, "\n")
+        immig <<- c(immig, rates$immig_rate * mainland_n)
       }
 
       if (timeval <= totaltime) {
@@ -272,7 +273,14 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(mainland_n))
   testit::assert(is.numeric(thor_ext))
   testit::assert(is.numeric(thor_c_i))
-  
+  # print(paste0("immi: ", island_area(timeval,
+  #                                    totaltime,
+  #                                    Apars,
+  #                                    island_ontogeny) * K))
+  # print(paste0("island area: ", island_area(timeval,
+  #                                           totaltime,
+  #                                           Apars,
+  #                                           island_ontogeny)))
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,
                                gam = gam,
@@ -388,7 +396,18 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(immig_rate_max))
     }
 
+  if (ext_rate_max < ext_rate) {
+    ext_rate_max <- ext_rate
+  }
 
+  if (clado_rate_max < clado_rate) {
+    clado_rate_max <- clado_rate
+  }
+  
+  if (immig_rate_max < immig_rate) {
+    immig_rate_max <- immig_rate
+  }
+  
   rates <- create_rates(
     immig_rate = immig_rate,
     ext_rate = ext_rate,

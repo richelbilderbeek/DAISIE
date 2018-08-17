@@ -14,7 +14,7 @@ test_that("immig rate plots", {
     )
   }
   return()
-  plot(immig)
+
   
 })
 
