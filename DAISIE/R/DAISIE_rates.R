@@ -320,13 +320,13 @@ get_thor_half <- function(
     testit::assert(thor_c_i > 0.0)
     return(thor_c_i)
   } else {
-    
+    # Changed to Amax
     if (is.null(thor_c_i)) {
-      thor_c_i <- (Apars$proportional_peak_t * Apars$total_island_age) / 2
+      thor_c_i <- Apars$proportional_peak_t
       testit::assert(thor_c_i > 0.0)
       return(thor_c_i)
       
-    } else if (timeval >= thor_c_i & ((Apars$proportional_peak_t * Apars$total_island_age) / 2) < timeval) {
+    } else if (timeval >= thor_c_i & Apars$proportional_peak_t < timeval) {
       
       thor_c_i <- timeval + ext_multiplier * (totaltime - timeval)
       thor_c_i <- min(totaltime, thor_c_i)

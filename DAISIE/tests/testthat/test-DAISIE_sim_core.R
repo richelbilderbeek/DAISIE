@@ -66,14 +66,14 @@ test_that("Pedro's should run silent", {
   DAISIE_sim_core(
     time = 10,
     mainland_n = 1,
-    pars = c(2.5, 2.2, 10, 0.009, 1.01),
+    pars = c(0.001, 2.2, 10, 0.001, 1.01),
     Apars = create_area_params(
-      max_area = 10,
+      max_area = 1000,
       proportional_peak_t = 0.5,
       peak_sharpness = 1,
-      total_island_age = 5
+      total_island_age = 15
     ), 
-    Epars = c(1.7, 100),
+    Epars = c(1, 100),
     island_ontogeny = "quadratic"
   )
   expect_silent(
