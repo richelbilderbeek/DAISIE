@@ -1,2 +1,15 @@
-inst/doc
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+DAISIE.Rcheck/
+DAISIE/.Rhistory
+*.Rproj
+DAISIE.Rproj
+*.out
+*.txt
+DAISIE/tests/testthat/Rplots.pdf.RData
+DAISIE/.Rproj.user/
+DAISIE/.RData
+DAISIE/Rplots.pdf
+DAISIE/tests/testthat/Rplots.pdf
