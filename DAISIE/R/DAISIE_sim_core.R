@@ -93,21 +93,16 @@ DAISIE_sim_core <- function(
                           thor_c_i = NULL
                           )
   
-  counter <- 0
   #### Gillespie ####
   while (timeval <= totaltime) {
     if (timeval < thor_ext) {
       if (timeval < thor_c_i) {
-        counter <- counter + 1
-        print(timeval)
 
-        
-      rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
+        rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                             mu = mu, laa = laa, lac = lac, Apars = Apars,
                             Epars = Epars, island_ontogeny = island_ontogeny,
                             extcutoff = extcutoff, K = K,
                             island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
-      cat("before sample: ", unlist(rates), "\n") 
       testit::assert(are_rates(rates))
 
       timeval <- calc_next_timeval(rates, timeval)
@@ -121,9 +116,9 @@ DAISIE_sim_core <- function(
                                                   rates$clado_rate), 
                                  replace = FALSE)
       } else {
-        cat("before sample: ", unlist(rates), "\n")
+        # cat("before sample: ", unlist(rates), "\n")
         
-      testit::assert(are_rates(rates))  
+      testit::assert(are_rates(rates))
         possible_event <- sample(1:7, 1, prob = c(
           rates$immig_rate,
           rates$ext_rate,
@@ -393,18 +388,18 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(immig_rate_max))
     }
 
-  # if (ext_rate_max < ext_rate) {
-  #   ext_rate_max <- ext_rate
-  # }
-  # 
-  # if (clado_rate_max < clado_rate) {
-  #   clado_rate_max <- clado_rate
-  # }
-  # 
-  # if (immig_rate_max < immig_rate) {
-  #   immig_rate_max <- immig_rate
-  # }
-  
+  if (ext_rate_max < ext_rate) {
+    ext_rate_max <- ext_rate
+  }
+
+  if (clado_rate_max < clado_rate) {
+    clado_rate_max <- clado_rate
+  }
+
+  if (immig_rate_max < immig_rate) {
+    immig_rate_max <- immig_rate
+  }
+
   rates <- create_rates(
     immig_rate = immig_rate,
     ext_rate = ext_rate,
