@@ -93,18 +93,20 @@ DAISIE_sim_core <- function(
                           thor_c_i = NULL
                           )
   
+
   #### Gillespie ####
   while (timeval <= totaltime) {
     if (timeval < thor_ext) {
-      if (timeval < thor_c_i) {
-
-        rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
+      # if (timeval < thor_c_i) {
+      
+      # Calculate rates
+      rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                             mu = mu, laa = laa, lac = lac, Apars = Apars,
                             Epars = Epars, island_ontogeny = island_ontogeny,
                             extcutoff = extcutoff, K = K,
                             island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
       testit::assert(are_rates(rates))
-
+      
       timeval <- calc_next_timeval(rates, timeval)
 
       # Determine event
@@ -151,18 +153,19 @@ DAISIE_sim_core <- function(
                            length(which(island_spec[,4] == "I")),
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
-      } else {
-        thor_c_i <- get_thor_half(
-          timeval = timeval,
-          totaltime = totaltime,
-          Apars = Apars,
-          ext_multiplier = ext_multiplier,
-          island_ontogeny = island_ontogeny, 
-          thor_c_i = thor_c_i
-          )
-      }
+      # } else {
+      #   thor_c_i <- get_thor_half(
+      #     timeval = timeval,
+      #     totaltime = totaltime,
+      #     Apars = Apars,
+      #     ext_multiplier = ext_multiplier,
+      #     island_ontogeny = island_ontogeny, 
+      #     thor_c_i = thor_c_i
+      #     )
+      # }
     } else {
       #### After thor is reached ####
+      timeval <- thor_ext
       # Recalculate thor
       testit::assert(are_area_params(Apars))
       thor_ext <- get_thor(timeval = timeval,
@@ -171,6 +174,15 @@ DAISIE_sim_core <- function(
                        ext_multiplier = ext_multiplier,
                        island_ontogeny = island_ontogeny, 
                        thor = thor_ext)
+      
+      # rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
+      #                       mu = mu, laa = laa, lac = lac, Apars = Apars,
+      #                       Epars = Epars, island_ontogeny = island_ontogeny,
+      #                       extcutoff = extcutoff, K = K,
+      #                       island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
+      # testit::assert(are_rates(rates))
+      
+    
     }
   }
   stt_table[nrow(stt_table),1] <- 0
@@ -272,6 +284,8 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(mainland_n))
   testit::assert(is.numeric(thor_ext))
   testit::assert(is.numeric(thor_c_i))
+
+  
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,
                                gam = gam,
@@ -295,6 +309,7 @@ update_rates <- function(timeval, totaltime,
   ana_rate <- get_ana_rate(laa = laa,
                            island_spec = island_spec)
   testit::assert(is.numeric(ana_rate))
+  
   clado_rate <- get_clado_rate(timeval = timeval, 
                                totaltime = totaltime,
                                lac = lac,
@@ -312,21 +327,33 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(ext_rate_max))
     clado_rate_max <- clado_rate
     testit::assert(is.numeric(clado_rate_max))
+    
   } else if ((Apars$proportional_peak_t * Apars$total_island_age) > timeval) {
 
     ext_rate_max <- ext_rate
     testit::assert(is.numeric(ext_rate_max))
-  } else {
-    # No ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
-    immig_rate_max <- get_immig_rate(timeval = thor_c_i,
+    
+    immig_rate_max <- get_immig_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age,
                                      totaltime = totaltime,
                                      gam = gam,
+                                     mainland_n = mainland_n,
                                      Apars = Apars,
-                                     island_ontogeny = island_ontogeny,
+                                     island_ontogeny = island_ontogeny, 
                                      island_spec = island_spec,
-                                     K = K, 
-                                     mainland_n = mainland_n)
+                                     K = K)
     testit::assert(is.numeric(immig_rate_max))
+    
+    clado_rate_max <- get_clado_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age,
+                                     totaltime = totaltime,
+                                     lac = lac,
+                                     Apars = Apars,
+                                     island_ontogeny = island_ontogeny, 
+                                     island_spec = island_spec,
+                                     K = K)
+    testit::assert(is.numeric(clado_rate_max)) 
+
+  } else {
+    # Ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
 
     ext_rate_max <- get_ext_rate(timeval = thor_ext,
                                  totaltime = totaltime,
@@ -338,67 +365,40 @@ update_rates <- function(timeval, totaltime,
                                  island_spec = island_spec,
                                  K = K)
     testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
-    clado_rate_max <- get_clado_rate(timeval = thor_c_i, 
+
+    immig_rate_max <- get_immig_rate(timeval = timeval,
+                                     totaltime = totaltime,
+                                     gam = gam,
+                                     mainland_n = mainland_n,
+                                     Apars = Apars,
+                                     island_ontogeny = island_ontogeny, 
+                                     island_spec = island_spec,
+                                     K = K)
+    testit::assert(is.numeric(immig_rate_max))
+    
+    clado_rate_max <- get_clado_rate(timeval = timeval,
                                      totaltime = totaltime,
                                      lac = lac,
                                      Apars = Apars,
-                                     island_ontogeny = island_ontogeny,
+                                     island_ontogeny = island_ontogeny, 
                                      island_spec = island_spec,
                                      K = K)
-    testit::assert(is.numeric(clado_rate_max))
+    testit::assert(is.numeric(clado_rate_max)) 
+    
   }
   
-  if ((((Apars$proportional_peak_t * Apars$total_island_age) / 2) > timeval) && !is.null(island_ontogeny)) {
-    clado_rate_max <- get_clado_rate(((Apars$proportional_peak_t * Apars$total_island_age) / 2),
-                                     totaltime = totaltime, 
-                                     lac = lac,
-                                     Apars = Apars, 
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = K)
-    testit::assert(is.numeric(clado_rate_max))
-    
-    immig_rate_max <- get_immig_rate(((Apars$proportional_peak_t * Apars$total_island_age) / 2),
-                                     totaltime = totaltime, 
-                                     gam = gam,
-                                     Apars = Apars, 
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = K,
-                                     mainland_n = mainland_n)
-    testit::assert(is.numeric(immig_rate_max))
-  } else {
-
-    clado_rate_max <- get_clado_rate(thor_c_i,
-                                     totaltime = totaltime, 
-                                     lac = lac,
-                                     Apars = Apars, 
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = K)
-    testit::assert(is.numeric(clado_rate_max))
-    immig_rate_max <- get_immig_rate(thor_c_i,
-                                     totaltime = totaltime, 
-                                     gam = gam,
-                                     Apars = Apars, 
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = K,
-                                     mainland_n = mainland_n)
-    testit::assert(is.numeric(immig_rate_max))
-    }
-
-  if (ext_rate_max < ext_rate) {
-    ext_rate_max <- ext_rate
-  }
-
-  if (clado_rate_max < clado_rate) {
-    clado_rate_max <- clado_rate
-  }
-
-  if (immig_rate_max < immig_rate) {
-    immig_rate_max <- immig_rate
-  }
+  # 
+  # if (ext_rate_max < ext_rate) {
+  #   ext_rate_max <- ext_rate
+  # }
+  # 
+  # if (clado_rate_max < clado_rate) {
+  #   clado_rate_max <- clado_rate
+  # }
+  # 
+  # if (immig_rate_max < immig_rate) {
+  #   immig_rate_max <- immig_rate
+  # }
 
   rates <- create_rates(
     immig_rate = immig_rate,
