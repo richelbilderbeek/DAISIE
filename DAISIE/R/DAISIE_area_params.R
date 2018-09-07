@@ -1,6 +1,6 @@
 #' Test if list has area parameters
 #'
-#' @param area_params object to be tested if confms to area parameters
+#' @param area_params object to be tested if conforms to area parameters
 #'
 #' @return Boolean that indicates if list conforms to expected area parameters
 #' as created by \link{create_area_params}
@@ -25,7 +25,7 @@ are_area_params <- function(area_params) {
   if (is.null(area_params) == TRUE) return(TRUE)
   TRUE
 }
-#' Title
+#' Create named list of area parameters
 #'
 #' @param max_area maximum area
 #' @param proportional_peak_t value from 0 to 1 indicating where in the island's history the 
