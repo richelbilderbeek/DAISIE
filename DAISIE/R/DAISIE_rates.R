@@ -14,7 +14,7 @@
 #' \code{"quadratic"} for a beta function describing area through time,
 #'  or \code{"linear"} for a linear function
 #' @family rates calculation
-island_area <- function(timeval, totaltime, Apars, island_ontogeny){
+island_area <- function(timeval, totaltime, Apars, island_ontogeny) {
   testit::assert(are_area_params(Apars))
   
   Tmax <- Apars$total_island_age
@@ -90,7 +90,7 @@ get_ext_rate <- function(timeval,
     } else {
       
     X <- log(Epars[1] / Epars[2]) / log(0.1)
-    extrate <- Epars[1]/((island_area(timeval, totaltime, Apars, island_ontogeny) / Apars$max_area)^X)
+    extrate <- Epars[1] / ((island_area(timeval, totaltime, Apars, island_ontogeny) / Apars$max_area)^X)
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate <- extrate * length(island_spec[,1])
