@@ -105,15 +105,17 @@ DAISIE_sim_core <- function(
                           Epars = Epars, island_ontogeny = island_ontogeny,
                           extcutoff = extcutoff, K = K,
                           island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
-    cat(unlist(rates), "\n")
-    print(c(
-      rates$immig_rate,
-      rates$ext_rate,
-      rates$ana_rate,
-      rates$clado_rate,
-      (rates$ext_rate_max - rates$ext_rate),
-      (rates$immig_rate_max - rates$immig_rate),
-      (rates$clado_rate_max - rates$clado_rate)))
+    # cat(unlist(rates), "\n")
+    # print(c(
+    #   rates$immig_rate,
+    #   rates$ext_rate,
+    #   rates$ana_rate,
+    #   rates$clado_rate,
+    #   (rates$ext_rate_max - rates$ext_rate),
+    #   (rates$immig_rate_max - rates$immig_rate),
+    #   (rates$clado_rate_max - rates$clado_rate)))
+    # print(all.equal(rates$ext_rate, rates$ext_rate_max))
+    # print(timeval)
     testit::assert(are_rates(rates))
 
       
@@ -121,7 +123,7 @@ DAISIE_sim_core <- function(
     if (timeval > thor_ext && thor_ext <= totaltime) {
       timeval <- thor_ext
     }
-     
+
      
       # Determine event
       # If statement prevents odd behaviour of sample when rates are 0
@@ -372,7 +374,7 @@ update_rates <- function(timeval, totaltime,
     
   } else {
     # Ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
-    
+    print("hey")
     ext_rate_max <- get_ext_rate(timeval = thor_ext,
                                  totaltime = totaltime,
                                  mu = mu,
@@ -382,6 +384,7 @@ update_rates <- function(timeval, totaltime,
                                  extcutoff = extcutoff, 
                                  island_spec = island_spec,
                                  K = K)
+    ext_rate_max <- ext_rate_max + 9e-14
     testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
     
     # immig_rate_max <- get_immig_rate(timeval = timeval,
@@ -392,8 +395,10 @@ update_rates <- function(timeval, totaltime,
     #                                  island_ontogeny = island_ontogeny, 
     #                                  island_spec = island_spec,
     #                                  K = K)
-    
+
     immig_rate_max <- immig_rate
+    
+    print(immig_rate_max)
     
     testit::assert(is.numeric(immig_rate_max))
     
