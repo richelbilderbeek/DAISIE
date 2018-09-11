@@ -92,30 +92,21 @@ DAISIE_sim_core <- function(
                             thor_c_i = NULL
   )
   
-  # Calculate rates
-  if (!is.null(island_ontogeny)) {
-    rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
-                          mu = mu, laa = laa, lac = lac, Apars = Apars,
-                          Epars = Epars, island_ontogeny = island_ontogeny,
-                          extcutoff = extcutoff, K = K,
-                          island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
-    
-    timeval <- calc_next_timeval(rates, timeval)
-    if (timeval > thor_ext && thor_ext <= totaltime) {
-      timeval <- thor_ext
-    }
-  }
+
   #### Gillespie ####
   while (timeval < totaltime) {
-    if (timeval < thor_ext) {
-    # if (timeval < thor_c_i) {
-    # print(thor_ext)
+
+  
     # Calculate rates
     rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                           mu = mu, laa = laa, lac = lac, Apars = Apars,
                           Epars = Epars, island_ontogeny = island_ontogeny,
                           extcutoff = extcutoff, K = K,
                           island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
+    timeval <- calc_next_timeval(rates, timeval)
+    
+    
+    if (timeval <= thor_ext) {
     # cat(unlist(rates), "\n")
     # print(c(
     #   rates$immig_rate,
@@ -129,13 +120,7 @@ DAISIE_sim_core <- function(
     # print(timeval)
     testit::assert(are_rates(rates))
 
-      
-    timeval <- calc_next_timeval(rates, timeval)
-    if (timeval > thor_ext && thor_ext <= totaltime) {
-      timeval <- thor_ext
-    }
-
-      # Determine event
+      # Determine event MAKE IT A 
       # If statement prevents odd behaviour of sample when rates are 0
       if (is.null(island_ontogeny)) {
         possible_event <- sample(1:4, 1, prob = c(rates$immig_rate,
@@ -162,7 +147,7 @@ DAISIE_sim_core <- function(
         # cat(timeval, possible_event, "\n")
       }
       
-      if (timeval < totaltime) {
+    
         # Run event
         
         new_state <- DAISIE_sim_update_state(timeval = timeval,
@@ -173,25 +158,17 @@ DAISIE_sim_core <- function(
         
         island_spec <- new_state$island_spec
         maxspecID <- new_state$maxspecID
-      }
       
+      # ONLY RUN WHEN ACTUAL EVENTS HAPPEN. MAKE UPDATE FUNCTION INTO ABOVE. 
       stt_table <- rbind(stt_table,
                          c(totaltime - timeval,
                            length(which(island_spec[,4] == "I")),
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
-      # } else {
-      #   thor_c_i <- get_thor_half(
-      #     timeval = timeval,
-      #     totaltime = totaltime,
-      #     Apars = Apars,
-      #     ext_multiplier = ext_multiplier,
-      #     island_ontogeny = island_ontogeny, 
-      #     thor_c_i = thor_c_i
-      #     )
-      # }
+
       
-    } else {
+      # MAKE THIS A FUNCTION
+      } else { # MAKE THIS A FUNCTION
       #### After thor is reached ####
       # Recalculate thor
       testit::assert(are_area_params(Apars))
@@ -206,12 +183,6 @@ DAISIE_sim_core <- function(
       
       timeval <- old_thor
       
-      # rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
-      #                       mu = mu, laa = laa, lac = lac, Apars = Apars,
-      #                       Epars = Epars, island_ontogeny = island_ontogeny,
-      #                       extcutoff = extcutoff, K = K,
-      #                       island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
-      # testit::assert(are_rates(rates))
 
     }
   }
@@ -373,7 +344,7 @@ update_rates <- function(timeval, totaltime,
                                      K = K)
     testit::assert(is.numeric(immig_rate_max))
     
-    clado_rate_max <- get_clado_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age,
+    clado_rate_max <- get_clado_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age, # SHOULD BE GENERALIZED
                                      totaltime = totaltime,
                                      lac = lac,
                                      Apars = Apars,
@@ -394,7 +365,7 @@ update_rates <- function(timeval, totaltime,
                                  extcutoff = extcutoff, 
                                  island_spec = island_spec,
                                  K = K)
-    ext_rate_max <- ext_rate_max + 9e-14
+
     testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
     
     # immig_rate_max <- get_immig_rate(timeval = timeval,
