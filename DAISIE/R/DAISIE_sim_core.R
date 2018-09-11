@@ -92,13 +92,24 @@ DAISIE_sim_core <- function(
                             thor_c_i = NULL
   )
   
-  
+  # Calculate rates
+  if (!is.null(island_ontogeny)) {
+    rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
+                          mu = mu, laa = laa, lac = lac, Apars = Apars,
+                          Epars = Epars, island_ontogeny = island_ontogeny,
+                          extcutoff = extcutoff, K = K,
+                          island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
+    
+    timeval <- calc_next_timeval(rates, timeval)
+    if (timeval > thor_ext && thor_ext <= totaltime) {
+      timeval <- thor_ext
+    }
+  }
   #### Gillespie ####
   while (timeval < totaltime) {
     if (timeval < thor_ext) {
-    # TO TRY: CHANGE HOW THOR < TIMEVAL CHECK IS EVALUATED
     # if (timeval < thor_c_i) {
-    
+    # print(thor_ext)
     # Calculate rates
     rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                           mu = mu, laa = laa, lac = lac, Apars = Apars,
@@ -124,7 +135,6 @@ DAISIE_sim_core <- function(
       timeval <- thor_ext
     }
 
-     
       # Determine event
       # If statement prevents odd behaviour of sample when rates are 0
       if (is.null(island_ontogeny)) {
@@ -374,7 +384,7 @@ update_rates <- function(timeval, totaltime,
     
   } else {
     # Ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
-    print("hey")
+    # print("hey")
     ext_rate_max <- get_ext_rate(timeval = thor_ext,
                                  totaltime = totaltime,
                                  mu = mu,
@@ -398,7 +408,7 @@ update_rates <- function(timeval, totaltime,
 
     immig_rate_max <- immig_rate
     
-    print(immig_rate_max)
+    # print(immig_rate_max)
     
     testit::assert(is.numeric(immig_rate_max))
     
