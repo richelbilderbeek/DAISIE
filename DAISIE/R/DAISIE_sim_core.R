@@ -84,14 +84,7 @@ DAISIE_sim_core <- function(
     island_ontogeny, 
     thor = NULL
   )
-  thor_c_i <- get_thor_half(0,
-                            totaltime,
-                            Apars,
-                            ext_multiplier,
-                            island_ontogeny, 
-                            thor_c_i = NULL
-  )
-  
+
 
   #### Gillespie ####
   while (timeval < totaltime) {
@@ -102,7 +95,7 @@ DAISIE_sim_core <- function(
                           mu = mu, laa = laa, lac = lac, Apars = Apars,
                           Epars = Epars, island_ontogeny = island_ontogeny,
                           extcutoff = extcutoff, K = K,
-                          island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
+                          island_spec = island_spec, mainland_n, thor_ext)
     timeval <- calc_next_timeval(rates, timeval)
     
     
@@ -120,7 +113,7 @@ DAISIE_sim_core <- function(
     # print(timeval)
     testit::assert(are_rates(rates))
 
-      # Determine event MAKE IT A 
+      # Determine event MAKE IT A FUNCTION
       # If statement prevents odd behaviour of sample when rates are 0
       if (is.null(island_ontogeny)) {
         possible_event <- sample(1:4, 1, prob = c(rates$immig_rate,
@@ -129,9 +122,6 @@ DAISIE_sim_core <- function(
                                                   rates$clado_rate), 
                                  replace = FALSE)
       } else {
-        # cat("before sample: ", unlist(rates), "\n")
-        # print(timeval)
-        # print(rates$ext_rate_max == rates$ext_rate)
         testit::assert(are_rates(rates))
         possible_event <- sample(1:7, 1, prob = c(
           rates$immig_rate,
@@ -142,9 +132,7 @@ DAISIE_sim_core <- function(
           (rates$immig_rate_max - rates$immig_rate),
           (rates$clado_rate_max - rates$clado_rate)),
           replace = FALSE)
-        # cat(rates$immig_rate, "\n")
-        # immig <<- c(immig, rates$immig_rate * mainland_n)
-        # cat(timeval, possible_event, "\n")
+
       }
       
     
@@ -262,13 +250,12 @@ DAISIE_sim_core <- function(
 #' @param island_spec matrix containing state of system
 #' @param mainland_n total number of species present in the mainland
 #' @param thor_ext time of horizon for max extinction
-#' @param thor_c_i time of horizon for max cladogenesis and immigration
 update_rates <- function(timeval, totaltime,
                          gam, mu, laa, lac, Apars, Epars,
                          island_ontogeny, 
                          extcutoff,
                          K, 
-                         island_spec, mainland_n, thor_ext, thor_c_i) {
+                         island_spec, mainland_n, thor_ext) {
   # Function to calculate rates at time = timeval. Returns list with each rate.
   testit::assert(is.numeric(timeval))
   testit::assert(is.numeric(totaltime))
@@ -284,8 +271,7 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.matrix(island_spec) || is.null(island_spec))
   testit::assert(is.numeric(mainland_n))
   testit::assert(is.numeric(thor_ext))
-  testit::assert(is.numeric(thor_c_i))
-  
+
   
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,

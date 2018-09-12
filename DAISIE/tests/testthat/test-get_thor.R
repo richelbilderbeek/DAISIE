@@ -34,22 +34,3 @@ test_that("classic behavior thor", {
   
 })
 
-
-
-test_that("classic behavior thor_half", {
-  
-  # That is, a simulation without island ontogeny
-  total_time <- 12.34
-  expected <- total_time
-  created <- get_thor_half(
-    timeval = 1,
-    totaltime = total_time,
-    Apars = NULL,
-    ext_multiplier = 0.5,
-    island_ontogeny = NULL,
-    thor = NULL
-  )
-  expect_equal(created, expected)
-  
-})
-

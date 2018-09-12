@@ -288,7 +288,6 @@ get_thor <- function(timeval,
 #' @param island_ontogeny a string describing the type of island ontogeny.
 #'  Can be \code{NULL}, \code{"quadratic"} for a beta function
 #'  describing area through time, or \code{"linear"} for a linear function
-#' @param thor_c_i time horizon for clagogesis and immigration
 #'
 #' @return the time horizon for cladogenesis and immigration
 #' #' @examples 
@@ -302,39 +301,9 @@ get_thor <- function(timeval,
 #'                                  total_island_age = 15),
 #'       ext_multiplier = 0.5,
 #'       island_ontogeny = "quadratic",
-#'       thor_c_i = NULL
 #'     ) == 1.5
 #'   )
 #' @export
-get_thor_half <- function(
-  timeval,
-  totaltime,
-  Apars,
-  ext_multiplier,
-  island_ontogeny,
-  thor_c_i
-) {
-  # Function calculates where the horizon for max(immig_rate and clado_rate) is.
-  if (is.null(island_ontogeny)) {
-    thor_c_i <- totaltime
-    testit::assert(thor_c_i > 0.0)
-    return(thor_c_i)
-  } else {
-    # Changed to Amax
-    if (is.null(thor_c_i)) {
-      thor_c_i <- Apars$proportional_peak_t
-      testit::assert(thor_c_i > 0.0)
-      return(thor_c_i)
-      
-    } else if (timeval >= thor_c_i & Apars$proportional_peak_t < timeval) {
-      
-      thor_c_i <- timeval + ext_multiplier * (totaltime - timeval)
-      thor_c_i <- min(totaltime, thor_c_i)
-      testit::assert(thor_c_i > 0.0)
-      thor_c_i
-    }
-  }
-}
 
 
 #' Calculate the clade-wide extinction rate

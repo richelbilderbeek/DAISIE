@@ -24,9 +24,8 @@ test_that("update rates use", {
     K = 3, 
     island_spec = c(), 
     mainland_n = 1, 
-    thor_ext = 0.5, 
-    thor_c_i = 0.25
-  )
+    thor_ext = 0.5
+    )
   are_rates
 })
 
@@ -49,8 +48,7 @@ test_that("update_rates classic behavior", {
     K = 3, 
     island_spec = c(), 
     mainland_n = 1, 
-    thor_ext = 0.5, 
-    thor_c_i = 0.25
+    thor_ext = 0.5
   )
   
 })

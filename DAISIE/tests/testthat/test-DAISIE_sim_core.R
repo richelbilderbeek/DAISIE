@@ -64,14 +64,14 @@ test_that("Pedro's should run silent", {
   skip("WIP")
   set.seed(234567890)
   DAISIE_sim_core(
-    time = 10,
+    time = 8,
     mainland_n = 1,
-    pars = c(0.001, 2.2, 0.05, 0.001, 1.01),
+    pars = c(0.0001, 2.2, 0.005, 0.001, 1),
     Apars = create_area_params(
       max_area = 5000,
-      proportional_peak_t = 0.2,
+      proportional_peak_t = 0.5,
       peak_sharpness = 1,
-      total_island_age = 15
+      total_island_age = 10
     ),
     Epars = c(1, 100),
     island_ontogeny = "quadratic"
