@@ -28,8 +28,8 @@
 #'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 #' }
 #' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
-#' \code{"quadratic"} for a beta function describing area through time,
-#'  or \code{"linear"} for a linear function
+#' \code{quadratic} for a beta function describing area through time,
+#'  or \code{linear} for a linear function
 DAISIE_sim_core <- function(
   time,
   mainland_n,

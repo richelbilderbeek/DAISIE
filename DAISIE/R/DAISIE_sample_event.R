@@ -3,10 +3,13 @@
 #' @param rates numeric list with probability rates for each event. In the 
 #' ontogeny case it also contains the maximum possible probability for the 
 #' event at each timestep.
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
 #'
 #' @return numeric indicating what event will happen, or a supposed event that would
 #' happen in some timesteps of the ontogeny algorithm.
-#' #' \itemize{
+#' \itemize{
 #'   \item{[1]: immigration event}
 #'   \item{[2]: extinction event}
 #'   \item{[3]: cladogenesis event}
@@ -16,7 +19,7 @@
 #'   \item{[7]: proposed cladogenesis that will not happen}
 #' }
 #' @author Pedro Neves
-determine_event <- function(rates, island_ontogeny) {
+DAISIE_sample_event <- function(rates, island_ontogeny) {
   # If statement prevents odd behaviour of sample when rates are 0
   if (is.null(island_ontogeny)) {
     possible_event <- sample(1:4, 1, prob = c(rates$immig_rate,

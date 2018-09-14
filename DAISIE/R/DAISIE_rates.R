@@ -276,35 +276,6 @@ get_thor <- function(timeval,
 
 
 
-#' Creates the horizon time for the cladogenesis and immigration
-#' rate.
-#'
-#' @param timeval current time of simulation
-#' @param totaltime total time of simulation
-#' @param Apars area parameters, 
-#'   as created by \link{create_area_params}
-#' @param ext_multiplier reduces or increases distance of horizon to current
-#' simulation time
-#' @param island_ontogeny a string describing the type of island ontogeny.
-#'  Can be \code{NULL}, \code{"quadratic"} for a beta function
-#'  describing area through time, or \code{"linear"} for a linear function
-#'
-#' @return the time horizon for cladogenesis and immigration
-#' #' @examples 
-#'   testit::assert(
-#'     get_thor_half(
-#'       timeval = 0.2, 
-#'       totaltime = 10,
-#'       Apars = create_area_params(Amax= 1000,
-#'                                  proportional_peak_t = 0.2,
-#'                                  peak_sharpness = 1,
-#'                                  total_island_age = 15),
-#'       ext_multiplier = 0.5,
-#'       island_ontogeny = "quadratic",
-#'     ) == 1.5
-#'   )
-#' @export
-
 
 #' Calculate the clade-wide extinction rate
 #' @param ps_ext_rate per species extinction rate
