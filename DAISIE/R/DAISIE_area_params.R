@@ -13,6 +13,7 @@
 #'     peak_sharpness = 1,
 #'     total_island_age = 5)) == TRUE)
 are_area_params <- function(area_params) {
+  if (is.null(area_params) == TRUE) return(TRUE)
   if (!"max_area" %in% names(area_params)) return(FALSE)
   if (!"proportional_peak_t" %in% names(area_params)) return(FALSE)
   if (!"peak_sharpness" %in% names(area_params)) return(FALSE)
@@ -22,7 +23,6 @@ are_area_params <- function(area_params) {
   if (area_params$proportional_peak_t >= 1.0) return(FALSE)
   if (area_params$peak_sharpness <= 0) return(FALSE)
   if (area_params$total_island_age <= 0.0) return(FALSE)
-  if (is.null(area_params) == TRUE) return(TRUE)
   TRUE
 }
 #' Create named list of area parameters

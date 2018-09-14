@@ -84,12 +84,8 @@ DAISIE_sim_core <- function(
     island_ontogeny, 
     thor = NULL
   )
-
-
   #### Gillespie ####
   while (timeval < totaltime) {
-
-  
     # Calculate rates
     rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                           mu = mu, laa = laa, lac = lac, Apars = Apars,
@@ -97,22 +93,10 @@ DAISIE_sim_core <- function(
                           extcutoff = extcutoff, K = K,
                           island_spec = island_spec, mainland_n, thor_ext)
     timeval <- calc_next_timeval(rates, timeval)
-    
-    
-    if (timeval <= thor_ext) {
-    # cat(unlist(rates), "\n")
-    # print(c(
-    #   rates$immig_rate,
-    #   rates$ext_rate,
-    #   rates$ana_rate,
-    #   rates$clado_rate,
-    #   (rates$ext_rate_max - rates$ext_rate),
-    #   (rates$immig_rate_max - rates$immig_rate),
-    #   (rates$clado_rate_max - rates$clado_rate)))
-    # print(all.equal(rates$ext_rate, rates$ext_rate_max))
-    # print(timeval)
-    testit::assert(are_rates(rates))
 
+    if (timeval <= thor_ext) {
+      testit::assert(are_rates(rates))
+      
       # Determine event MAKE IT A FUNCTION
       # If statement prevents odd behaviour of sample when rates are 0
       if (is.null(island_ontogeny)) {
@@ -132,20 +116,16 @@ DAISIE_sim_core <- function(
           (rates$immig_rate_max - rates$immig_rate),
           (rates$clado_rate_max - rates$clado_rate)),
           replace = FALSE)
-
       }
+      # Run event
       
-    
-        # Run event
-        
-        new_state <- DAISIE_sim_update_state(timeval = timeval,
-                                             possible_event = possible_event,
-                                             maxspecID = maxspecID,
-                                             mainland_spec = mainland_spec,
-                                             island_spec = island_spec)
-        
-        island_spec <- new_state$island_spec
-        maxspecID <- new_state$maxspecID
+      new_state <- DAISIE_sim_update_state(timeval = timeval,
+                                           possible_event = possible_event,
+                                           maxspecID = maxspecID,
+                                           mainland_spec = mainland_spec,
+                                           island_spec = island_spec)
+      island_spec <- new_state$island_spec
+      maxspecID <- new_state$maxspecID
       
       # ONLY RUN WHEN ACTUAL EVENTS HAPPEN. MAKE UPDATE FUNCTION INTO ABOVE. 
       stt_table <- rbind(stt_table,
@@ -153,10 +133,9 @@ DAISIE_sim_core <- function(
                            length(which(island_spec[,4] == "I")),
                            length(which(island_spec[,4] == "A")),
                            length(which(island_spec[,4] == "C"))))
-
       
       # MAKE THIS A FUNCTION
-      } else { # MAKE THIS A FUNCTION
+    } else { # MAKE THIS A FUNCTION
       #### After thor is reached ####
       # Recalculate thor
       testit::assert(are_area_params(Apars))
@@ -170,11 +149,14 @@ DAISIE_sim_core <- function(
                            thor = thor_ext)
       
       timeval <- old_thor
-      
-
     }
   }
-  stt_table[nrow(stt_table),1] <- 0
+  
+  stt_table <- rbind(stt_table, 
+                     c(0, 
+                       stt_table[nrow(stt_table), 2],
+                       stt_table[nrow(stt_table), 3],
+                       stt_table[nrow(stt_table), 4]))
   
   ############# 
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
@@ -271,7 +253,6 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.matrix(island_spec) || is.null(island_spec))
   testit::assert(is.numeric(mainland_n))
   testit::assert(is.numeric(thor_ext))
-
   
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,
@@ -282,6 +263,7 @@ update_rates <- function(timeval, totaltime,
                                K = K,
                                mainland_n = mainland_n)
   testit::assert(is.numeric(immig_rate))
+  
   ext_rate <- get_ext_rate(timeval = timeval,
                            totaltime = totaltime,
                            mu = mu,
@@ -341,7 +323,6 @@ update_rates <- function(timeval, totaltime,
     
   } else {
     # Ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
-    # print("hey")
     ext_rate_max <- get_ext_rate(timeval = thor_ext,
                                  totaltime = totaltime,
                                  mu = mu,
@@ -351,50 +332,18 @@ update_rates <- function(timeval, totaltime,
                                  extcutoff = extcutoff, 
                                  island_spec = island_spec,
                                  K = K)
-
-    testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
     
-    # immig_rate_max <- get_immig_rate(timeval = timeval,
-    #                                  totaltime = totaltime,
-    #                                  gam = gam,
-    #                                  mainland_n = mainland_n,
-    #                                  Apars = Apars,
-    #                                  island_ontogeny = island_ontogeny, 
-    #                                  island_spec = island_spec,
-    #                                  K = K)
-
+    testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
     immig_rate_max <- immig_rate
     
-    # print(immig_rate_max)
     
     testit::assert(is.numeric(immig_rate_max))
     
-    # clado_rate_max <- get_clado_rate(timeval = timeval,
-    #                                  totaltime = totaltime,
-    #                                  lac = lac,
-    #                                  Apars = Apars,
-    #                                  island_ontogeny = island_ontogeny, 
-    #                                  island_spec = island_spec,
-    #                                  K = K)
-    
     clado_rate_max <- clado_rate
-
+    
     testit::assert(is.numeric(clado_rate_max)) 
     
   }
-  
-  # 
-  # if (ext_rate_max < ext_rate) {
-  #   ext_rate_max <- ext_rate
-  # }
-  # 
-  # if (clado_rate_max < clado_rate) {
-  #   clado_rate_max <- clado_rate
-  # }
-  # 
-  # if (immig_rate_max < immig_rate) {
-  #   immig_rate_max <- immig_rate
-  # }
   
   rates <- create_rates(
     immig_rate = immig_rate,
@@ -405,7 +354,6 @@ update_rates <- function(timeval, totaltime,
     immig_rate_max = immig_rate_max,
     clado_rate_max = clado_rate_max
   )
-  # cat(unlist(rates), "\n")
   return(rates)
 }
 
@@ -439,6 +387,7 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
   if (possible_event > 4) {
     # Nothing happens
   }
+  
   ##########################################
   #IMMIGRATION
   if (possible_event == 1)
