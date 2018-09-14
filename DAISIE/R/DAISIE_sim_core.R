@@ -87,36 +87,30 @@ DAISIE_sim_core <- function(
   #### Gillespie ####
   while (timeval < totaltime) {
     # Calculate rates
-    rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
-                          mu = mu, laa = laa, lac = lac, Apars = Apars,
-                          Epars = Epars, island_ontogeny = island_ontogeny,
-                          extcutoff = extcutoff, K = K,
-                          island_spec = island_spec, mainland_n, thor_ext)
+    rates <- update_rates(timeval = timeval,
+                          totaltime = totaltime,
+                          gam = gam,
+                          mu = mu,
+                          laa = laa,
+                          lac = lac,
+                          Apars = Apars,
+                          Epars = Epars,
+                          island_ontogeny = island_ontogeny,
+                          extcutoff = extcutoff,
+                          K = K,
+                          island_spec = island_spec,
+                          mainland_n = mainland_n,
+                          thor_ext = thor_ext)
+    
     timeval <- calc_next_timeval(rates, timeval)
 
     if (timeval <= thor_ext) {
       testit::assert(are_rates(rates))
       
-      # Determine event MAKE IT A FUNCTION
-      # If statement prevents odd behaviour of sample when rates are 0
-      if (is.null(island_ontogeny)) {
-        possible_event <- sample(1:4, 1, prob = c(rates$immig_rate,
-                                                  rates$ext_rate,
-                                                  rates$ana_rate,
-                                                  rates$clado_rate), 
-                                 replace = FALSE)
-      } else {
-        testit::assert(are_rates(rates))
-        possible_event <- sample(1:7, 1, prob = c(
-          rates$immig_rate,
-          rates$ext_rate,
-          rates$ana_rate,
-          rates$clado_rate,
-          (rates$ext_rate_max - rates$ext_rate),
-          (rates$immig_rate_max - rates$immig_rate),
-          (rates$clado_rate_max - rates$clado_rate)),
-          replace = FALSE)
-      }
+      # Determine event
+      possible_event <- DAISIE_sample_event(rates = rates,
+                                            island_ontogeny = island_ontogeny)
+      
       # Run event
       
       new_state <- DAISIE_sim_update_state(timeval = timeval,
