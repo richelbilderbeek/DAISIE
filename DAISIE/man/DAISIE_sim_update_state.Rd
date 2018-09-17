@@ -4,11 +4,13 @@
 \alias{DAISIE_sim_update_state}
 \title{Updates state of island given sampled event}
 \usage{
-DAISIE_sim_update_state(timeval, possible_event, maxspecID, mainland_spec,
-  island_spec)
+DAISIE_sim_update_state(timeval, totaltime, possible_event, maxspecID,
+  mainland_spec, island_spec, stt_table)
 }
 \arguments{
 \item{timeval}{current time of simulation}
+
+\item{totaltime}{simulated amount of time}
 
 \item{possible_event}{numeric indicating what event will happen.}
 
@@ -17,6 +19,8 @@ DAISIE_sim_update_state(timeval, possible_event, maxspecID, mainland_spec,
 \item{mainland_spec}{number of mainland species}
 
 \item{island_spec}{matrix with species on island (state of system at each time point)}
+
+\item{stt_table}{a species-through-time table}
 }
 \description{
 Makes the event happen by updating island species matrix and species IDs.

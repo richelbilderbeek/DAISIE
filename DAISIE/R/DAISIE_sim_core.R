@@ -110,7 +110,6 @@ DAISIE_sim_core <- function(
       # Determine event
       possible_event <- DAISIE_sample_event(rates = rates,
                                             island_ontogeny = island_ontogeny)
-      # Run event
       
       updated_state <- DAISIE_sim_update_state(timeval = timeval, 
                                                totaltime = totaltime,
@@ -125,25 +124,20 @@ DAISIE_sim_core <- function(
       stt_table <- updated_state$stt_table
       
 
-    } else { # MAKE THIS A FUNCTION
+    } else {
       #### After thor is reached ####
-      # Recalculate thor
-      
-      # UPDATE THOR FUNCTION HERE
-      testit::assert(are_area_params(Apars))
-      old_thor <- thor_ext
-      
-      thor_ext <- get_thor(timeval = timeval,
-                           totaltime = totaltime,
-                           Apars = Apars,
-                           ext_multiplier = ext_multiplier,
-                           island_ontogeny = island_ontogeny, 
-                           thor = thor_ext)
-      
-      timeval <- old_thor
+
+      updated_thor_timeval <- update_thor_timeval(timeval = timeval,
+                                                  totaltime = totaltime,
+                                                  Apars = Apars,
+                                                  ext_multiplier = ext_multiplier,
+                                                  island_ontogeny = island_ontogeny, 
+                                                  thor = thor_ext)
+      thor_ext <- updated_thor_timeval$thor_ext
+      timeval <- updated_thor_timeval$timeval
     }
   }
-  
+  #### Finalize stt_table ####
   stt_table <- rbind(stt_table, 
                      c(0, 
                        stt_table[nrow(stt_table), 2],
@@ -375,6 +369,7 @@ calc_next_timeval <- function(rates, timeval) {
 #' @param maxspecID current species IDs
 #' @param mainland_spec number of mainland species
 #' @param island_spec matrix with species on island (state of system at each time point)
+#' @param stt_table a species-through-time table
 DAISIE_sim_update_state <- function(timeval,
                                     totaltime,
                                     possible_event,

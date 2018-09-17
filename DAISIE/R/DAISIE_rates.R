@@ -399,3 +399,57 @@ DAISIE_calc_clade_imm_rate <- function(
      n_mainland_species * ps_imm_rate * (1.0 - (n_island_species / carr_cap))
   )
 }
+
+
+#' Realigns timeval with thor and updates thor
+#'
+#' @param timeval current time of simulation
+#' @param totaltime simulated amount of time
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param ext_multiplier reduces or increases distance of horizon to current
+#' simulation time
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{quadratic} for a beta function describing area through time,
+#'  or \code{linear} for a linear function
+#' @param thor time of horizon for max extinction
+#'
+#' @author Pedro Neves
+#'
+#' @return
+#'
+update_thor_timeval <- function(timeval,
+                                totaltime,
+                                Apars,
+                                ext_multiplier,
+                                island_ontogeny, 
+                                thor) {
+  
+  testit::assert(are_area_params(Apars))
+  old_thor <- thor
+  
+  thor_ext <- get_thor(timeval = timeval,
+                       totaltime = totaltime,
+                       Apars = Apars,
+                       ext_multiplier = ext_multiplier,
+                       island_ontogeny = island_ontogeny, 
+                       thor = thor)
+  
+  timeval <- old_thor
+  
+  new_thor_timeval <- list(thor_ext = thor_ext,
+                           timeval = timeval)
+  
+  
+  testit::assert(is.list(new_thor_timeval))
+  
+  return(new_thor_timeval)
+}
+
+
