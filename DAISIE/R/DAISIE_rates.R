@@ -434,16 +434,16 @@ update_thor_timeval <- function(timeval,
   testit::assert(are_area_params(Apars))
   old_thor <- thor
   
-  thor_ext <- get_thor(timeval = timeval,
-                       totaltime = totaltime,
-                       Apars = Apars,
-                       ext_multiplier = ext_multiplier,
-                       island_ontogeny = island_ontogeny, 
-                       thor = thor)
+  thor <- get_thor(timeval = timeval,
+                   totaltime = totaltime,
+                   Apars = Apars,
+                   ext_multiplier = ext_multiplier,
+                   island_ontogeny = island_ontogeny, 
+                   thor = thor)
   
   timeval <- old_thor
   
-  new_thor_timeval <- list(thor_ext = thor_ext,
+  new_thor_timeval <- list(thor = thor,
                            timeval = timeval)
   
   

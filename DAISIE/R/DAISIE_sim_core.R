@@ -76,7 +76,7 @@ DAISIE_sim_core <- function(
   stt_table[1,] <- c(totaltime,0,0,0)
   testit::assert(is.null(Apars) || are_area_params(Apars))
   # Pick thor (before timeval, to set Amax thor)
-  thor_ext <- get_thor(
+  thor <- get_thor(
     0,
     totaltime,
     Apars,
@@ -100,11 +100,11 @@ DAISIE_sim_core <- function(
                           K = K,
                           island_spec = island_spec,
                           mainland_n = mainland_n,
-                          thor_ext = thor_ext)
+                          thor = thor)
     
     timeval <- calc_next_timeval(rates, timeval)
     
-    if (timeval <= thor_ext) {
+    if (timeval <= thor) {
       testit::assert(are_rates(rates))
       
       # Determine event
@@ -132,8 +132,8 @@ DAISIE_sim_core <- function(
                                                   Apars = Apars,
                                                   ext_multiplier = ext_multiplier,
                                                   island_ontogeny = island_ontogeny, 
-                                                  thor = thor_ext)
-      thor_ext <- updated_thor_timeval$thor_ext
+                                                  thor = thor)
+      thor <- updated_thor_timeval$thor
       timeval <- updated_thor_timeval$timeval
     }
   }
@@ -144,7 +144,7 @@ DAISIE_sim_core <- function(
                        stt_table[nrow(stt_table), 3],
                        stt_table[nrow(stt_table), 4]))
   
-  ############# 
+  ############# CONVERT THIS INTO A FUNCTION
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
   if(length(island_spec[,1]) == 0)
   {
