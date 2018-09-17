@@ -103,35 +103,33 @@ DAISIE_sim_core <- function(
                           thor_ext = thor_ext)
     
     timeval <- calc_next_timeval(rates, timeval)
-
+    
     if (timeval <= thor_ext) {
       testit::assert(are_rates(rates))
       
       # Determine event
       possible_event <- DAISIE_sample_event(rates = rates,
                                             island_ontogeny = island_ontogeny)
-      
       # Run event
       
-      new_state <- DAISIE_sim_update_state(timeval = timeval,
-                                           possible_event = possible_event,
-                                           maxspecID = maxspecID,
-                                           mainland_spec = mainland_spec,
-                                           island_spec = island_spec)
-      island_spec <- new_state$island_spec
-      maxspecID <- new_state$maxspecID
+      updated_state <- DAISIE_sim_update_state(timeval = timeval, 
+                                               totaltime = totaltime,
+                                               possible_event = possible_event,
+                                               maxspecID = maxspecID,
+                                               mainland_spec = mainland_spec,
+                                               island_spec = island_spec,
+                                               stt_table = stt_table)
       
-      # ONLY RUN WHEN ACTUAL EVENTS HAPPEN. MAKE UPDATE FUNCTION INTO ABOVE. 
-      stt_table <- rbind(stt_table,
-                         c(totaltime - timeval,
-                           length(which(island_spec[,4] == "I")),
-                           length(which(island_spec[,4] == "A")),
-                           length(which(island_spec[,4] == "C"))))
+      island_spec <- updated_state$island_spec
+      maxspecID <- updated_state$maxspecID
+      stt_table <- updated_state$stt_table
       
-      # MAKE THIS A FUNCTION
+
     } else { # MAKE THIS A FUNCTION
       #### After thor is reached ####
       # Recalculate thor
+      
+      # UPDATE THOR FUNCTION HERE
       testit::assert(are_area_params(Apars))
       old_thor <- thor_ext
       
@@ -372,11 +370,18 @@ calc_next_timeval <- function(rates, timeval) {
 #' 
 #' 
 #' @param timeval current time of simulation
+#' @param totaltime simulated amount of time
 #' @param possible_event numeric indicating what event will happen.
 #' @param maxspecID current species IDs
 #' @param mainland_spec number of mainland species
 #' @param island_spec matrix with species on island (state of system at each time point)
-DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_spec,island_spec)
+DAISIE_sim_update_state <- function(timeval,
+                                    totaltime,
+                                    possible_event,
+                                    maxspecID,
+                                    mainland_spec,
+                                    island_spec,
+                                    stt_table)
 {  
   if (possible_event > 4) {
     # Nothing happens
@@ -544,7 +549,20 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
       maxspecID = maxspecID + 2
     } 
   }
-  return(list(island_spec = island_spec, maxspecID = maxspecID))
+  
+  
+  if (possible_event <= 4) {
+    stt_table <- rbind(stt_table,
+                       c(totaltime - timeval,
+                         length(which(island_spec[,4] == "I")),
+                         length(which(island_spec[,4] == "A")),
+                         length(which(island_spec[,4] == "C"))))
+  }
+
+  updated_state <- list(island_spec = island_spec, 
+                        maxspecID = maxspecID, 
+                        stt_table = stt_table)
+  updated_state
 }
 
 DAISIE_ONEcolonist <- function(time,island_spec,stt_table)
