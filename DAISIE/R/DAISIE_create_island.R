@@ -7,7 +7,6 @@
 #'
 #' @return list with the island information, composed stt table, branching times of extant
 #' species, status os species on the island and number of missing species.
-#'
 DAISIE_create_island <- function(stt_table, totaltime, island_spec, mainland_n) {
   
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
