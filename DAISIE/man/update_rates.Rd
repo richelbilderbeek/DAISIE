@@ -5,7 +5,7 @@
 \title{Calculates algorithm rates}
 \usage{
 update_rates(timeval, totaltime, gam, mu, laa, lac, Apars, Epars,
-  island_ontogeny, extcutoff, K, island_spec, mainland_n, thor_ext, thor_c_i)
+  island_ontogeny, extcutoff, K, island_spec, mainland_n, thor)
 }
 \arguments{
 \item{timeval}{current time of simulation}
@@ -49,9 +49,7 @@ large and slowing down simulation. Should be big}
 
 \item{mainland_n}{total number of species present in the mainland}
 
-\item{thor_ext}{time of horizon for max extinction}
-
-\item{thor_c_i}{time of horizon for max cladogenesis and immigration}
+\item{thor}{time of horizon for max extinction}
 }
 \description{
 Internal function that updates the all the rates and 

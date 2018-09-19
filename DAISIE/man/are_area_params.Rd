@@ -7,7 +7,7 @@
 are_area_params(area_params)
 }
 \arguments{
-\item{area_params}{object to be tested if confms to area parameters}
+\item{area_params}{object to be tested if conforms to area parameters}
 }
 \value{
 Boolean that indicates if list conforms to expected area parameters

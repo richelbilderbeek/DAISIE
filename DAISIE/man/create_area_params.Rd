@@ -2,7 +2,7 @@
 % Please edit documentation in R/DAISIE_area_params.R
 \name{create_area_params}
 \alias{create_area_params}
-\title{Title}
+\title{Create named list of area parameters}
 \usage{
 create_area_params(max_area, proportional_peak_t, peak_sharpness,
   total_island_age)
@@ -22,7 +22,7 @@ list of numerical values containing area parameters for island ontogeny
 simulation
 }
 \description{
-Title
+Create named list of area parameters
 }
 \examples{
 testit::assert(are_area_params(

@@ -28,8 +28,8 @@
 #'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 #' }
 #' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
-#' \code{"quadratic"} for a beta function describing area through time,
-#'  or \code{"linear"} for a linear function
+#' \code{quadratic} for a beta function describing area through time,
+#'  or \code{linear} for a linear function
 DAISIE_sim_core <- function(
   time,
   mainland_n,
@@ -46,15 +46,14 @@ DAISIE_sim_core <- function(
     stop('Rate of colonisation is zero. Island cannot be colonised.')
   }  
   
-  if (are_area_params(Apars) && is.null(island_ontogeny)){
-    stop("Apars specified for contant island_ontogeny. Set Apars to NULL")
+  if (!is.null(Apars) && is.null(island_ontogeny)){
+    stop("Apars specified for constant island_ontogeny. Set Apars to NULL")
   }
   
   if (!is.null(island_ontogeny) && island_ontogeny != "linear" && island_ontogeny != "quadratic") {
     stop("Please select valid island ontogeny model. Options are no ontogeny: NULL, 'linear' or 'quadratic'.")
   }
   
-  immig <- c()
   timeval <- 0
   totaltime <- time
   lac <- pars[1]
@@ -77,7 +76,7 @@ DAISIE_sim_core <- function(
   stt_table[1,] <- c(totaltime,0,0,0)
   testit::assert(is.null(Apars) || are_area_params(Apars))
   # Pick thor (before timeval, to set Amax thor)
-  thor_ext <- get_thor(
+  thor <- get_thor(
     0,
     totaltime,
     Apars,
@@ -85,136 +84,71 @@ DAISIE_sim_core <- function(
     island_ontogeny, 
     thor = NULL
   )
-  thor_c_i <- get_thor_half(0,
-                          totaltime,
-                          Apars,
-                          ext_multiplier,
-                          island_ontogeny, 
-                          thor_c_i = NULL
-                          )
-  
-  counter <- 0
-  #### Start Gillespie ####
-  while (timeval <= totaltime) {
-    if (timeval < thor_ext) {
-      if (timeval < thor_c_i) {
-        counter <- counter + 1
-        
-
-      rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
-                            mu = mu, laa = laa, lac = lac, Apars = Apars,
-                            Epars = Epars, island_ontogeny = island_ontogeny,
-                            extcutoff = extcutoff, K = K,
-                            island_spec = island_spec, mainland_n, thor_ext, thor_c_i)
+  #### Gillespie ####
+  while (timeval < totaltime) {
+    # Calculate rates
+    rates <- update_rates(timeval = timeval,
+                          totaltime = totaltime,
+                          gam = gam,
+                          mu = mu,
+                          laa = laa,
+                          lac = lac,
+                          Apars = Apars,
+                          Epars = Epars,
+                          island_ontogeny = island_ontogeny,
+                          extcutoff = extcutoff,
+                          K = K,
+                          island_spec = island_spec,
+                          mainland_n = mainland_n,
+                          thor = thor)
+    
+    timeval <- calc_next_timeval(rates, timeval)
+    
+    if (timeval <= thor) {
       testit::assert(are_rates(rates))
-
-      timeval <- calc_next_timeval(rates, timeval)
-
+      
       # Determine event
-      # If statement prevents odd behaviour of sample when rates are 0
-      if (is.null(island_ontogeny)) {
-        possible_event <- sample(1:4, 1, prob = c(rates$immig_rate,
-                                                  rates$ext_rate,
-                                                  rates$ana_rate,
-                                                  rates$clado_rate), 
-                                 replace = FALSE)
-      } else {
+      possible_event <- DAISIE_sample_event(rates = rates,
+                                            island_ontogeny = island_ontogeny)
+      
+      updated_state <- DAISIE_sim_update_state(timeval = timeval, 
+                                               totaltime = totaltime,
+                                               possible_event = possible_event,
+                                               maxspecID = maxspecID,
+                                               mainland_spec = mainland_spec,
+                                               island_spec = island_spec,
+                                               stt_table = stt_table)
+      
+      island_spec <- updated_state$island_spec
+      maxspecID <- updated_state$maxspecID
+      stt_table <- updated_state$stt_table
+      
 
-      testit::assert(are_rates(rates))  
-        possible_event <- sample(1:7, 1, prob = c(
-          rates$immig_rate,
-          rates$ext_rate,
-          rates$ana_rate,
-          rates$clado_rate,
-          (rates$ext_rate_max - rates$ext_rate),
-          (rates$immig_rate_max - rates$immig_rate),
-          (rates$clado_rate_max - rates$clado_rate)),
-          replace = FALSE)
-        cat(rates$immig_rate, "\n")
-        immig <<- c(immig, rates$immig_rate * mainland_n)
-      }
-
-      if (timeval <= totaltime) {
-        # Run event
-
-        new_state <- DAISIE_sim_update_state(timeval = timeval,
-                                             possible_event = possible_event,
-                                             maxspecID = maxspecID,
-                                             mainland_spec = mainland_spec,
-                                             island_spec = island_spec)
-        
-        island_spec <- new_state$island_spec
-        maxspecID <- new_state$maxspecID
-
-      }
-      stt_table <- rbind(stt_table,
-                         c(totaltime - timeval,
-                           length(which(island_spec[,4] == "I")),
-                           length(which(island_spec[,4] == "A")),
-                           length(which(island_spec[,4] == "C"))))
-      } else {
-        thor_c_i <- get_thor_half(
-          timeval = timeval,
-          totaltime = totaltime,
-          Apars = Apars,
-          ext_multiplier = ext_multiplier,
-          island_ontogeny = island_ontogeny, 
-          thor_c_i = thor_c_i
-          )
-      }
     } else {
       #### After thor is reached ####
-      # Recalculate thor
-      testit::assert(are_area_params(Apars))
-      thor_ext <- get_thor(timeval = timeval,
-                       totaltime = totaltime,
-                       Apars = Apars,
-                       ext_multiplier = ext_multiplier,
-                       island_ontogeny = island_ontogeny, 
-                       thor = thor_ext)
+
+      updated_thor_timeval <- update_thor_timeval(timeval = timeval,
+                                                  totaltime = totaltime,
+                                                  Apars = Apars,
+                                                  ext_multiplier = ext_multiplier,
+                                                  island_ontogeny = island_ontogeny, 
+                                                  thor = thor)
+      thor <- updated_thor_timeval$thor
+      timeval <- updated_thor_timeval$timeval
     }
   }
-  stt_table[nrow(stt_table),1] <- 0
+  #### Finalize stt_table ####
+  stt_table <- rbind(stt_table, 
+                     c(0, 
+                       stt_table[nrow(stt_table), 2],
+                       stt_table[nrow(stt_table), 3],
+                       stt_table[nrow(stt_table), 4]))
   
-  ############# 
-  ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
-  if(length(island_spec[,1]) == 0)
-  {
-    island <- list(stt_table = stt_table, branching_times = totaltime, stac = 0, missing_species = 0)
-  } else
-  {
-    cnames <- c("Species","Mainland Ancestor","Colonisation time (BP)",
-                "Species type","branch_code","branching time (BP)","Anagenetic_origin")
-    colnames(island_spec) <- cnames
-    
-    ### set ages as counting backwards from present
-    island_spec[,"branching time (BP)"] <- totaltime - as.numeric(island_spec[,"branching time (BP)"])
-    island_spec[,"Colonisation time (BP)"] <- totaltime - as.numeric(island_spec[,"Colonisation time (BP)"])
-    if(mainland_n == 1)
-    {
-      island <- DAISIE_ONEcolonist(totaltime,island_spec,stt_table)
-    } else if (mainland_n > 1) 
-    {  
-      ### number of colonists present
-      colonists_present <- sort(as.numeric(unique(island_spec[,'Mainland Ancestor'])))
-      number_colonists_present <- length(colonists_present) 
-      
-      island_clades_info <- list()  
-      for(i in 1:number_colonists_present)
-      {
-        subset_island <- island_spec[which(island_spec[,'Mainland Ancestor']==colonists_present[i]),] 
-        if(class(subset_island) != 'matrix')
-        {
-          subset_island <- rbind(subset_island[1:7])
-          colnames(subset_island) <- cnames
-        }
-        island_clades_info[[i]] <- DAISIE_ONEcolonist(totaltime,island_spec=subset_island,stt_table=NULL)
-        island_clades_info[[i]]$stt_table <- NULL
-      }
-      island <- list(stt_table = stt_table, taxon_list = island_clades_info)
-    }
-  }
-  return(island)
+  island <- DAISIE_create_island(stt_table = stt_table,
+                    totaltime = totaltime,
+                    island_spec = island_spec,
+                    mainland_n = mainland_n)
+  island
 }
 
 #' Calculates algorithm rates
@@ -249,14 +183,13 @@ DAISIE_sim_core <- function(
 #' @param K carrying capacity
 #' @param island_spec matrix containing state of system
 #' @param mainland_n total number of species present in the mainland
-#' @param thor_ext time of horizon for max extinction
-#' @param thor_c_i time of horizon for max cladogenesis and immigration
+#' @param thor time of horizon for max extinction
 update_rates <- function(timeval, totaltime,
                          gam, mu, laa, lac, Apars, Epars,
                          island_ontogeny, 
                          extcutoff,
                          K, 
-                         island_spec, mainland_n, thor_ext, thor_c_i) {
+                         island_spec, mainland_n, thor) {
   # Function to calculate rates at time = timeval. Returns list with each rate.
   testit::assert(is.numeric(timeval))
   testit::assert(is.numeric(totaltime))
@@ -271,16 +204,8 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(K))
   testit::assert(is.matrix(island_spec) || is.null(island_spec))
   testit::assert(is.numeric(mainland_n))
-  testit::assert(is.numeric(thor_ext))
-  testit::assert(is.numeric(thor_c_i))
-  # print(paste0("immi: ", island_area(timeval,
-  #                                    totaltime,
-  #                                    Apars,
-  #                                    island_ontogeny) * K))
-  # print(paste0("island area: ", island_area(timeval,
-  #                                           totaltime,
-  #                                           Apars,
-  #                                           island_ontogeny)))
+  testit::assert(is.numeric(thor))
+  
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,
                                gam = gam,
@@ -290,6 +215,7 @@ update_rates <- function(timeval, totaltime,
                                K = K,
                                mainland_n = mainland_n)
   testit::assert(is.numeric(immig_rate))
+  
   ext_rate <- get_ext_rate(timeval = timeval,
                            totaltime = totaltime,
                            mu = mu,
@@ -304,6 +230,7 @@ update_rates <- function(timeval, totaltime,
   ana_rate <- get_ana_rate(laa = laa,
                            island_spec = island_spec)
   testit::assert(is.numeric(ana_rate))
+  
   clado_rate <- get_clado_rate(timeval = timeval, 
                                totaltime = totaltime,
                                lac = lac,
@@ -312,6 +239,7 @@ update_rates <- function(timeval, totaltime,
                                island_spec = island_spec,
                                K = K)
   testit::assert(is.numeric(clado_rate))
+  
   if (is.null(island_ontogeny)) {
     
     immig_rate_max <- immig_rate
@@ -320,23 +248,34 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(ext_rate_max))
     clado_rate_max <- clado_rate
     testit::assert(is.numeric(clado_rate_max))
+    
   } else if ((Apars$proportional_peak_t * Apars$total_island_age) > timeval) {
-
+    
     ext_rate_max <- ext_rate
     testit::assert(is.numeric(ext_rate_max))
-  } else {
-    # No ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
-    immig_rate_max <- get_immig_rate(timeval = thor_c_i,
+    
+    immig_rate_max <- get_immig_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age,
                                      totaltime = totaltime,
                                      gam = gam,
+                                     mainland_n = mainland_n,
                                      Apars = Apars,
-                                     island_ontogeny = island_ontogeny,
+                                     island_ontogeny = island_ontogeny, 
                                      island_spec = island_spec,
-                                     K = 0.05, 
-                                     mainland_n = mainland_n)
+                                     K = K)
     testit::assert(is.numeric(immig_rate_max))
-
-    ext_rate_max <- get_ext_rate(timeval = thor_ext,
+    
+    clado_rate_max <- get_clado_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age, # SHOULD BE GENERALIZED
+                                     totaltime = totaltime,
+                                     lac = lac,
+                                     Apars = Apars,
+                                     island_ontogeny = island_ontogeny, 
+                                     island_spec = island_spec,
+                                     K = K)
+    testit::assert(is.numeric(clado_rate_max)) 
+    
+  } else {
+    # Ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
+    ext_rate_max <- get_ext_rate(timeval = thor,
                                  totaltime = totaltime,
                                  mu = mu,
                                  Apars = Apars, 
@@ -345,67 +284,17 @@ update_rates <- function(timeval, totaltime,
                                  extcutoff = extcutoff, 
                                  island_spec = island_spec,
                                  K = K)
-    testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
-    clado_rate_max <- get_clado_rate(timeval = thor_c_i, 
-                                     totaltime = totaltime,
-                                     lac = lac,
-                                     Apars = Apars,
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = 0.05)
-    testit::assert(is.numeric(clado_rate_max))
-  }
-  
-  if ((((Apars$proportional_peak_t * Apars$total_island_age) / 2) > timeval) && !is.null(island_ontogeny)) {
-    clado_rate_max <- get_clado_rate(((Apars$proportional_peak_t * Apars$total_island_age) / 2),
-                                     totaltime = totaltime, 
-                                     lac = lac,
-                                     Apars = Apars, 
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = 0.05)
-    testit::assert(is.numeric(clado_rate_max))
     
-    immig_rate_max <- get_immig_rate(((Apars$proportional_peak_t * Apars$total_island_age) / 2),
-                                     totaltime = totaltime, 
-                                     gam = gam,
-                                     Apars = Apars, 
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = 0.05,
-                                     mainland_n = mainland_n)
-    testit::assert(is.numeric(immig_rate_max))
-  } else {
-
-    clado_rate_max <- get_clado_rate(thor_c_i,
-                                     totaltime = totaltime, 
-                                     lac = lac,
-                                     Apars = Apars, 
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = K)
-    testit::assert(is.numeric(clado_rate_max))
-    immig_rate_max <- get_immig_rate(thor_c_i,
-                                     totaltime = totaltime, 
-                                     gam = gam,
-                                     Apars = Apars, 
-                                     island_ontogeny = island_ontogeny,
-                                     island_spec = island_spec,
-                                     K = K,
-                                     mainland_n = mainland_n)
-    testit::assert(is.numeric(immig_rate_max))
-    }
-
-  if (ext_rate_max < ext_rate) {
-    ext_rate_max <- ext_rate
-  }
-
-  if (clado_rate_max < clado_rate) {
-    clado_rate_max <- clado_rate
-  }
-  
-  if (immig_rate_max < immig_rate) {
+    testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
     immig_rate_max <- immig_rate
+    
+    
+    testit::assert(is.numeric(immig_rate_max))
+    
+    clado_rate_max <- clado_rate
+    
+    testit::assert(is.numeric(clado_rate_max)) 
+    
   }
   
   rates <- create_rates(
@@ -417,7 +306,6 @@ update_rates <- function(timeval, totaltime,
     immig_rate_max = immig_rate_max,
     clado_rate_max = clado_rate_max
   )
-
   return(rates)
 }
 
@@ -442,19 +330,28 @@ calc_next_timeval <- function(rates, timeval) {
 #' 
 #' 
 #' @param timeval current time of simulation
+#' @param totaltime simulated amount of time
 #' @param possible_event numeric indicating what event will happen.
 #' @param maxspecID current species IDs
 #' @param mainland_spec number of mainland species
 #' @param island_spec matrix with species on island (state of system at each time point)
-DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_spec,island_spec)
+#' @param stt_table a species-through-time table
+DAISIE_sim_update_state <- function(timeval,
+                                    totaltime,
+                                    possible_event,
+                                    maxspecID,
+                                    mainland_spec,
+                                    island_spec,
+                                    stt_table)
 {  
   if (possible_event > 4) {
     # Nothing happens
   }
+  
   ##########################################
   #IMMIGRATION
   if (possible_event == 1)
-  {  	
+  {
     colonist = DDD::sample2(mainland_spec,1)
     
     if (length(island_spec[,1]) != 0)
@@ -613,7 +510,20 @@ DAISIE_sim_update_state <- function(timeval, possible_event,maxspecID,mainland_s
       maxspecID = maxspecID + 2
     } 
   }
-  return(list(island_spec = island_spec, maxspecID = maxspecID))
+  
+  
+  if (possible_event <= 4) {
+    stt_table <- rbind(stt_table,
+                       c(totaltime - timeval,
+                         length(which(island_spec[,4] == "I")),
+                         length(which(island_spec[,4] == "A")),
+                         length(which(island_spec[,4] == "C"))))
+  }
+
+  updated_state <- list(island_spec = island_spec, 
+                        maxspecID = maxspecID, 
+                        stt_table = stt_table)
+  updated_state
 }
 
 DAISIE_ONEcolonist <- function(time,island_spec,stt_table)

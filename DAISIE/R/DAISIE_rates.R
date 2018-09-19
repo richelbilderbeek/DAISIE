@@ -14,7 +14,7 @@
 #' \code{"quadratic"} for a beta function describing area through time,
 #'  or \code{"linear"} for a linear function
 #' @family rates calculation
-island_area <- function(timeval, totaltime, Apars, island_ontogeny){
+island_area <- function(timeval, totaltime, Apars, island_ontogeny) {
   testit::assert(are_area_params(Apars))
   
   Tmax <- Apars$total_island_age
@@ -90,7 +90,7 @@ get_ext_rate <- function(timeval,
     } else {
       
     X <- log(Epars[1] / Epars[2]) / log(0.1)
-    extrate <- Epars[1]/((island_area(timeval, totaltime, Apars, island_ontogeny) / Apars$max_area)^X)
+    extrate <- Epars[1] / ((island_area(timeval, totaltime, Apars, island_ontogeny) / Apars$max_area)^X)
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate <- extrate * length(island_spec[,1])
@@ -276,66 +276,6 @@ get_thor <- function(timeval,
 
 
 
-#' Creates the horizon time for the cladogenesis and immigration
-#' rate.
-#'
-#' @param timeval current time of simulation
-#' @param totaltime total time of simulation
-#' @param Apars area parameters, 
-#'   as created by \link{create_area_params}
-#' @param ext_multiplier reduces or increases distance of horizon to current
-#' simulation time
-#' @param island_ontogeny a string describing the type of island ontogeny.
-#'  Can be \code{NULL}, \code{"quadratic"} for a beta function
-#'  describing area through time, or \code{"linear"} for a linear function
-#' @param thor_c_i time horizon for clagogesis and immigration
-#'
-#' @return the time horizon for cladogenesis and immigration
-#' #' @examples 
-#'   testit::assert(
-#'     get_thor_half(
-#'       timeval = 0.2, 
-#'       totaltime = 10,
-#'       Apars = create_area_params(Amax= 1000,
-#'                                  proportional_peak_t = 0.2,
-#'                                  peak_sharpness = 1,
-#'                                  total_island_age = 15),
-#'       ext_multiplier = 0.5,
-#'       island_ontogeny = "quadratic",
-#'       thor_c_i = NULL
-#'     ) == 1.5
-#'   )
-#' @export
-get_thor_half <- function(
-  timeval,
-  totaltime,
-  Apars,
-  ext_multiplier,
-  island_ontogeny,
-  thor_c_i
-) {
-  # Function calculates where the horizon for max(immig_rate and clado_rate) is.
-  if (is.null(island_ontogeny)) {
-    thor_c_i <- totaltime
-    testit::assert(thor_c_i > 0.0)
-    return(thor_c_i)
-  } else {
-    
-    if (is.null(thor_c_i)) {
-      thor_c_i <- (Apars$proportional_peak_t * Apars$total_island_age) / 2
-      testit::assert(thor_c_i > 0.0)
-      return(thor_c_i)
-      
-    } else if (timeval >= thor_c_i & ((Apars$proportional_peak_t * Apars$total_island_age) / 2) < timeval) {
-      
-      thor_c_i <- timeval + ext_multiplier * (totaltime - timeval)
-      thor_c_i <- min(totaltime, thor_c_i)
-      testit::assert(thor_c_i > 0.0)
-      thor_c_i
-    }
-  }
-}
-
 
 #' Calculate the clade-wide extinction rate
 #' @param ps_ext_rate per species extinction rate
@@ -459,3 +399,57 @@ DAISIE_calc_clade_imm_rate <- function(
      n_mainland_species * ps_imm_rate * (1.0 - (n_island_species / carr_cap))
   )
 }
+
+
+#' Realigns timeval with thor and updates thor
+#'
+#' @param timeval current time of simulation
+#' @param totaltime simulated amount of time
+#' @param Apars a numeric vector:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param ext_multiplier reduces or increases distance of horizon to current
+#' simulation time
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{quadratic} for a beta function describing area through time,
+#'  or \code{linear} for a linear function
+#' @param thor time of horizon for max extinction
+#'
+#' @author Pedro Neves
+#'
+#' @return numeric list with updated thor and updated timeval
+#'
+update_thor_timeval <- function(timeval,
+                                totaltime,
+                                Apars,
+                                ext_multiplier,
+                                island_ontogeny, 
+                                thor) {
+  
+  testit::assert(are_area_params(Apars))
+  old_thor <- thor
+  
+  thor <- get_thor(timeval = timeval,
+                   totaltime = totaltime,
+                   Apars = Apars,
+                   ext_multiplier = ext_multiplier,
+                   island_ontogeny = island_ontogeny, 
+                   thor = thor)
+  
+  timeval <- old_thor
+  
+  new_thor_timeval <- list(thor = thor,
+                           timeval = timeval)
+
+  testit::assert(is.list(new_thor_timeval))
+  
+  
+  return(new_thor_timeval)
+}
+
+

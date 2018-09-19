@@ -42,8 +42,8 @@ this value is set to the number of mainland species.}
 }}
 
 \item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
-\code{"quadratic"} for a beta function describing area through time,
- or \code{"linear"} for a linear function}
+\code{quadratic} for a beta function describing area through time,
+ or \code{linear} for a linear function}
 }
 \description{
 Internal function of the DAISIE simulation
