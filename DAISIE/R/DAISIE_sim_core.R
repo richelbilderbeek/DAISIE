@@ -144,45 +144,11 @@ DAISIE_sim_core <- function(
                        stt_table[nrow(stt_table), 3],
                        stt_table[nrow(stt_table), 4]))
   
-  ############# CONVERT THIS INTO A FUNCTION
-  ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
-  if(length(island_spec[,1]) == 0)
-  {
-    island <- list(stt_table = stt_table, branching_times = totaltime, stac = 0, missing_species = 0)
-  } else
-  {
-    cnames <- c("Species","Mainland Ancestor","Colonisation time (BP)",
-                "Species type","branch_code","branching time (BP)","Anagenetic_origin")
-    colnames(island_spec) <- cnames
-    
-    ### set ages as counting backwards from present
-    island_spec[,"branching time (BP)"] <- totaltime - as.numeric(island_spec[,"branching time (BP)"])
-    island_spec[,"Colonisation time (BP)"] <- totaltime - as.numeric(island_spec[,"Colonisation time (BP)"])
-    if(mainland_n == 1)
-    {
-      island <- DAISIE_ONEcolonist(totaltime,island_spec,stt_table)
-    } else if (mainland_n > 1) 
-    {  
-      ### number of colonists present
-      colonists_present <- sort(as.numeric(unique(island_spec[,'Mainland Ancestor'])))
-      number_colonists_present <- length(colonists_present) 
-      
-      island_clades_info <- list()  
-      for(i in 1:number_colonists_present)
-      {
-        subset_island <- island_spec[which(island_spec[,'Mainland Ancestor']==colonists_present[i]),] 
-        if(class(subset_island) != 'matrix')
-        {
-          subset_island <- rbind(subset_island[1:7])
-          colnames(subset_island) <- cnames
-        }
-        island_clades_info[[i]] <- DAISIE_ONEcolonist(totaltime,island_spec=subset_island,stt_table=NULL)
-        island_clades_info[[i]]$stt_table <- NULL
-      }
-      island <- list(stt_table = stt_table, taxon_list = island_clades_info)
-    }
-  }
-  return(island)
+  island <- DAISIE_create_island(stt_table = stt_table,
+                    totaltime = totaltime,
+                    island_spec = island_spec,
+                    mainland_n = mainland_n)
+  island
 }
 
 #' Calculates algorithm rates
@@ -217,13 +183,13 @@ DAISIE_sim_core <- function(
 #' @param K carrying capacity
 #' @param island_spec matrix containing state of system
 #' @param mainland_n total number of species present in the mainland
-#' @param thor_ext time of horizon for max extinction
+#' @param thor time of horizon for max extinction
 update_rates <- function(timeval, totaltime,
                          gam, mu, laa, lac, Apars, Epars,
                          island_ontogeny, 
                          extcutoff,
                          K, 
-                         island_spec, mainland_n, thor_ext) {
+                         island_spec, mainland_n, thor) {
   # Function to calculate rates at time = timeval. Returns list with each rate.
   testit::assert(is.numeric(timeval))
   testit::assert(is.numeric(totaltime))
@@ -238,7 +204,7 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(K))
   testit::assert(is.matrix(island_spec) || is.null(island_spec))
   testit::assert(is.numeric(mainland_n))
-  testit::assert(is.numeric(thor_ext))
+  testit::assert(is.numeric(thor))
   
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,
@@ -309,7 +275,7 @@ update_rates <- function(timeval, totaltime,
     
   } else {
     # Ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
-    ext_rate_max <- get_ext_rate(timeval = thor_ext,
+    ext_rate_max <- get_ext_rate(timeval = thor,
                                  totaltime = totaltime,
                                  mu = mu,
                                  Apars = Apars, 

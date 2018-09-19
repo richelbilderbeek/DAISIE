@@ -31,7 +31,7 @@ simulation time}
 \item{thor}{time of horizon for max extinction}
 }
 \value{
-
+numeric list with updated thor and updated timeval
 }
 \description{
 Realigns timeval with thor and updates thor

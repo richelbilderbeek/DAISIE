@@ -422,7 +422,7 @@ DAISIE_calc_clade_imm_rate <- function(
 #'
 #' @author Pedro Neves
 #'
-#' @return
+#' @return numeric list with updated thor and updated timeval
 #'
 update_thor_timeval <- function(timeval,
                                 totaltime,
@@ -445,9 +445,9 @@ update_thor_timeval <- function(timeval,
   
   new_thor_timeval <- list(thor = thor,
                            timeval = timeval)
-  
-  
+
   testit::assert(is.list(new_thor_timeval))
+  
   
   return(new_thor_timeval)
 }
