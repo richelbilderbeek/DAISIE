@@ -210,3 +210,94 @@ antidiagSums = function(mat)
 is_numeric_list <- function(x) {
   is.list(x) && is.numeric(unlist(x))
 }
+
+plot_ext_rate <- function(resolution,
+                          totaltime,
+                          mu,
+                          Apars,
+                          Epars,
+                          island_ontogeny,
+                          island_spec,
+                          K
+) {
+  
+  # Generate time vector
+  timepoints <- seq(0, totaltime, by = resolution)
+  
+  
+  # Calculate immigration rate
+  ext_rate_vec <- c()
+  for (i in seq_along(timepoints)) {
+    ext_rate_vec <- c(ext_rate_vec,
+                      get_ext_rate(timeval = timepoints[i],
+                                   totaltime = totaltime, 
+                                   mu = mu,
+                                   Apars = Apars,
+                                   Epars = Epars,
+                                   island_ontogeny = island_ontogeny, 
+                                   island_spec = island_spec,
+                                   extcutoff = 1000, 
+                                   K = K))
+  }
+  plot(ext_rate_vec, type = "l")
+  return(ext_rate_vec)
+}
+
+plot_clado_rate <- function(resolution,
+                            totaltime,
+                            lac,
+                            Apars,
+                            island_ontogeny,
+                            island_spec,
+                            K
+) {
+  
+  # Generate time vector
+  timepoints <- seq(0, totaltime, by = resolution)
+  
+  
+  # Calculate immigration rate
+  clado_rate_vec <- c()
+  for (i in seq_along(timepoints)) {
+    clado_rate_vec <- c(clado_rate_vec,
+                        get_clado_rate(timepoints[i],
+                                       totaltime,
+                                       lac,
+                                       Apars,
+                                       island_ontogeny,
+                                       island_spec,
+                                       K))
+  }
+  plot(clado_rate_vec, type = "l")
+  return(clado_rate_vec)
+}
+
+plot_immig_rate <- function(resolution,
+                            totaltime,
+                            gam,
+                            Apars,
+                            island_ontogeny,
+                            island_spec,
+                            K, 
+                            mainland_n) {
+  
+  # Generate time vector
+  timepoints <- seq(0, totaltime, by = resolution)
+  
+  
+  # Calculate immigration rate
+  immig_rate_vec <- c()
+  for (i in seq_along(timepoints)) {
+    immig_rate_vec <- c(immig_rate_vec,
+                        get_immig_rate(timepoints[i],
+                                       totaltime,
+                                       gam,
+                                       Apars,
+                                       island_ontogeny,
+                                       island_spec,
+                                       K, 
+                                       mainland_n))
+  }
+  plot(immig_rate_vec, type = "l")
+  return(immig_rate_vec)
+}
