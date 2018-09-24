@@ -239,8 +239,20 @@ plot_ext_rate <- function(resolution,
                                    extcutoff = 1000, 
                                    K = K))
   }
-  plot(ext_rate_vec, type = "l")
-  return(ext_rate_vec)
+  
+  plot_ext <- data.frame(Time = timepoints, Extinction = ext_rate_vec)
+  
+  plot <- ggplot2::ggplot(data = plot_ext, ggplot2::aes(x = Time, y = Extinction)) +
+    ggplot2::geom_line(size = 1.5, col = "red") +
+    ggplot2::ylim(0, 2) +
+    ggplot2::ggtitle("Per capita extinction rate at time t") +
+    ggplot2::theme(axis.text = ggplot2::element_text(size = 14),
+          axis.title = ggplot2::element_text(size = 14),
+          plot.title = ggplot2::element_text(size = 16, face = "bold"))
+   
+  # plot(ext_rate_vec[2:length(ext_rate_vec)], type = "l")
+  plot
+  return(plot)
 }
 
 plot_clado_rate <- function(resolution,
@@ -298,6 +310,19 @@ plot_immig_rate <- function(resolution,
                                        K, 
                                        mainland_n))
   }
-  plot(immig_rate_vec, type = "l")
+  # plot(immig_rate_vec, type = "l")
+  
+  plot_immig <- data.frame(Time = timepoints, Immigration = immig_rate_vec)
+  
+  plot <- ggplot2::ggplot(data = plot_immig, ggplot2::aes(x = Time, y = Immigration)) +
+    ggplot2::geom_line(size = 1.5, col = "red") +
+    ggplot2::ylim(0, 0.0015) +
+    ggplot2::ggtitle("Per capita extinction rate at time t") +
+    ggplot2::theme(axis.text = ggplot2::element_text(size = 14),
+                   axis.title = ggplot2::element_text(size = 14),
+                   plot.title = ggplot2::element_text(size = 16, face = "bold"))
+  
+  
   return(immig_rate_vec)
 }
+
