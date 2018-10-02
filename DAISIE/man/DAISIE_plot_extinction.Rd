@@ -4,27 +4,44 @@
 \alias{DAISIE_plot_extinction}
 \title{Plots extinction rate function through time}
 \usage{
-DAISIE_plot_extinction(island_area_time, totaltime, K, Apars, Epars,
-  island_ontogeny = "quadratic", removed_timepoints)
+DAISIE_plot_extinction(totaltime, K, Apars, Epars,
+  island_ontogeny = "quadratic", removed_timepoints, resolution)
 }
 \arguments{
-\item{island_area_time}{something}
+\item{totaltime}{total time of simulation}
 
-\item{totaltime}{something}
+\item{K}{K (clade-level carrying capacity)}
 
-\item{K}{something}
+\item{Apars}{a numeric vector:
+\itemize{
+  \item{[1]: maximum area}
+  \item{[2]: value from 0 to 1 indicating where in the island's history the 
+  peak area is achieved}
+  \item{[3]: sharpness of peak}
+  \item{[4]: total island age}
+}}
 
-\item{Apars}{something}
+\item{Epars}{a numeric vector:
+\itemize{
+  \item{[1]: minimum extinction when area is at peak}
+  \item{[2]: extinction rate when current area is 0.10 of maximum area}
+}}
 
-\item{Epars}{something}
+\item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
+\code{quadratic} for a beta function describing area through time,
+ or \code{linear} for a linear function}
 
-\item{island_ontogeny}{something}
+\item{removed_timepoints}{starting position of time vector}
 
-\item{removed_timepoints}{something}
+\item{resolution}{resolution of time axis}
 }
 \value{
-extinction rate through time plot
+extinction rate through time plot and dataframe with extinction 
+at corresponding time
 }
 \description{
 Plots extinction rate function through time
+}
+\author{
+Pedro Neves
 }

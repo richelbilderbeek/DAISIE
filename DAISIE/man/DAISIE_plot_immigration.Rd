@@ -5,28 +5,41 @@
 \title{Plot immigration rate through time}
 \usage{
 DAISIE_plot_immigration(totaltime, K, Apars, gam, mainland_n,
-  island_ontogeny = "quadratic", removed_timepoints, immig_rate)
+  island_ontogeny = "quadratic", removed_timepoints, resolution)
 }
 \arguments{
-\item{totaltime}{Something}
+\item{totaltime}{total time of simulation}
 
-\item{K}{Something}
+\item{K}{K (clade-level carrying capacity)}
 
-\item{Apars}{Something}
+\item{Apars}{a numeric vector:
+\itemize{
+  \item{[1]: maximum area}
+  \item{[2]: value from 0 to 1 indicating where in the island's history the 
+  peak area is achieved}
+  \item{[3]: sharpness of peak}
+  \item{[4]: total island age}
+}}
 
-\item{gam}{Something}
+\item{gam}{minimum per capita immigration rate}
 
-\item{mainland_n}{Something}
+\item{mainland_n}{number of mainland species. Set as 1 for clade-specific 
+diversity dependence}
 
-\item{island_ontogeny}{Something}
+\item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
+\code{quadratic} for a beta function describing area through time,
+ or \code{linear} for a linear function}
 
-\item{removed_timepoints}{Something}
+\item{removed_timepoints}{starting position of time vector}
 
-\item{immig_rate}{Something}
+\item{resolution}{resolution of time axis}
 }
 \value{
 a plot with immigration rate through time
 }
 \description{
 Plot immigration rate through time
+}
+\author{
+Pedro Neves
 }
