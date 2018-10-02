@@ -49,8 +49,8 @@ DAISIE_plot_area <- function(totaltime,
   
   Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
   Area <- NULL; rm(Area) # nolint, fixes warning: no visible binding for global variable
-  ggplot2::ggplot(data = island_area_time, ggplot2::aes(x = Time, y = Area)) +
-    ggplot2::geom_line(size = 1.5)
+  plot(ggplot2::ggplot(data = island_area_time, ggplot2::aes(x = Time, y = Area)) +
+    ggplot2::geom_line(size = 1.5))
   invisible(island_area_time)
 }
 

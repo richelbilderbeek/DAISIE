@@ -84,6 +84,7 @@ DAISIE_sim_core <- function(
     island_ontogeny, 
     thor = NULL
   )
+  
   #### Gillespie ####
   while (timeval < totaltime) {
     # Calculate rates
