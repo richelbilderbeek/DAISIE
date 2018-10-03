@@ -11,7 +11,7 @@ get_thor(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor)
 
 \item{totaltime}{total time of simulation}
 
-\item{Apars}{a numeric vector:
+\item{Apars}{a named list containing area parameters as created by create_area_params:
 \itemize{
   \item{[1]: maximum area}
   \item{[2]: value from 0 to 1 indicating where in the island's history the 

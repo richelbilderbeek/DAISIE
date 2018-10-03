@@ -9,7 +9,7 @@ DAISIE_plot_area(totaltime, Apars, island_ontogeny = "quadratic", resolution)
 \arguments{
 \item{totaltime}{total time of simulation}
 
-\item{Apars}{a numeric vector:
+\item{Apars}{a named list containing area parameters:
 \itemize{
   \item{[1]: maximum area}
   \item{[2]: value from 0 to 1 indicating where in the island's history the 

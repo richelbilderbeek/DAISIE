@@ -15,7 +15,7 @@ get_ext_rate(timeval, totaltime, mu, Apars, Epars, island_ontogeny, extcutoff,
 
 \item{mu}{per capita extinction rate in no ontogeny model}
 
-\item{Apars}{a numeric vector:
+\item{Apars}{a named list containing area parameters as created by create_area_params:
 \itemize{
   \item{[1]: maximum area}
   \item{[2]: value from 0 to 1 indicating where in the island's history the 

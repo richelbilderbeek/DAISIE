@@ -4,7 +4,7 @@
 #' Plots island area function through time
 #'
 #' @param totaltime total time of simulation
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -58,7 +58,7 @@ DAISIE_plot_area <- function(totaltime,
 #'
 #' @param totaltime total time of simulation
 #' @param K K (clade-level carrying capacity)
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -78,7 +78,7 @@ DAISIE_plot_area <- function(totaltime,
 #' @param resolution resolution of time axis
 #'
 #' @author Pedro Neves
-#' @return extinction rate through time plot and dataframe with extinction 
+#' @return per capita extinction rate through time plot and dataframe with extinction 
 #' at corresponding time
 #' @export
 DAISIE_plot_extinction <- function(totaltime,
@@ -127,7 +127,7 @@ DAISIE_plot_extinction <- function(totaltime,
 #'
 #' @param totaltime total time of simulation
 #' @param K K (clade-level carrying capacity)
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -145,9 +145,9 @@ DAISIE_plot_extinction <- function(totaltime,
 #' @param resolution resolution of time axis
 #' 
 #' @author Pedro Neves
-#' @return a plot with immigration rate through time
+#' @return a plot with per capita immigration rate through time and dataframe with immigration 
+#' at corresponding time
 #' @export
-#'
 DAISIE_plot_immigration <- function(totaltime,
                                     K, 
                                     Apars, 
@@ -178,7 +178,7 @@ DAISIE_plot_immigration <- function(totaltime,
     )
   }
   
-  immig_rate_time <- data.frame(Immigration = immig_rate[removed_timepoints:length(immig_rate)], Time = axis[removed_timepoints:length(axis)])
+  immig_rate_time <- data.frame(Cladogenesis = immig_rate[removed_timepoints:length(immig_rate)], Time = axis[removed_timepoints:length(axis)])
   
   Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
   Immigration <- NULL; rm(Immigration) # nolint, fixes warning: no visible binding for global variable
@@ -188,3 +188,65 @@ DAISIE_plot_immigration <- function(totaltime,
   invisible(immig_rate_time)
 }
 
+
+#' Plot cladogenesis rate through time
+#'
+#' @param totaltime total time of simulation
+#' @param K K (clade-level carrying capacity)
+#' @param Apars a named list containing area parameters as created by create_area_params:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param lac minimum per capita cladogenesis rate
+#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' \code{quadratic} for a beta function describing area through time,
+#'  or \code{linear} for a linear function
+#' @param removed_timepoints starting position of time vector
+#' @param resolution resolution of time axis 
+#'
+#' @return a plot with per capita cladogenesis rate through time and dataframe with immigration 
+#' at corresponding time
+#' @export
+#'
+#' @author Pedro Neves
+DAISIE_plot_cladogenesis <- function(totaltime,
+                                     K, 
+                                     Apars, 
+                                     lac,
+                                     island_ontogeny = "quadratic", 
+                                     removed_timepoints,
+                                     resolution) {
+  
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package \"ggplot2\" needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
+  
+  
+  axis <- seq(0, totaltime, by = resolution)
+  
+  clado_rate <- c()
+  for (i in seq_along(axis)) {
+    clado_rate[i] <- get_clado_rate(timeval = axis[i],
+                                    totaltime = totaltime,
+                                    Apars = Apars,
+                                    lac = lac, 
+                                    K = K,
+                                    island_spec = matrix(ncol = 1),
+                                    island_ontogeny = island_ontogeny)
+  }
+  
+  clado_rate_time <- data.frame(Cladogenesis = clado_rate[removed_timepoints:length(clado_rate)],
+                                Time = axis[removed_timepoints:length(axis)])
+  
+  Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
+  Immigration <- NULL; rm(Immigration) # nolint, fixes warning: no visible binding for global variable
+  plot(ggplot2::ggplot(data = clado_rate_time, ggplot2::aes(x = Time, y = Immigration)) +
+         ggplot2::geom_line(size = 1) +
+         ggplot2::ylim(0, 0.01))
+  invisible(clado_rate_time)
+}

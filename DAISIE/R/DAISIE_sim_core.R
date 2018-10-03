@@ -1,12 +1,12 @@
 #' Internal function of the DAISIE simulation
-#' @param time simulated amount of time
-#' @param mainland_n number of mainland species, that
+#' @param time Simulated amount of time
+#' @param mainland_n A numeric stating the number of mainland species, that
 #'   is, the number of species that can potentially colonize the island.
 #'   If \code{\link{DAISIE_sim}} uses a clade-specific diversity dependence,
 #'   this value is set to 1. 
 #'   If \code{\link{DAISIE_sim}} uses an island-specific diversity dependence,
 #'   this value is set to the number of mainland species.
-#' @param pars a numeric vector:
+#' @param pars A numeric vector:
 #' \itemize{
 #'   \item{[1]: cladogenesis rate}
 #'   \item{[2]: extinction rate}
@@ -14,7 +14,7 @@
 #'   \item{[4]: immigration rate}
 #'   \item{[5]: anagenesis rate}
 #' }
-#' @param Apars a numeric vector:
+#' @param Apars A named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -22,12 +22,12 @@
 #'   \item{[3]: sharpness of peak}
 #'   \item{[4]: total island age}
 #' }
-#' @param Epars a numeric vector:
+#' @param Epars A numeric vector:
 #' \itemize{
 #'   \item{[1]: minimum extinction when area is at peak}
 #'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 #' }
-#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
+#' @param island_ontogeny A string describing the type of island ontogeny. Can be \code{NULL},
 #' \code{quadratic} for a beta function describing area through time,
 #'  or \code{linear} for a linear function
 DAISIE_sim_core <- function(
@@ -156,13 +156,13 @@ DAISIE_sim_core <- function(
 #' @description Internal function that updates the all the rates and 
 #' max extinction horizon at time t.
 #' @family rates calculation
-#' @param timeval current time of simulation
-#' @param totaltime total time of simulation
-#' @param gam per capita immigration rate
-#' @param mu per capita extinction rate in no ontogeny model
-#' @param laa per capita anagenesis rate
-#' @param lac per capita cladogenesis rate
-#' @param Apars a numeric vector:
+#' @param timeval A numeric with the current time of simulation
+#' @param totaltime A numeric with the total time of simulation
+#' @param gam A numeric with the per capita immigration rate
+#' @param mu A numeric with the per capita extinction rate in no ontogeny model
+#' @param laa A numeric with the per capita anagenesis rate
+#' @param lac A numeric with the per capita cladogenesis rate
+#' @param Apars A named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -170,21 +170,21 @@ DAISIE_sim_core <- function(
 #'   \item{[3]: sharpness of peak}
 #'   \item{[4]: total island age}
 #' }
-#' @param Epars a numeric vector:
+#' @param Epars A numeric vector:
 #' \itemize{
 #'   \item{[1]: minimum extinction when area is at peak}
 #'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 #' }
-#' @param island_ontogeny a string describing the type of island ontogeny. 
+#' @param island_ontogeny A string describing the type of island ontogeny. 
 #' Can be \code{NULL},
 #' \code{"quadratic"} for a beta function describing area through time,
 #'  or \code{"linear"} for a linear function
-#' @param extcutoff cutoff for extinction rate preventing it from being too 
-#' large and slowing down simulation. Should be big
-#' @param K carrying capacity
-#' @param island_spec matrix containing state of system
-#' @param mainland_n total number of species present in the mainland
-#' @param thor time of horizon for max extinction
+#' @param extcutoff A numeric with the cutoff for extinction rate preventing it from being too 
+#' large and slowing down simulation. Should be big.
+#' @param K A numeric with K (clade-specific carrying capacity)
+#' @param island_spec A matrix containing state of system
+#' @param mainland_n A numeirc with the total number of species present in the mainland
+#' @param thor A numeric with the time of horizon for max cladogenesis, immigration and minimum extinction
 update_rates <- function(timeval, totaltime,
                          gam, mu, laa, lac, Apars, Epars,
                          island_ontogeny, 
@@ -335,8 +335,8 @@ calc_next_timeval <- function(rates, timeval) {
 #' @param possible_event numeric indicating what event will happen.
 #' @param maxspecID current species IDs
 #' @param mainland_spec number of mainland species
-#' @param island_spec matrix with species on island (state of system at each time point)
-#' @param stt_table a species-through-time table
+#' @param island_spec A Matrix with species on island (state of system at each time point)
+#' @param stt_table A species-through-time table
 DAISIE_sim_update_state <- function(timeval,
                                     totaltime,
                                     possible_event,

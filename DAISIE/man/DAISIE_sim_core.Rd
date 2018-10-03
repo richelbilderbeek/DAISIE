@@ -8,16 +8,16 @@ DAISIE_sim_core(time, mainland_n, pars, Apars = NULL, Epars = NULL,
   island_ontogeny = NULL)
 }
 \arguments{
-\item{time}{simulated amount of time}
+\item{time}{Simulated amount of time}
 
-\item{mainland_n}{number of mainland species, that
+\item{mainland_n}{A numeric stating the number of mainland species, that
 is, the number of species that can potentially colonize the island.
 If \code{\link{DAISIE_sim}} uses a clade-specific diversity dependence,
 this value is set to 1. 
 If \code{\link{DAISIE_sim}} uses an island-specific diversity dependence,
 this value is set to the number of mainland species.}
 
-\item{pars}{a numeric vector:
+\item{pars}{A numeric vector:
 \itemize{
   \item{[1]: cladogenesis rate}
   \item{[2]: extinction rate}
@@ -26,7 +26,7 @@ this value is set to the number of mainland species.}
   \item{[5]: anagenesis rate}
 }}
 
-\item{Apars}{a numeric vector:
+\item{Apars}{A named list containing area parameters as created by create_area_params:
 \itemize{
   \item{[1]: maximum area}
   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -35,13 +35,13 @@ this value is set to the number of mainland species.}
   \item{[4]: total island age}
 }}
 
-\item{Epars}{a numeric vector:
+\item{Epars}{A numeric vector:
 \itemize{
   \item{[1]: minimum extinction when area is at peak}
   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 }}
 
-\item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
+\item{island_ontogeny}{A string describing the type of island ontogeny. Can be \code{NULL},
 \code{quadratic} for a beta function describing area through time,
  or \code{linear} for a linear function}
 }

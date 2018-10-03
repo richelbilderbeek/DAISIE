@@ -12,7 +12,7 @@ DAISIE_plot_extinction(totaltime, K, Apars, Epars,
 
 \item{K}{K (clade-level carrying capacity)}
 
-\item{Apars}{a numeric vector:
+\item{Apars}{a named list containing area parameters:
 \itemize{
   \item{[1]: maximum area}
   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -36,7 +36,7 @@ DAISIE_plot_extinction(totaltime, K, Apars, Epars,
 \item{resolution}{resolution of time axis}
 }
 \value{
-extinction rate through time plot and dataframe with extinction 
+per capita extinction rate through time plot and dataframe with extinction 
 at corresponding time
 }
 \description{

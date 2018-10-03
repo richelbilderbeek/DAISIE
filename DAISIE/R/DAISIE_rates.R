@@ -2,7 +2,7 @@
 #' Valente et al 2014 ProcB
 #' @param timeval current time of simulation
 #' @param totaltime total time of simulation
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -48,7 +48,7 @@ island_area <- function(timeval, totaltime, Apars, island_ontogeny) {
 #' @param timeval current time of simulation
 #' @param totaltime total time of simulation
 #' @param mu per capita extinction rate in no ontogeny model
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -123,7 +123,7 @@ get_ana_rate <- function(laa, island_spec) {
 #' @param timeval current time of simulation
 #' @param totaltime total time of simulation
 #' @param lac per capita cladogenesis rate
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -179,7 +179,7 @@ get_clado_rate <- function(timeval,
 #' @param timeval current time of simulation
 #' @param totaltime total time of simulation
 #' @param gam per capita immigration rate
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -229,7 +229,7 @@ get_immig_rate <- function(
 #' simulation
 #' @param timeval current time of simulation
 #' @param totaltime total time of simulation
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
@@ -405,7 +405,7 @@ DAISIE_calc_clade_imm_rate <- function(
 #'
 #' @param timeval current time of simulation
 #' @param totaltime simulated amount of time
-#' @param Apars a numeric vector:
+#' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
 #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 

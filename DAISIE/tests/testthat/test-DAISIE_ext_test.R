@@ -19,7 +19,7 @@ test_that("test expected species vs simulated with extinction", {
     #'   \item{[4]: immigration rate}
     #'   \item{[5]: anagenesis rate}
     #' }
-    #' @param Apars a numeric vector:
+    #' @param Apars a named list containing area parameters as created by create_area_params:
     #' \itemize{
     #'   \item{[1]: maximum area}
     #'   \item{[2]: value from 0 to 1 indicating where in the island's history the 

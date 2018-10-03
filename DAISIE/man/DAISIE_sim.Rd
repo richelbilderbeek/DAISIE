@@ -72,7 +72,7 @@ plots are produced: STT for all, STT for type 1 and STT for type 2.}
 \code{quadratic} for a beta function describing area through time,
  or \code{linear} for a linear function}
 
-\item{Apars}{a numeric vector:
+\item{Apars}{A numeric vector:
 \itemize{
   \item{[1]: maximum area}
   \item{[2]: value from 0 to 1 indicating where in the island's history the 
