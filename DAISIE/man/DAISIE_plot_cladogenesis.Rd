@@ -38,3 +38,6 @@ at corresponding time
 \description{
 Plot cladogenesis rate through time
 }
+\author{
+Pedro Neves
+}

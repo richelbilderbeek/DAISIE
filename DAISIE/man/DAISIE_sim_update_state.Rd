@@ -18,9 +18,9 @@ DAISIE_sim_update_state(timeval, totaltime, possible_event, maxspecID,
 
 \item{mainland_spec}{number of mainland species}
 
-\item{island_spec}{matrix with species on island (state of system at each time point)}
+\item{island_spec}{A Matrix with species on island (state of system at each time point)}
 
-\item{stt_table}{a species-through-time table}
+\item{stt_table}{A species-through-time table}
 }
 \description{
 Makes the event happen by updating island species matrix and species IDs.

@@ -26,7 +26,9 @@ DAISIE_plot_area <- function(totaltime,
                              resolution) {
   
   testit::assert(are_area_params(Apars))
-  
+  if (is.null(island_ontogeny)) {
+    return()
+  }
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package \"ggplot2\" needed for this function to work. Please install it.",
          call. = FALSE)
@@ -178,7 +180,7 @@ DAISIE_plot_immigration <- function(totaltime,
     )
   }
   
-  immig_rate_time <- data.frame(Cladogenesis = immig_rate[removed_timepoints:length(immig_rate)], Time = axis[removed_timepoints:length(axis)])
+  immig_rate_time <- data.frame(Immigration = immig_rate[removed_timepoints:length(immig_rate)], Time = axis[removed_timepoints:length(axis)])
   
   Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
   Immigration <- NULL; rm(Immigration) # nolint, fixes warning: no visible binding for global variable
@@ -244,9 +246,9 @@ DAISIE_plot_cladogenesis <- function(totaltime,
                                 Time = axis[removed_timepoints:length(axis)])
   
   Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
-  Immigration <- NULL; rm(Immigration) # nolint, fixes warning: no visible binding for global variable
-  plot(ggplot2::ggplot(data = clado_rate_time, ggplot2::aes(x = Time, y = Immigration)) +
+  Cladogenesis <- NULL; rm(Cladogenesis) # nolint, fixes warning: no visible binding for global variable
+  plot(ggplot2::ggplot(data = clado_rate_time, ggplot2::aes(x = Time, y = Cladogenesis)) +
          ggplot2::geom_line(size = 1) +
-         ggplot2::ylim(0, 0.01))
+         ggplot2::ylim(0, 5))
   invisible(clado_rate_time)
 }
