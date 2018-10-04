@@ -26,25 +26,20 @@ DAISIE_plot_area <- function(totaltime,
                              resolution) {
   
   testit::assert(are_area_params(Apars))
-  if (is.null(island_ontogeny)) {
-    return()
-  }
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     stop("Package \"ggplot2\" needed for this function to work. Please install it.",
          call. = FALSE)
   }
-  
-  
-  
+
   axis <- seq(0, totaltime, by = resolution)
   area <- c()
   for (i in seq_along(axis)) {
     testit::assert(are_area_params(Apars))
     area[i] <- DAISIE::island_area(timeval = axis[i],
-                                totaltime = totaltime,
-                                Apars = Apars,
-                                island_ontogeny = island_ontogeny
-                                )
+                                   totaltime = totaltime,
+                                   Apars = Apars,
+                                   island_ontogeny = island_ontogeny
+    )
     
   }
   island_area_time <- data.frame(Area = area, Time = axis, Totaltime = totaltime)

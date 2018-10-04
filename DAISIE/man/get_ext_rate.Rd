@@ -46,6 +46,11 @@ large and slowing down simulation}
 Function to describe changes in extinction rate through time. From
 Valente et al 2014 ProcB
 }
+\references{
+Valente, Luis M., Rampal S. Etienne, and Albert B. Phillimore. 
+"The effects of island ontogeny on species diversity and phylogeny." 
+Proceedings of the Royal Society of London B: Biological Sciences 281.1784 (2014): 20133227.
+}
 \seealso{
 Does the same as \link{DAISIE_calc_clade_ext_rate}
 

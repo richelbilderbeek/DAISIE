@@ -29,9 +29,17 @@ island_area(timeval, totaltime, Apars, island_ontogeny)
 Function to describe changes in area through time. Adapted from
 Valente et al 2014 ProcB
 }
+\references{
+Valente, Luis M., Rampal S. Etienne, and Albert B. Phillimore. 
+"The effects of island ontogeny on species diversity and phylogeny." 
+Proceedings of the Royal Society of London B: Biological Sciences 281.1784 (2014): 20133227.
+}
 \seealso{
 Other rates calculation: \code{\link{DAISIE_plot_area}},
   \code{\link{get_ana_rate}}, \code{\link{get_ext_rate}},
   \code{\link{get_immig_rate}}, \code{\link{get_thor}},
   \code{\link{update_rates}}
+}
+\author{
+Pedro Neves
 }

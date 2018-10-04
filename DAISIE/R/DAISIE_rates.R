@@ -14,6 +14,10 @@
 #' \code{"quadratic"} for a beta function describing area through time,
 #'  or \code{"linear"} for a linear function
 #' @family rates calculation
+#' @author Pedro Neves
+#' @references Valente, Luis M., Rampal S. Etienne, and Albert B. Phillimore. 
+#' "The effects of island ontogeny on species diversity and phylogeny." 
+#' Proceedings of the Royal Society of London B: Biological Sciences 281.1784 (2014): 20133227.
 island_area <- function(timeval, totaltime, Apars, island_ontogeny) {
   testit::assert(are_area_params(Apars))
   
@@ -71,6 +75,9 @@ island_area <- function(timeval, totaltime, Apars, island_ontogeny) {
 #' @param K carrying capacity
 #' @seealso Does the same as \link{DAISIE_calc_clade_ext_rate}
 #' @family rates calculation
+#' @references Valente, Luis M., Rampal S. Etienne, and Albert B. Phillimore. 
+#' "The effects of island ontogeny on species diversity and phylogeny." 
+#' Proceedings of the Royal Society of London B: Biological Sciences 281.1784 (2014): 20133227.
 #' @author Pedro Neves
 get_ext_rate <- function(timeval, 
                          totaltime,
@@ -140,6 +147,9 @@ get_ana_rate <- function(laa, island_spec) {
 #'
 #' @seealso Does the same as \link{DAISIE_calc_clade_clado_rate}
 #' @author Pedro Neves
+#' @references Valente, Luis M., Rampal S. Etienne, and Albert B. Phillimore. 
+#' "The effects of island ontogeny on species diversity and phylogeny." 
+#' Proceedings of the Royal Society of London B: Biological Sciences 281.1784 (2014): 20133227.
 get_clado_rate <- function(timeval, 
                            totaltime,
                            lac,
@@ -197,6 +207,9 @@ get_clado_rate <- function(timeval,
 #' @seealso Does the same as \link{DAISIE_calc_clade_imm_rate}
 #' @family rates calculation
 #' @author Pedro Neves
+#' @references Valente, Luis M., Rampal S. Etienne, and Albert B. Phillimore. 
+#' "The effects of island ontogeny on species diversity and phylogeny." 
+#' Proceedings of the Royal Society of London B: Biological Sciences 281.1784 (2014): 20133227.
 get_immig_rate <- function(
   timeval,
   totaltime,
@@ -251,6 +264,14 @@ get_thor <- function(timeval,
                      ext_multiplier,
                      island_ontogeny,
                      thor) {
+  
+  
+  ################~~~TODO~~~#####################
+  # Use optimize (optimize(island_area, interval = c(0, 10), maximum = TRUE, Apars = create_area_params(1000, 0.1, 1, 17), island_ontogeny = "quadratic"))
+  # to select maximum point to identify maximum of function
+  
+  
+  ###############################################
   testit::assert(is.null(Apars) || are_area_params(Apars))
   # Function calculates where the horizon for max(ext_rate) is.
   if (is.null(island_ontogeny)) {
