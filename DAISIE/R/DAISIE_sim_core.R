@@ -41,13 +41,18 @@ DAISIE_sim_core <- function(
   testit::assert(length(pars) == 5)
   testit::assert(is.null(Apars) || are_area_params(Apars))
   
-  if(pars[4] == 0) 
-  {
+  if (pars[4] == 0) {
     stop('Rate of colonisation is zero. Island cannot be colonised.')
   }  
   
-  if (!is.null(Apars) && is.null(island_ontogeny)){
-    stop("Apars specified for constant island_ontogeny. Set Apars to NULL")
+  if (!is.null(Apars) && is.null(island_ontogeny)) {
+    stop("Apars specified for constant island_ontogeny. Set Apars to NULL.")
+  }
+  
+  if ((is.null(Epars) || is.null(Apars)) && !is.null(island_ontogeny)) {
+    stop("Island ontogeny specified but Area parameters and/or extinction 
+         parameters not available. Please either set island_ontogeny to NULL, or 
+         specify Apars and Epars.")
   }
   
   if (!is.null(island_ontogeny) && island_ontogeny != "linear" && island_ontogeny != "quadratic") {
@@ -146,9 +151,9 @@ DAISIE_sim_core <- function(
                        stt_table[nrow(stt_table), 4]))
   
   island <- DAISIE_create_island(stt_table = stt_table,
-                    totaltime = totaltime,
-                    island_spec = island_spec,
-                    mainland_n = mainland_n)
+                                 totaltime = totaltime,
+                                 island_spec = island_spec,
+                                 mainland_n = mainland_n)
   island
 }
 
