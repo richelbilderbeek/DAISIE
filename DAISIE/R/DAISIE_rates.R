@@ -1,7 +1,6 @@
 #' Function to describe changes in area through time. Adapted from
 #' Valente et al 2014 ProcB
 #' @param timeval current time of simulation
-#' @param totaltime total time of simulation
 #' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
 #'   \item{[1]: maximum area}
@@ -18,7 +17,7 @@
 #' @references Valente, Luis M., Rampal S. Etienne, and Albert B. Phillimore. 
 #' "The effects of island ontogeny on species diversity and phylogeny." 
 #' Proceedings of the Royal Society of London B: Biological Sciences 281.1784 (2014): 20133227.
-island_area <- function(timeval, totaltime, Apars, island_ontogeny) {
+island_area <- function(timeval, Apars, island_ontogeny) {
   testit::assert(are_area_params(Apars))
   
   Tmax <- Apars$total_island_age
