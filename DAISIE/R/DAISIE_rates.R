@@ -79,7 +79,6 @@ island_area <- function(timeval, Apars, island_ontogeny) {
 #' Proceedings of the Royal Society of London B: Biological Sciences 281.1784 (2014): 20133227.
 #' @author Pedro Neves
 get_ext_rate <- function(timeval, 
-                         totaltime,
                          mu,
                          Apars,
                          Epars, 
@@ -96,7 +95,7 @@ get_ext_rate <- function(timeval,
     } else {
       
     X <- log(Epars[1] / Epars[2]) / log(0.1)
-    extrate <- Epars[1] / ((island_area(timeval, totaltime, Apars, island_ontogeny) / Apars$max_area)^X)
+    extrate <- Epars[1] / ((island_area(timeval, Apars, island_ontogeny) / Apars$max_area)^X)
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate[which(extrate > extcutoff)] <- extcutoff
     extrate <- extrate * length(island_spec[,1])

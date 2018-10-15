@@ -5,12 +5,10 @@
 \title{Function to describe changes in area through time. Adapted from
 Valente et al 2014 ProcB}
 \usage{
-island_area(timeval, totaltime, Apars, island_ontogeny)
+island_area(timeval, Apars, island_ontogeny)
 }
 \arguments{
 \item{timeval}{current time of simulation}
-
-\item{totaltime}{total time of simulation}
 
 \item{Apars}{a named list containing area parameters as created by create_area_params:
 \itemize{

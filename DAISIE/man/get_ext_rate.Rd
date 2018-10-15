@@ -5,13 +5,11 @@
 \title{Function to describe changes in extinction rate through time. From
 Valente et al 2014 ProcB}
 \usage{
-get_ext_rate(timeval, totaltime, mu, Apars, Epars, island_ontogeny, extcutoff,
-  island_spec, K)
+get_ext_rate(timeval, mu, Apars, Epars, island_ontogeny, extcutoff, island_spec,
+  K)
 }
 \arguments{
 \item{timeval}{current time of simulation}
-
-\item{totaltime}{total time of simulation}
 
 \item{mu}{per capita extinction rate in no ontogeny model}
 
@@ -41,6 +39,8 @@ large and slowing down simulation}
 \item{island_spec}{matrix containing state of system}
 
 \item{K}{carrying capacity}
+
+\item{totaltime}{total time of simulation}
 }
 \description{
 Function to describe changes in extinction rate through time. From
