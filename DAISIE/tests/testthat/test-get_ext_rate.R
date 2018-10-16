@@ -5,7 +5,6 @@ test_that("ext rate is a number", {
   
   get_ext_rate(
     timeval = 0,
-    totaltime = 1,
     mu = 2,
     Apars = create_area_params(10, 0.5, 1, 15),
     Epars = c(1, 10), 
@@ -19,7 +18,6 @@ test_that("ext rate is a number", {
     is.numeric(
       get_ext_rate(
         timeval = 0,
-        totaltime = 1,
         mu = 2,
         Apars = create_area_params(10, 0.5, 1, 15),
         Epars = c(1, 10), 
@@ -45,7 +43,6 @@ test_that("classic behaviour", {
   )
   created <- get_ext_rate(
     timeval = 1.0,
-    totaltime = 10.0,
     mu = ps_ext_rate,
     Apars =  NULL,
     Epars = NULL,

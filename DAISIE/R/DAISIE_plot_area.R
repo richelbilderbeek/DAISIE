@@ -36,7 +36,6 @@ DAISIE_plot_area <- function(totaltime,
   for (i in seq_along(axis)) {
     testit::assert(are_area_params(Apars))
     area[i] <- DAISIE::island_area(timeval = axis[i],
-                                   totaltime = totaltime,
                                    Apars = Apars,
                                    island_ontogeny = island_ontogeny
     )

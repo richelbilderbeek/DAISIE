@@ -169,11 +169,9 @@ get_clado_rate <- function(timeval,
     
     clado_rate <-  max(c(length(island_spec[, 1]) * lac * 
                          island_area(timeval,
-                                     totaltime,
                                      Apars,
                                      island_ontogeny) *
                          (1 - length(island_spec[, 1]) / (island_area(timeval, 
-                                             totaltime, 
                                              Apars, 
                                              island_ontogeny) * K)), 0), na.rm = T)
        clado_rate
@@ -226,7 +224,6 @@ get_immig_rate <- function(
     
     immig_rate <- max(c(mainland_n * gam * (1 - length(island_spec[, 1]) / (
         island_area(timeval,
-                    totaltime,
                     Apars,
                     island_ontogeny) * K)), 0), na.rm = T)
 
@@ -537,7 +534,6 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(immig_rate))
   
   ext_rate <- get_ext_rate(timeval = timeval,
-                           totaltime = totaltime,
                            mu = mu,
                            Apars = Apars,
                            Epars = Epars, 
@@ -596,7 +592,6 @@ update_rates <- function(timeval, totaltime,
   } else {
     # Ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
     ext_rate_max <- get_ext_rate(timeval = thor,
-                                 totaltime = totaltime,
                                  mu = mu,
                                  Apars = Apars, 
                                  Epars = Epars,

@@ -2,7 +2,6 @@ context("island_area")
 
 test_that("is valid island area", {
   area <- island_area(timeval = 2,
-                      totaltime = 10,
                       Apars = create_area_params(
                       max_area = 10,
                       proportional_peak_t = 0.5,
