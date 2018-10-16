@@ -77,4 +77,3 @@ island_replicates_2types <- DAISIE_sim(
   verbose = FALSE
 )
 DAISIE_plot_sims(island_replicates_2types, use_dev_new = FALSE)
-
