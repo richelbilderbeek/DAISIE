@@ -49,7 +49,6 @@ island_area <- function(timeval, Apars, island_ontogeny) {
 #' Function to describe changes in extinction rate through time. From
 #' Valente et al 2014 ProcB
 #' @param timeval current time of simulation
-#' @param totaltime total time of simulation
 #' @param mu per capita extinction rate in no ontogeny model
 #' @param Apars a named list containing area parameters as created by create_area_params:
 #' \itemize{
@@ -281,7 +280,9 @@ get_thor <- function(timeval,
       return(thor)
       
     } else if (timeval >= thor) {
-      
+      # thor should dynamically be adjusted depending on parameter values.
+      # Certain parameter combinations will always make it be > totaltime at 
+      # first calculation, slowing down the simulations
       thor <- timeval + ext_multiplier * (totaltime - timeval)
       thor <- min(totaltime, thor)
       testit::assert(thor > 0.0)

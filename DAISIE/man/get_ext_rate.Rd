@@ -39,8 +39,6 @@ large and slowing down simulation}
 \item{island_spec}{matrix containing state of system}
 
 \item{K}{carrying capacity}
-
-\item{totaltime}{total time of simulation}
 }
 \description{
 Function to describe changes in extinction rate through time. From
