@@ -284,9 +284,9 @@ get_thor <- function(timeval,
       # Certain parameter combinations will always make it be > totaltime at 
       # first calculation, slowing down the simulations
       thor <- timeval + ext_multiplier * (totaltime - timeval)
-      thor <- min(totaltime, thor)
+      # thor <- min(totaltime, thor)
       testit::assert(thor > 0.0)
-      thor
+      return(thor)
     }
   }
 }
@@ -464,8 +464,6 @@ update_thor_timeval <- function(timeval,
                            timeval = timeval)
 
   testit::assert(is.list(new_thor_timeval))
-  
-  
   return(new_thor_timeval)
 }
 

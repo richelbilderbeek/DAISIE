@@ -107,6 +107,8 @@ DAISIE_sim_core <- function(
                           island_spec = island_spec,
                           mainland_n = mainland_n,
                           thor = thor)
+    cat(unlist(rates), "\n")
+    # cat("thor: ", thor, "timeval: ", timeval, "\n")
     # print(rates)
     timeval <- calc_next_timeval(rates, timeval)
     # print(timeval)
@@ -124,7 +126,7 @@ DAISIE_sim_core <- function(
                                                mainland_spec = mainland_spec,
                                                island_spec = island_spec,
                                                stt_table = stt_table)
-      
+      # print(possible_event)
       island_spec <- updated_state$island_spec
       maxspecID <- updated_state$maxspecID
       stt_table <- updated_state$stt_table
@@ -132,15 +134,18 @@ DAISIE_sim_core <- function(
 
     } else {
       #### After thor is reached ####
-
-      updated_thor_timeval <- update_thor_timeval(timeval = timeval,
-                                                  totaltime = totaltime,
-                                                  Apars = Apars,
-                                                  ext_multiplier = ext_multiplier,
-                                                  island_ontogeny = island_ontogeny, 
-                                                  thor = thor)
-      thor <- updated_thor_timeval$thor
-      timeval <- updated_thor_timeval$timeval
+      
+      timeval <- thor
+      thor <- get_thor(
+        timeval = timeval,
+        totaltime = totaltime,
+        Apars = Apars,
+        ext_multiplier = ext_multiplier,
+        island_ontogeny = island_ontogeny, 
+        thor = thor
+      )
+      # cat("thor: ", thor, "timeval: ", timeval, "\n")
+      
     }
   }
   #### Finalize stt_table ####
@@ -154,9 +159,9 @@ DAISIE_sim_core <- function(
                                  totaltime = totaltime,
                                  island_spec = island_spec,
                                  mainland_n = mainland_n)
-  island
+  return(island)
 }
-
+print("loop")
 #' Calculates when the next timestep will be.
 #' @param rates list of numeric with probabilities of each event
 #' @param timeval current time of simulation
