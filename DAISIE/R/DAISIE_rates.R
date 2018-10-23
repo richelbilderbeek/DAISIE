@@ -257,13 +257,13 @@ get_thor <- function(timeval,
                      Apars,
                      ext_multiplier,
                      island_ontogeny,
-                     thor) {
-  
-  
+                     thor,
+                     dt,
+                     old_timeval) {
+
   ################~~~TODO~~~#####################
   # Use optimize (optimize(island_area, interval = c(0, 10), maximum = TRUE, Apars = create_area_params(1000, 0.1, 1, 17), island_ontogeny = "quadratic"))
   # to select maximum point to identify maximum of function
-  
   
   ###############################################
   testit::assert(is.null(Apars) || are_area_params(Apars))
@@ -283,8 +283,8 @@ get_thor <- function(timeval,
       # thor should dynamically be adjusted depending on parameter values.
       # Certain parameter combinations will always make it be > totaltime at 
       # first calculation, slowing down the simulations
-      thor <- timeval + ext_multiplier * (totaltime - timeval)
-      # thor <- min(totaltime, thor)
+      thor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
+      thor <- min(totaltime, thor)
       testit::assert(thor > 0.0)
       return(thor)
     }
@@ -417,55 +417,6 @@ DAISIE_calc_clade_imm_rate <- function(
   )
 }
 
-
-#' Realigns timeval with thor and updates thor
-#'
-#' @param timeval current time of simulation
-#' @param totaltime simulated amount of time
-#' @param Apars a named list containing area parameters as created by create_area_params:
-#' \itemize{
-#'   \item{[1]: maximum area}
-#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
-#'   peak area is achieved}
-#'   \item{[3]: sharpness of peak}
-#'   \item{[4]: total island age}
-#' }
-#' @param ext_multiplier reduces or increases distance of horizon to current
-#' simulation time
-#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
-#' \code{quadratic} for a beta function describing area through time,
-#'  or \code{linear} for a linear function
-#' @param thor time of horizon for max extinction
-#'
-#' @author Pedro Neves
-#'
-#' @return numeric list with updated thor and updated timeval
-#'
-update_thor_timeval <- function(timeval,
-                                totaltime,
-                                Apars,
-                                ext_multiplier,
-                                island_ontogeny, 
-                                thor) {
-  
-  testit::assert(are_area_params(Apars))
-  old_thor <- thor
-  
-  thor <- get_thor(timeval = timeval,
-                   totaltime = totaltime,
-                   Apars = Apars,
-                   ext_multiplier = ext_multiplier,
-                   island_ontogeny = island_ontogeny, 
-                   thor = thor)
-  
-  timeval <- old_thor
-  
-  new_thor_timeval <- list(thor = thor,
-                           timeval = timeval)
-
-  testit::assert(is.list(new_thor_timeval))
-  return(new_thor_timeval)
-}
 
 #' Calculates algorithm rates
 #' @description Internal function that updates the all the rates and 

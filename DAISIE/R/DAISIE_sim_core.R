@@ -87,10 +87,12 @@ DAISIE_sim_core <- function(
     Apars,
     ext_multiplier,
     island_ontogeny, 
-    thor = NULL
+    thor = NULL,
+    dt = 0,
+    old_timeval = 0
   )
   
-  #### Gillespie ####
+  #### Start Gillespie ####
   while (timeval < totaltime) {
     # Calculate rates
     rates <- update_rates(timeval = timeval,
@@ -107,18 +109,22 @@ DAISIE_sim_core <- function(
                           island_spec = island_spec,
                           mainland_n = mainland_n,
                           thor = thor)
-    cat(unlist(rates), "\n")
-    # cat("thor: ", thor, "timeval: ", timeval, "\n")
+    # cat("ext_rate: ", rates$ext_rate, "ana_rate: ", rates$ana_rate, "clado_rate: ", rates$clado_rate, "immig_rate: ", rates$immig_rate, 
+        # "ext_rate_max: ", rates$ext_rate_max, "ana_rate_max: ", rates$ana_rate_max, "clado_rate_max: ", rates$clado_rate_max, "immig_rate_max: ", rates$immig_rate_max, "\n")
     # print(rates)
-    timeval <- calc_next_timeval(rates, timeval)
-    # print(timeval)
+    old_timeval <- timeval
+    timeval_and_dt <- calc_next_timeval(rates, timeval)
+    timeval <- timeval_and_dt$timeval
+    dt <- timeval_and_dt$dt
+    # cat("thor: ", thor, "timeval: ", timeval, "\n")
     if (timeval <= thor) {
       testit::assert(are_rates(rates))
       
       # Determine event
       possible_event <- DAISIE_sample_event(rates = rates,
                                             island_ontogeny = island_ontogeny)
-      
+      # print(possible_event)
+      # print(timeval)
       updated_state <- DAISIE_sim_update_state(timeval = timeval, 
                                                totaltime = totaltime,
                                                possible_event = possible_event,
@@ -126,7 +132,6 @@ DAISIE_sim_core <- function(
                                                mainland_spec = mainland_spec,
                                                island_spec = island_spec,
                                                stt_table = stt_table)
-      # print(possible_event)
       island_spec <- updated_state$island_spec
       maxspecID <- updated_state$maxspecID
       stt_table <- updated_state$stt_table
@@ -134,7 +139,7 @@ DAISIE_sim_core <- function(
 
     } else {
       #### After thor is reached ####
-      
+      # print("trigger")
       timeval <- thor
       thor <- get_thor(
         timeval = timeval,
@@ -142,10 +147,10 @@ DAISIE_sim_core <- function(
         Apars = Apars,
         ext_multiplier = ext_multiplier,
         island_ontogeny = island_ontogeny, 
-        thor = thor
+        thor = thor,
+        dt = dt,
+        old_timeval = old_timeval
       )
-      # cat("thor: ", thor, "timeval: ", timeval, "\n")
-      
     }
   }
   #### Finalize stt_table ####
@@ -161,8 +166,9 @@ DAISIE_sim_core <- function(
                                  mainland_n = mainland_n)
   return(island)
 }
-print("loop")
+# print("loop")
 #' Calculates when the next timestep will be.
+#'
 #' @param rates list of numeric with probabilities of each event
 #' @param timeval current time of simulation
 calc_next_timeval <- function(rates, timeval) {
@@ -171,8 +177,9 @@ calc_next_timeval <- function(rates, timeval) {
   testit::assert(timeval >= 0)
   totalrate <- rates$immig_rate_max + rates$ana_rate + rates$clado_rate_max + rates$ext_rate_max
   dt <- rexp(1, totalrate)
+  # print(dt)
   timeval <- timeval + dt
-  return(timeval)
+  return(list(timeval = timeval, dt = dt))
 }
 
 #' Updates state of island given sampled event

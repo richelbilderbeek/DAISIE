@@ -4,7 +4,8 @@
 \alias{get_thor}
 \title{Function to calculate and update horizon for maximum extinction rate}
 \usage{
-get_thor(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor)
+get_thor(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor, dt,
+  old_timeval)
 }
 \arguments{
 \item{timeval}{current time of simulation}
