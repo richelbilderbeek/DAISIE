@@ -4,8 +4,8 @@
 \alias{get_immig_rate}
 \title{Calculate immigration rate}
 \usage{
-get_immig_rate(timeval, totaltime, gam, Apars, island_ontogeny, island_spec, K,
-  mainland_n)
+get_immig_rate(timeval, totaltime, gam, Apars, island_ontogeny,
+  island_spec, K, mainland_n)
 }
 \arguments{
 \item{timeval}{current time of simulation}
@@ -55,3 +55,4 @@ Other rates calculation: \code{\link{DAISIE_plot_area}},
 \author{
 Pedro Neves
 }
+\concept{rates calculation}

@@ -4,8 +4,8 @@
 \alias{get_thor}
 \title{Function to calculate and update horizon for maximum extinction rate}
 \usage{
-get_thor(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor, dt,
-  old_timeval)
+get_thor(timeval, totaltime, Apars, ext, ext_multiplier, island_ontogeny,
+  thor, dt, old_timeval)
 }
 \arguments{
 \item{timeval}{current time of simulation}
@@ -21,6 +21,8 @@ get_thor(timeval, totaltime, Apars, ext_multiplier, island_ontogeny, thor, dt,
   \item{[4]: total island age}
 }}
 
+\item{ext}{effective extinction rate at timeval}
+
 \item{ext_multiplier}{reduces or increases distance of horizon to current
 simulation time}
 
@@ -29,6 +31,10 @@ Can be \code{NULL}, \code{"quadratic"} for a beta function
  describing area through time, or \code{"linear"} for a linear function}
 
 \item{thor}{time of horizon for max extinction}
+
+\item{dt}{change in timeval}
+
+\item{old_timeval}{timeval before update at current loop}
 }
 \description{
 Internal function. 
@@ -44,3 +50,4 @@ Other rates calculation: \code{\link{DAISIE_plot_area}},
 \author{
 Pedro Neves
 }
+\concept{rates calculation}

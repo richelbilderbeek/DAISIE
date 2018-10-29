@@ -5,8 +5,8 @@
 \title{Create the Species-Through-Time plot. This is used to visualize
 the output of \code{\link{DAISIE_sim}}}
 \usage{
-DAISIE_plot_stt(plot_plus_one = FALSE, time, stt_q0.025_all, stt_q0.25_all,
-  stt_average_all, stt_q0.75_all, stt_q0.975_all)
+DAISIE_plot_stt(plot_plus_one = FALSE, time, stt_q0.025_all,
+  stt_q0.25_all, stt_average_all, stt_q0.75_all, stt_q0.975_all)
 }
 \arguments{
 \item{plot_plus_one}{Boolean to indicate to plot all values plus one.

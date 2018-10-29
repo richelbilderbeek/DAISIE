@@ -27,3 +27,4 @@ Other rates calculation: \code{\link{DAISIE_plot_area}},
 \author{
 Pedro Neves
 }
+\concept{rates calculation}

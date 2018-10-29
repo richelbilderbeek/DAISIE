@@ -61,3 +61,4 @@ Other rates calculation: \code{\link{DAISIE_plot_area}},
   \code{\link{get_immig_rate}}, \code{\link{get_thor}},
   \code{\link{island_area}}
 }
+\concept{rates calculation}

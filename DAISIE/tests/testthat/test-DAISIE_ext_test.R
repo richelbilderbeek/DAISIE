@@ -77,10 +77,15 @@ test_that("test expected species vs simulated with extinction", {
       stt_table[1,] <- c(totaltime,0,0,0)
       
       # Pick thor (before timeval, to set Amax thor)
-      thor <- get_thor(0, totaltime, Apars, ext_multiplier, island_ontogeny, thor = NULL)
+      thor <- get_thor(timeval = 0,
+                       totaltime = totaltime,
+                       Apars = Apars,
+                       ext_multiplier = ext_multiplier,
+                       island_ontogeny = island_ontogeny,
+                       thor = NULL)
       
       #### Start Gillespie ####
-      while(timeval < totaltime) {
+      while (timeval < totaltime) {
         if (timeval < thor) {
           rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                                 mu = mu, laa = laa, lac = lac, Apars = Apars,

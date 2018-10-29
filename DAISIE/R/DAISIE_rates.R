@@ -249,12 +249,17 @@ get_immig_rate <- function(
 #' @param island_ontogeny a string describing the type of island ontogeny.
 #'  Can be \code{NULL}, \code{"quadratic"} for a beta function
 #'   describing area through time, or \code{"linear"} for a linear function
+#' @param ext effective extinction rate at timeval
+#' @param dt change in timeval
+#' @param old_timeval timeval before update at current loop
 #' @param thor time of horizon for max extinction
+#'
 #' @family rates calculation
 #' @author Pedro Neves
 get_thor <- function(timeval,
                      totaltime,
                      Apars,
+                     ext,
                      ext_multiplier,
                      island_ontogeny,
                      thor,
@@ -283,6 +288,7 @@ get_thor <- function(timeval,
       # thor should dynamically be adjusted depending on parameter values.
       # Certain parameter combinations will always make it be > totaltime at 
       # first calculation, slowing down the simulations
+      # thor <- old_timeval + ext_multiplier * ext * (totaltime - timeval + dt)
       thor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
       thor <- min(totaltime, thor)
       testit::assert(thor > 0.0)
@@ -540,7 +546,7 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(clado_rate_max)) 
     
   } else {
-    # Ontogeny, max rate is thor, which in this case is totaltime (from get_thor)
+    # Ontogeny, max rate is thor, which in this case is totaltime (from hor)
     ext_rate_max <- get_ext_rate(timeval = thor,
                                  mu = mu,
                                  Apars = Apars, 

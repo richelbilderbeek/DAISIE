@@ -4,7 +4,8 @@
 \alias{DAISIE_plot_area}
 \title{Plots island area function through time}
 \usage{
-DAISIE_plot_area(totaltime, Apars, island_ontogeny = "quadratic", resolution)
+DAISIE_plot_area(totaltime, Apars, island_ontogeny = "quadratic",
+  resolution)
 }
 \arguments{
 \item{totaltime}{total time of simulation}
@@ -36,3 +37,4 @@ Other rates calculation: \code{\link{get_ana_rate}},
   \code{\link{get_thor}}, \code{\link{island_area}},
   \code{\link{update_rates}}
 }
+\concept{rates calculation}

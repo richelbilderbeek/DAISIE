@@ -5,8 +5,8 @@
 \title{Function to describe changes in extinction rate through time. From
 Valente et al 2014 ProcB}
 \usage{
-get_ext_rate(timeval, mu, Apars, Epars, island_ontogeny, extcutoff, island_spec,
-  K)
+get_ext_rate(timeval, mu, Apars, Epars, island_ontogeny, extcutoff,
+  island_spec, K)
 }
 \arguments{
 \item{timeval}{current time of simulation}
@@ -60,3 +60,4 @@ Other rates calculation: \code{\link{DAISIE_plot_area}},
 \author{
 Pedro Neves
 }
+\concept{rates calculation}

@@ -82,11 +82,12 @@ DAISIE_sim_core <- function(
   testit::assert(is.null(Apars) || are_area_params(Apars))
   # Pick thor (before timeval, to set Amax thor)
   thor <- get_thor(
-    0,
-    totaltime,
-    Apars,
-    ext_multiplier,
-    island_ontogeny, 
+    timeval = 0,
+    totaltime = totaltime,
+    Apars = Apars,
+    ext = 0,
+    ext_multiplier = ext_multiplier,
+    island_ontogeny = island_ontogeny, 
     thor = NULL,
     dt = 0,
     old_timeval = 0
@@ -145,6 +146,7 @@ DAISIE_sim_core <- function(
         timeval = timeval,
         totaltime = totaltime,
         Apars = Apars,
+        ext = rates$ext_rate,
         ext_multiplier = ext_multiplier,
         island_ontogeny = island_ontogeny, 
         thor = thor,
