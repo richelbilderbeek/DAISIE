@@ -288,8 +288,8 @@ get_thor <- function(timeval,
       # thor should dynamically be adjusted depending on parameter values.
       # Certain parameter combinations will always make it be > totaltime at 
       # first calculation, slowing down the simulations
-      # thor <- old_timeval + ext_multiplier * ext * (totaltime - timeval + dt)
-      thor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
+      thor <- old_timeval + ext_multiplier * ext * (totaltime - timeval + dt)
+      # thor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
       thor <- min(totaltime, thor)
       testit::assert(thor > 0.0)
       return(thor)

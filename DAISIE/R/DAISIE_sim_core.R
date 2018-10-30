@@ -154,6 +154,9 @@ DAISIE_sim_core <- function(
         old_timeval = old_timeval
       )
     }
+      if (rates$ext_rate_max >= extcutoff && length(island_spec[,1]) == 0) {
+        timeval <- totaltime
+      }
   }
   #### Finalize stt_table ####
   stt_table <- rbind(stt_table, 
