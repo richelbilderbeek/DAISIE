@@ -80,15 +80,15 @@ DAISIE_sim_core <- function(
   colnames(stt_table) <- c("Time","nI","nA","nC")
   stt_table[1,] <- c(totaltime,0,0,0)
   testit::assert(is.null(Apars) || are_area_params(Apars))
-  # Pick thor (before timeval, to set Amax thor)
-  thor <- get_thor(
+  # Pick t_hor (before timeval, to set Amax t_hor)
+  t_hor <- get_t_hor(
     timeval = 0,
     totaltime = totaltime,
     Apars = Apars,
     ext = 0,
     ext_multiplier = ext_multiplier,
     island_ontogeny = island_ontogeny, 
-    thor = NULL,
+    t_hor = NULL,
     dt = 0,
     old_timeval = 0
   )
@@ -109,7 +109,7 @@ DAISIE_sim_core <- function(
                           K = K,
                           island_spec = island_spec,
                           mainland_n = mainland_n,
-                          thor = thor)
+                          t_hor = t_hor)
     # cat("ext_rate: ", rates$ext_rate, "ana_rate: ", rates$ana_rate, "clado_rate: ", rates$clado_rate, "immig_rate: ", rates$immig_rate, 
         # "ext_rate_max: ", rates$ext_rate_max, "ana_rate_max: ", rates$ana_rate_max, "clado_rate_max: ", rates$clado_rate_max, "immig_rate_max: ", rates$immig_rate_max, "\n")
     # print(rates)
@@ -117,8 +117,8 @@ DAISIE_sim_core <- function(
     timeval_and_dt <- calc_next_timeval(rates, timeval)
     timeval <- timeval_and_dt$timeval
     dt <- timeval_and_dt$dt
-    # cat("thor: ", thor, "timeval: ", timeval, "\n")
-    if (timeval <= thor) {
+    # cat("t_hor: ", t_hor, "timeval: ", timeval, "\n")
+    if (timeval <= t_hor) {
       testit::assert(are_rates(rates))
       
       # Determine event
@@ -139,17 +139,17 @@ DAISIE_sim_core <- function(
       
 
     } else {
-      #### After thor is reached ####
+      #### After t_hor is reached ####
       # print("trigger")
-      timeval <- thor
-      thor <- get_thor(
+      timeval <- t_hor
+      t_hor <- get_t_hor(
         timeval = timeval,
         totaltime = totaltime,
         Apars = Apars,
         ext = rates$ext_rate,
         ext_multiplier = ext_multiplier,
         island_ontogeny = island_ontogeny, 
-        thor = thor,
+        t_hor = t_hor,
         dt = dt,
         old_timeval = old_timeval
       )

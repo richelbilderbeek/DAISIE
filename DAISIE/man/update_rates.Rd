@@ -5,7 +5,7 @@
 \title{Calculates algorithm rates}
 \usage{
 update_rates(timeval, totaltime, gam, mu, laa, lac, Apars, Epars,
-  island_ontogeny, extcutoff, K, island_spec, mainland_n, thor)
+  island_ontogeny, extcutoff, K, island_spec, mainland_n, t_hor)
 }
 \arguments{
 \item{timeval}{A numeric with the current time of simulation}
@@ -49,7 +49,7 @@ large and slowing down simulation. Should be big.}
 
 \item{mainland_n}{A numeirc with the total number of species present in the mainland}
 
-\item{thor}{A numeric with the time of horizon for max cladogenesis, immigration and minimum extinction}
+\item{t_hor}{A numeric with the time of horizon for max cladogenesis, immigration and minimum extinction}
 }
 \description{
 Internal function that updates the all the rates and 
@@ -58,7 +58,7 @@ max extinction horizon at time t.
 \seealso{
 Other rates calculation: \code{\link{DAISIE_plot_area}},
   \code{\link{get_ana_rate}}, \code{\link{get_ext_rate}},
-  \code{\link{get_immig_rate}}, \code{\link{get_thor}},
+  \code{\link{get_immig_rate}}, \code{\link{get_t_hor}},
   \code{\link{island_area}}
 }
 \concept{rates calculation}

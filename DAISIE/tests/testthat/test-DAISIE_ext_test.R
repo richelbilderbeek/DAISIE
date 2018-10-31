@@ -76,22 +76,22 @@ test_that("test expected species vs simulated with extinction", {
       colnames(stt_table) <- c("Time","nI","nA","nC")
       stt_table[1,] <- c(totaltime,0,0,0)
       
-      # Pick thor (before timeval, to set Amax thor)
-      thor <- get_thor(timeval = 0,
+      # Pick t_hor (before timeval, to set Amax t_hor)
+      t_hor <- get_t_hor(timeval = 0,
                        totaltime = totaltime,
                        Apars = Apars,
                        ext_multiplier = ext_multiplier,
                        island_ontogeny = island_ontogeny,
-                       thor = NULL)
+                       t_hor = NULL)
       
       #### Start Gillespie ####
       while (timeval < totaltime) {
-        if (timeval < thor) {
+        if (timeval < t_hor) {
           rates <- update_rates(timeval = timeval, totaltime = totaltime, gam = gam,
                                 mu = mu, laa = laa, lac = lac, Apars = Apars,
                                 Epars = Epars, island_ontogeny = island_ontogeny,
                                 extcutoff = extcutoff, K = K,
-                                island_spec = island_spec, mainland_n, thor)
+                                island_spec = island_spec, mainland_n, t_hor)
           if (is.na(timeval) == T) {
             timeval <- totaltime
           } else {
@@ -139,11 +139,11 @@ test_that("test expected species vs simulated with extinction", {
                                length(which(island_spec[,4] == "C"))))
           
         } else {
-          ##### After thor is reached ####
-          # Recalculate thor
-          thor <- get_thor(timeval = timeval, totaltime = totaltime, Apars = Apars,
+          ##### After t_hor is reached ####
+          # Recalculate t_hor
+          t_hor <- get_t_hor(timeval = timeval, totaltime = totaltime, Apars = Apars,
                            ext_multiplier = ext_multiplier,
-                           island_ontogeny = island_ontogeny, thor = thor)
+                           island_ontogeny = island_ontogeny, t_hor = t_hor)
         }
       }
       

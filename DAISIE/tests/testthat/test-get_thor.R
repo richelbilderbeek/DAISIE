@@ -1,9 +1,9 @@
-context("get_thor")
+context("get_t_hor")
 
 test_that("minimal use", {
   
   expect_silent(
-    get_thor(
+    get_t_hor(
       timeval = 1,
       totaltime = 5,
       dt = 0.04,
@@ -14,23 +14,23 @@ test_that("minimal use", {
                                  total_island_age = 5),
       ext_multiplier = 0.5,
       island_ontogeny = "quadratic",
-      thor = NULL
+      t_hor = NULL
     )
   )
 })
 
-test_that("classic behavior thor", {
+test_that("classic behavior t_hor", {
   
   # That is, a simulation without island ontogeny
   total_time <- 12.34
   expected <- total_time
-  created <- get_thor(
+  created <- get_t_hor(
     timeval = 1,
     totaltime = total_time,
     Apars = NULL,
     ext_multiplier = 0.5,
     island_ontogeny = NULL,
-    thor = NULL
+    t_hor = NULL
   )
   expect_equal(created, expected)
   

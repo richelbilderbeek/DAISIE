@@ -252,17 +252,17 @@ get_immig_rate <- function(
 #' @param ext effective extinction rate at timeval
 #' @param dt change in timeval
 #' @param old_timeval timeval before update at current loop
-#' @param thor time of horizon for max extinction
+#' @param t_hor time of horizon for max extinction
 #'
 #' @family rates calculation
 #' @author Pedro Neves
-get_thor <- function(timeval,
+get_t_hor <- function(timeval,
                      totaltime,
                      Apars,
                      ext,
                      ext_multiplier,
                      island_ontogeny,
-                     thor,
+                     t_hor,
                      dt,
                      old_timeval) {
 
@@ -278,21 +278,21 @@ get_thor <- function(timeval,
     return(totaltime)
   } else {
     
-    if (is.null(thor)) {
+    if (is.null(t_hor)) {
       testit::assert(are_area_params(Apars))
-      thor <- Apars$proportional_peak_t * Apars$total_island_age
-      testit::assert(thor > 0.0)
-      return(thor)
+      t_hor <- Apars$proportional_peak_t * Apars$total_island_age
+      testit::assert(t_hor > 0.0)
+      return(t_hor)
       
-    } else if (timeval >= thor) {
-      # thor should dynamically be adjusted depending on parameter values.
+    } else if (timeval >= t_hor) {
+      # t_hor should dynamically be adjusted depending on parameter values.
       # Certain parameter combinations will always make it be > totaltime at 
       # first calculation, slowing down the simulations
-      thor <- old_timeval + ext_multiplier * ext * (totaltime - timeval + dt)
-      # thor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
-      thor <- min(totaltime, thor)
-      testit::assert(thor > 0.0)
-      return(thor)
+      t_hor <- old_timeval + ext_multiplier * ext * (totaltime - timeval + dt)
+      # t_hor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
+      t_hor <- min(totaltime, t_hor)
+      testit::assert(t_hor > 0.0)
+      return(t_hor)
     }
   }
 }
@@ -456,13 +456,13 @@ DAISIE_calc_clade_imm_rate <- function(
 #' @param K A numeric with K (clade-specific carrying capacity)
 #' @param island_spec A matrix containing state of system
 #' @param mainland_n A numeirc with the total number of species present in the mainland
-#' @param thor A numeric with the time of horizon for max cladogenesis, immigration and minimum extinction
+#' @param t_hor A numeric with the time of horizon for max cladogenesis, immigration and minimum extinction
 update_rates <- function(timeval, totaltime,
                          gam, mu, laa, lac, Apars, Epars,
                          island_ontogeny, 
                          extcutoff,
                          K, 
-                         island_spec, mainland_n, thor) {
+                         island_spec, mainland_n, t_hor) {
   # Function to calculate rates at time = timeval. Returns list with each rate.
   testit::assert(is.numeric(timeval))
   testit::assert(is.numeric(totaltime))
@@ -477,7 +477,7 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(K))
   testit::assert(is.matrix(island_spec) || is.null(island_spec))
   testit::assert(is.numeric(mainland_n))
-  testit::assert(is.numeric(thor))
+  testit::assert(is.numeric(t_hor))
   
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,
@@ -546,8 +546,8 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(clado_rate_max)) 
     
   } else {
-    # Ontogeny, max rate is thor, which in this case is totaltime (from hor)
-    ext_rate_max <- get_ext_rate(timeval = thor,
+    # Ontogeny, max rate is t_hor, which in this case is totaltime (from hor)
+    ext_rate_max <- get_ext_rate(timeval = t_hor,
                                  mu = mu,
                                  Apars = Apars, 
                                  Epars = Epars,
