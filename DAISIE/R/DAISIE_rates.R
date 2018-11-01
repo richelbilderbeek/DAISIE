@@ -225,7 +225,6 @@ get_immig_rate <- function(
         island_area(timeval,
                     Apars,
                     island_ontogeny) * K)), 0), na.rm = T)
-
   }
   immig_rate
 }
@@ -269,7 +268,6 @@ get_t_hor <- function(timeval,
   ################~~~TODO~~~#####################
   # Use optimize (optimize(island_area, interval = c(0, 10), maximum = TRUE, Apars = create_area_params(1000, 0.1, 1, 17), island_ontogeny = "quadratic"))
   # to select maximum point to identify maximum of function
-  
   ###############################################
   testit::assert(is.null(Apars) || are_area_params(Apars))
   # Function calculates where the horizon for max(ext_rate) is.
@@ -288,10 +286,11 @@ get_t_hor <- function(timeval,
       # t_hor should dynamically be adjusted depending on parameter values.
       # Certain parameter combinations will always make it be > totaltime at 
       # first calculation, slowing down the simulations
-      t_hor <- old_timeval + ext_multiplier * ext * (totaltime - timeval + dt)
+      t_hor <- t_hor + t_hor / 2 + ext_multiplier * (totaltime - timeval) * ext
       # t_hor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
       t_hor <- min(totaltime, t_hor)
       testit::assert(t_hor > 0.0)
+      if (ext != 0) print("trigger")
       return(t_hor)
     }
   }

@@ -92,7 +92,6 @@ DAISIE_sim_core <- function(
     dt = 0,
     old_timeval = 0
   )
-  
   #### Start Gillespie ####
   while (timeval < totaltime) {
     # Calculate rates
@@ -136,11 +135,10 @@ DAISIE_sim_core <- function(
       island_spec <- updated_state$island_spec
       maxspecID <- updated_state$maxspecID
       stt_table <- updated_state$stt_table
-      
 
     } else {
       #### After t_hor is reached ####
-      # print("trigger")
+      
       timeval <- t_hor
       t_hor <- get_t_hor(
         timeval = timeval,
@@ -154,9 +152,11 @@ DAISIE_sim_core <- function(
         old_timeval = old_timeval
       )
     }
-      if (rates$ext_rate_max >= extcutoff && length(island_spec[,1]) == 0) {
-        timeval <- totaltime
-      }
+    if (rates$ext_rate_max >= extcutoff && length(island_spec[,1]) == 0) {
+      timeval <- totaltime
+    }
+    # print(timeval)
+    # print(t_hor)
   }
   #### Finalize stt_table ####
   stt_table <- rbind(stt_table, 
@@ -192,8 +192,6 @@ calc_next_timeval <- function(rates, timeval) {
 #' Makes the event happen by updating island species matrix and species IDs.
 #' What event happens is determined by the sampling in the algorithm.
 #' !!!!!!!!!!!!THIS DOCUMENTATION MUST BE CONFIRMED!!!!!!!!!!!!
-#' 
-#' 
 #' @param timeval current time of simulation
 #' @param totaltime simulated amount of time
 #' @param possible_event numeric indicating what event will happen.
