@@ -87,3 +87,24 @@ test_that("Pedro's should run silent", {
     )
   )
 })
+
+test_that("all species extinct if island dead", {
+  ontogeny_sim <- DAISIE_sim_core(
+                    time = 10,
+                    mainland_n = 1000,
+                    pars = c(0.0001, 2.2, 0.005, 0.001, 1),
+                    Apars = create_area_params(
+                      max_area = 5000,
+                      proportional_peak_t = 0.5,
+                      peak_sharpness = 1,
+                      total_island_age = 10
+                    ),
+                    Epars = c(1, 100),
+                    island_ontogeny = "quadratic"
+  )
+  last_entry <- ontogeny_sim$stt_table[nrow(ontogeny_sim$stt_table),]
+  expect_true(last_entry[1] == 0)
+  expect_true(last_entry[2] == 0)
+  expect_true(last_entry[3] == 0)
+  expect_true(last_entry[4] == 0)
+})

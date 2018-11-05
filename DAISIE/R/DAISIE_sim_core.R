@@ -152,9 +152,9 @@ DAISIE_sim_core <- function(
         old_timeval = old_timeval
       )
     }
-    if (rates$ext_rate_max >= extcutoff && length(island_spec[,1]) == 0) {
-      timeval <- totaltime
-    }
+    # if (rates$ext_rate_max >= extcutoff && length(island_spec[,1]) == 0) {
+    #   timeval <- totaltime
+    # }
     # print(timeval)
     # print(t_hor)
   }

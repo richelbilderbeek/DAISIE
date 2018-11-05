@@ -123,7 +123,6 @@ get_ana_rate <- function(laa, island_spec) {
 #' Calculates the cladogenesis rate given the current number of
 #' species in the system, the carrying capacity and the per capita cladogenesis
 #' rate
-#'
 #' @param timeval current time of simulation
 #' @param totaltime total time of simulation
 #' @param lac per capita cladogenesis rate
@@ -290,7 +289,6 @@ get_t_hor <- function(timeval,
       # t_hor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
       t_hor <- min(totaltime, t_hor)
       testit::assert(t_hor > 0.0)
-      if (ext != 0) print("trigger")
       return(t_hor)
     }
   }
