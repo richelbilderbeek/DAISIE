@@ -285,7 +285,7 @@ get_t_hor <- function(timeval,
       # t_hor should dynamically be adjusted depending on parameter values.
       # Certain parameter combinations will always make it be > totaltime at 
       # first calculation, slowing down the simulations
-      t_hor <- t_hor + t_hor / 2 + ext_multiplier * (totaltime - timeval) * ext
+      t_hor <- t_hor + t_hor / 6 + ext_multiplier * (totaltime - timeval) * ext
       # t_hor <- old_timeval + ext_multiplier * (totaltime - timeval + dt)
       t_hor <- min(totaltime, t_hor)
       testit::assert(t_hor > 0.0)

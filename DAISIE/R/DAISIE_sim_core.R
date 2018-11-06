@@ -109,33 +109,35 @@ DAISIE_sim_core <- function(
                           island_spec = island_spec,
                           mainland_n = mainland_n,
                           t_hor = t_hor)
-    # cat("ext_rate: ", rates$ext_rate, "ana_rate: ", rates$ana_rate, "clado_rate: ", rates$clado_rate, "immig_rate: ", rates$immig_rate, 
-        # "ext_rate_max: ", rates$ext_rate_max, "ana_rate_max: ", rates$ana_rate_max, "clado_rate_max: ", rates$clado_rate_max, "immig_rate_max: ", rates$immig_rate_max, "\n")
-    # print(rates)
+    
     old_timeval <- timeval
     timeval_and_dt <- calc_next_timeval(rates, timeval)
     timeval <- timeval_and_dt$timeval
     dt <- timeval_and_dt$dt
-    # cat("t_hor: ", t_hor, "timeval: ", timeval, "\n")
+    
     if (timeval <= t_hor) {
       testit::assert(are_rates(rates))
       
       # Determine event
-      possible_event <- DAISIE_sample_event(rates = rates,
-                                            island_ontogeny = island_ontogeny)
+      possible_event <- DAISIE_sample_event(
+        rates = rates,
+        island_ontogeny = island_ontogeny
+        )
+      
+      updated_state <- DAISIE_sim_update_state(
+        timeval = timeval, 
+        totaltime = totaltime,
+        possible_event = possible_event,
+        maxspecID = maxspecID,
+        mainland_spec = mainland_spec,
+        island_spec = island_spec,
+        stt_table = stt_table
+        )
       # print(possible_event)
-      # print(timeval)
-      updated_state <- DAISIE_sim_update_state(timeval = timeval, 
-                                               totaltime = totaltime,
-                                               possible_event = possible_event,
-                                               maxspecID = maxspecID,
-                                               mainland_spec = mainland_spec,
-                                               island_spec = island_spec,
-                                               stt_table = stt_table)
       island_spec <- updated_state$island_spec
       maxspecID <- updated_state$maxspecID
       stt_table <- updated_state$stt_table
-
+      # print(stt_table)
     } else {
       #### After t_hor is reached ####
       
@@ -151,12 +153,13 @@ DAISIE_sim_core <- function(
         dt = dt,
         old_timeval = old_timeval
       )
+      # print(timeval)
+      # print(t_hor)
     }
-    # if (rates$ext_rate_max >= extcutoff && length(island_spec[,1]) == 0) {
-    #   timeval <- totaltime
-    # }
-    # print(timeval)
-    # print(t_hor)
+    # TODO Check if this is redundant, or a good idea
+    if (rates$ext_rate_max >= extcutoff && length(island_spec[,1]) == 0) {
+      timeval <- totaltime
+    }
   }
   #### Finalize stt_table ####
   stt_table <- rbind(stt_table, 
