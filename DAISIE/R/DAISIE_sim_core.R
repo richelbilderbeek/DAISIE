@@ -133,11 +133,10 @@ DAISIE_sim_core <- function(
         island_spec = island_spec,
         stt_table = stt_table
         )
-      # print(possible_event)
+      
       island_spec <- updated_state$island_spec
       maxspecID <- updated_state$maxspecID
       stt_table <- updated_state$stt_table
-      # print(stt_table)
     } else {
       #### After t_hor is reached ####
       
@@ -153,8 +152,6 @@ DAISIE_sim_core <- function(
         dt = dt,
         old_timeval = old_timeval
       )
-      # print(timeval)
-      # print(t_hor)
     }
     # TODO Check if this is redundant, or a good idea
     if (rates$ext_rate_max >= extcutoff && length(island_spec[,1]) == 0) {
@@ -174,7 +171,7 @@ DAISIE_sim_core <- function(
                                  mainland_n = mainland_n)
   return(island)
 }
-# print("loop")
+
 #' Calculates when the next timestep will be.
 #'
 #' @param rates list of numeric with probabilities of each event
@@ -185,7 +182,6 @@ calc_next_timeval <- function(rates, timeval) {
   testit::assert(timeval >= 0)
   totalrate <- rates$immig_rate_max + rates$ana_rate + rates$clado_rate_max + rates$ext_rate_max
   dt <- rexp(1, totalrate)
-  # print(dt)
   timeval <- timeval + dt
   return(list(timeval = timeval, dt = dt))
 }
