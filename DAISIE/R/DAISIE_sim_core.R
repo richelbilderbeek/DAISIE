@@ -174,7 +174,7 @@ DAISIE_sim_core <- function(
                                  mainland_n = mainland_n)
   return(island)
 }
-# print("loop")
+
 #' Calculates when the next timestep will be.
 #'
 #' @param rates list of numeric with probabilities of each event
