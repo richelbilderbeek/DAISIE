@@ -4,8 +4,7 @@
 \alias{DAISIE_sim_core}
 \title{Internal function of the DAISIE simulation}
 \usage{
-DAISIE_sim_core(time, mainland_n, pars, Apars = NULL, Epars = NULL,
-  island_ontogeny = NULL)
+DAISIE_sim_core(time, mainland_n, pars)
 }
 \arguments{
 \item{time}{Simulated amount of time}
@@ -25,25 +24,6 @@ this value is set to the number of mainland species.}
   \item{[4]: immigration rate}
   \item{[5]: anagenesis rate}
 }}
-
-\item{Apars}{A named list containing area parameters as created by create_area_params:
-\itemize{
-  \item{[1]: maximum area}
-  \item{[2]: value from 0 to 1 indicating where in the island's history the 
-  peak area is achieved}
-  \item{[3]: sharpness of peak}
-  \item{[4]: total island age}
-}}
-
-\item{Epars}{A numeric vector:
-\itemize{
-  \item{[1]: minimum extinction when area is at peak}
-  \item{[2]: extinction rate when current area is 0.10 of maximum area}
-}}
-
-\item{island_ontogeny}{A string describing the type of island ontogeny. Can be \code{NULL},
-\code{quadratic} for a beta function describing area through time,
- or \code{linear} for a linear function}
 }
 \description{
 Internal function of the DAISIE simulation

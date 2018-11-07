@@ -165,14 +165,16 @@ get_clado_rate <- function(timeval,
     # Ontogeny scenario
   } else {
     
-    clado_rate <-  max(c(length(island_spec[, 1]) * lac * 
-                         island_area(timeval,
-                                     Apars,
-                                     island_ontogeny) *
-                         (1 - length(island_spec[, 1]) / (island_area(timeval, 
-                                             Apars, 
-                                             island_ontogeny) * K)), 0), na.rm = T)
-       clado_rate
+    clado_rate <-  max(c(
+      length(island_spec[, 1]) * lac *
+        island_area(timeval,
+                    Apars,
+                    island_ontogeny) *
+        (1 - length(island_spec[, 1]) /
+           (island_area(timeval,
+                        Apars,
+                        island_ontogeny) * K)), 0), na.rm = T)
+    clado_rate
   }
 }
 
@@ -294,7 +296,22 @@ get_t_hor <- function(timeval,
   }
 }
 
-
+#' Calculates when the next timestep will be.
+#'
+#' @param rates list of numeric with probabilities of each event
+#' @param timeval current time of simulation
+#' @return named list with numeric vector containing the time of the next
+#' timestep and the change in time.
+#' @author Pedro Neves
+calc_next_timeval <- function(rates, timeval) {
+  # Calculates when next event will happen
+  testit::assert(are_rates(rates))
+  testit::assert(timeval >= 0)
+  totalrate <- rates$immig_rate_max + rates$ana_rate + rates$clado_rate_max + rates$ext_rate_max
+  dt <- rexp(1, totalrate)
+  timeval <- timeval + dt
+  return(list(timeval = timeval, dt = dt))
+}
 
 
 #' Calculate the clade-wide extinction rate
@@ -455,11 +472,11 @@ DAISIE_calc_clade_imm_rate <- function(
 #' @param mainland_n A numeirc with the total number of species present in the mainland
 #' @param t_hor A numeric with the time of horizon for max cladogenesis, immigration and minimum extinction
 update_rates <- function(timeval, totaltime,
-                         gam, mu, laa, lac, Apars, Epars,
-                         island_ontogeny, 
+                         gam, mu, laa, lac, Apars = NULL, Epars = NULL,
+                         island_ontogeny = NULL, 
                          extcutoff,
                          K, 
-                         island_spec, mainland_n, t_hor) {
+                         island_spec, mainland_n, t_hor = NULL) {
   # Function to calculate rates at time = timeval. Returns list with each rate.
   testit::assert(is.numeric(timeval))
   testit::assert(is.numeric(totaltime))

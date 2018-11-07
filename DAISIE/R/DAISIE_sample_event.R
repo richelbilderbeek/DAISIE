@@ -19,7 +19,7 @@
 #'   \item{[7]: proposed cladogenesis that will not happen}
 #' }
 #' @author Pedro Neves
-DAISIE_sample_event <- function(rates, island_ontogeny) {
+DAISIE_sample_event <- function(rates, island_ontogeny = NULL) {
   testit::assert(are_rates(rates))
   
   # If statement prevents odd behaviour of sample when rates are 0

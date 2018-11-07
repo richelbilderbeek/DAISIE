@@ -4,8 +4,9 @@
 \alias{update_rates}
 \title{Calculates algorithm rates}
 \usage{
-update_rates(timeval, totaltime, gam, mu, laa, lac, Apars, Epars,
-  island_ontogeny, extcutoff, K, island_spec, mainland_n, t_hor)
+update_rates(timeval, totaltime, gam, mu, laa, lac, Apars = NULL,
+  Epars = NULL, island_ontogeny = NULL, extcutoff, K, island_spec,
+  mainland_n, t_hor = NULL)
 }
 \arguments{
 \item{timeval}{A numeric with the current time of simulation}
