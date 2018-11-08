@@ -60,7 +60,7 @@
 #' plots are produced: STT for all, STT for type 1 and STT for type 2.
 #' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
 #' \code{quadratic} for a beta function describing area through time,
-#'  or \code{linear} for a linear function
+#'  or \code{linear} for a linear function. Default is \code{NULL} for no ontogeny.
 #' @param Apars A numeric vector:
 #' \itemize{
 #'   \item{[1]: maximum area}
@@ -74,9 +74,13 @@
 #'   \item{[1]: minimum extinction when area is at peak}
 #'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 #' }
+#' @param extcutoff A numeric used only in ontogeny scenario with the cutoff for
+#'  extinction rate preventing it from being too
+#' large and slowing down simulation. Should be big.
 #' @param verbose Default=TRUE Give intermediate output, also if everything
 #' goes OK
 #' @param ...  Any arguments to pass on to plotting functions.
+#'
 #' @return Each simulated dataset is an element of the list, which can be
 #' called using [[x]]. For example if the object is called island_replicates,
 #' the 1st replicate can be called using island_replicates[[1]] Each of the
@@ -163,6 +167,7 @@ DAISIE_sim <- function(
   island_ontogeny = NULL, # NULL = no effect; "quadratic" = quadratic function; "linear" = linear function
   Apars = NULL,
   Epars = NULL,
+  extcutoff = NULL,
   verbose = TRUE,
   ...
 ) {
@@ -205,8 +210,9 @@ DAISIE_sim <- function(
           print(paste("Island replicate ",rep,sep = ""))
         }
       } 
-      island_replicates = DAISIE_format_IW(island_replicates = island_replicates,
-                                           time = totaltime,M = M,sample_freq = sample_freq)
+      island_replicates = DAISIE_format_IW(
+        island_replicates = island_replicates,
+        time = totaltime,M = M,sample_freq = sample_freq)
     }
     
     if (divdepmodel == 'CS')
@@ -297,13 +303,17 @@ DAISIE_sim <- function(
       if (!is.null(island_ontogeny)) {
         
         if (length(pars) == 10) {
-          stop("Two type model yet implemented with island ontogeny.")
+          stop("Two type model not yet implemented with island ontogeny.")
         }
         
+        if (is.null(Apars) || is.null(Epars) || is.null(extcutoff)) {
+          stop("Ontogeny simulation requires Apars, 
+               Epars and extcutoff to be provided.")
+        }
         
         totaltime <- time
+        print("ola")
         island_replicates  = list()
-        
         if (divdepmodel == 'IW')
         {
           if (length(pars) > 5)

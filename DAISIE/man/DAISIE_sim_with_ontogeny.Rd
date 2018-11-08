@@ -2,11 +2,10 @@
 % Please edit documentation in R/DAISIE_sim_with_ontogeny.R
 \name{DAISIE_sim_with_ontogeny}
 \alias{DAISIE_sim_with_ontogeny}
-\title{Title}
+\title{Internal function of the DAISIE simulation}
 \usage{
 DAISIE_sim_with_ontogeny(time, mainland_n, pars, Apars = NULL,
-  Epars = NULL, island_ontogeny = NULL, initial_species = 0,
-  initial_immigrants = 0)
+  Epars = NULL, island_ontogeny = NULL)
 }
 \arguments{
 \item{time}{Simulated amount of time}
@@ -43,13 +42,9 @@ this value is set to the number of mainland species.}
 }}
 
 \item{island_ontogeny}{A string describing the type of island ontogeny. Can be \code{NULL},
-\code{quadratic} for a beta function describing area through time,}
-
-\item{initial_species}{something}
-
-\item{initial_immigrants}{something
-or \code{linear} for a linear function}
+\code{quadratic} for a beta function describing area through time,
+ or \code{linear} for a linear function}
 }
 \description{
-Title
+Internal function of the DAISIE simulation
 }

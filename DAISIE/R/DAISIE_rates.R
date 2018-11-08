@@ -1,3 +1,159 @@
+#' Calculates algorithm rates
+#' @description Internal function that updates the all the rates and 
+#' max extinction horizon at time t.
+#' @family rates calculation
+#' @param timeval A numeric with the current time of simulation
+#' @param totaltime A numeric with the total time of simulation
+#' @param gam A numeric with the per capita immigration rate
+#' @param mu A numeric with the per capita extinction rate in no ontogeny model
+#' @param laa A numeric with the per capita anagenesis rate
+#' @param lac A numeric with the per capita cladogenesis rate
+#' @param Apars A named list containing area parameters as created by create_area_params:
+#' \itemize{
+#'   \item{[1]: maximum area}
+#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
+#'   peak area is achieved}
+#'   \item{[3]: sharpness of peak}
+#'   \item{[4]: total island age}
+#' }
+#' @param Epars A numeric vector:
+#' \itemize{
+#'   \item{[1]: minimum extinction when area is at peak}
+#'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
+#' }
+#' @param island_ontogeny A string describing the type of island ontogeny. 
+#' Can be \code{NULL},
+#' \code{"quadratic"} for a beta function describing area through time,
+#'  or \code{"linear"} for a linear function
+#' @param extcutoff A numeric with the cutoff for extinction rate preventing it from being too 
+#' large and slowing down simulation. Should be big.
+#' @param K A numeric with K (clade-specific carrying capacity)
+#' @param island_spec A matrix containing state of system
+#' @param mainland_n A numeirc with the total number of species present in the mainland
+#' @param t_hor A numeric with the time of horizon for max cladogenesis, immigration and minimum extinction
+update_rates <- function(timeval, totaltime,
+                         gam, mu, laa, lac, Apars = NULL, Epars = NULL,
+                         island_ontogeny = NULL, 
+                         extcutoff,
+                         K, 
+                         island_spec, mainland_n, t_hor = NULL) {
+  # Function to calculate rates at time = timeval. Returns list with each rate.
+  testit::assert(is.numeric(timeval))
+  testit::assert(is.numeric(totaltime))
+  testit::assert(is.numeric(gam))
+  testit::assert(is.numeric(mu))
+  testit::assert(is.numeric(laa))
+  testit::assert(is.numeric(lac))
+  testit::assert(is.null(Apars) || are_area_params(Apars))
+  testit::assert(is.null(Epars) || is.numeric(Epars))
+  testit::assert(is.character(island_ontogeny) || is.null(island_ontogeny))
+  testit::assert(is.numeric(extcutoff) || is.null(extcutoff))
+  testit::assert(is.numeric(K))
+  testit::assert(is.matrix(island_spec) || is.null(island_spec))
+  testit::assert(is.numeric(mainland_n))
+  testit::assert(is.numeric(t_hor))
+  
+  immig_rate <- get_immig_rate(timeval = timeval,
+                               totaltime = totaltime,
+                               gam = gam,
+                               Apars = Apars,
+                               island_ontogeny = island_ontogeny,
+                               island_spec = island_spec,
+                               K = K,
+                               mainland_n = mainland_n)
+  testit::assert(is.numeric(immig_rate))
+  
+  ext_rate <- get_ext_rate(timeval = timeval,
+                           mu = mu,
+                           Apars = Apars,
+                           Epars = Epars, 
+                           island_ontogeny = island_ontogeny, 
+                           extcutoff = extcutoff,
+                           island_spec = island_spec,
+                           K = K)
+  testit::assert(is.numeric(ext_rate))
+  
+  ana_rate <- get_ana_rate(laa = laa,
+                           island_spec = island_spec)
+  testit::assert(is.numeric(ana_rate))
+  
+  clado_rate <- get_clado_rate(timeval = timeval, 
+                               totaltime = totaltime,
+                               lac = lac,
+                               Apars = Apars,
+                               island_ontogeny = island_ontogeny,
+                               island_spec = island_spec,
+                               K = K)
+  testit::assert(is.numeric(clado_rate))
+  
+  if (is.null(island_ontogeny)) {
+    
+    immig_rate_max <- immig_rate
+    testit::assert(is.numeric(immig_rate_max))
+    ext_rate_max <- ext_rate
+    testit::assert(is.numeric(ext_rate_max))
+    clado_rate_max <- clado_rate
+    testit::assert(is.numeric(clado_rate_max))
+    
+  } else if ((Apars$proportional_peak_t * Apars$total_island_age) > timeval) {
+    
+    ext_rate_max <- ext_rate
+    testit::assert(is.numeric(ext_rate_max))
+    
+    immig_rate_max <- get_immig_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age,
+                                     totaltime = totaltime,
+                                     gam = gam,
+                                     mainland_n = mainland_n,
+                                     Apars = Apars,
+                                     island_ontogeny = island_ontogeny, 
+                                     island_spec = island_spec,
+                                     K = K)
+    testit::assert(is.numeric(immig_rate_max))
+    
+    clado_rate_max <- get_clado_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age, # SHOULD BE GENERALIZED
+                                     totaltime = totaltime,
+                                     lac = lac,
+                                     Apars = Apars,
+                                     island_ontogeny = island_ontogeny, 
+                                     island_spec = island_spec,
+                                     K = K)
+    testit::assert(is.numeric(clado_rate_max)) 
+    
+  } else {
+    # Ontogeny, max rate is t_hor, which in this case is totaltime (from hor)
+    ext_rate_max <- get_ext_rate(timeval = t_hor,
+                                 mu = mu,
+                                 Apars = Apars, 
+                                 Epars = Epars,
+                                 island_ontogeny = island_ontogeny, 
+                                 extcutoff = extcutoff, 
+                                 island_spec = island_spec,
+                                 K = K)
+    
+    testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
+    immig_rate_max <- immig_rate
+    
+    
+    testit::assert(is.numeric(immig_rate_max))
+    
+    clado_rate_max <- clado_rate
+    
+    testit::assert(is.numeric(clado_rate_max)) 
+    
+  }
+  
+  rates <- create_rates(
+    immig_rate = immig_rate,
+    ext_rate = ext_rate,
+    ana_rate = ana_rate,
+    clado_rate = clado_rate,
+    ext_rate_max = ext_rate_max,
+    immig_rate_max = immig_rate_max,
+    clado_rate_max = clado_rate_max
+  )
+  return(rates)
+}
+
 #' Function to describe changes in area through time. Adapted from
 #' Valente et al 2014 ProcB
 #' @param timeval current time of simulation
@@ -437,160 +593,4 @@ DAISIE_calc_clade_imm_rate <- function(
   )
 }
 
-
-#' Calculates algorithm rates
-#' @description Internal function that updates the all the rates and 
-#' max extinction horizon at time t.
-#' @family rates calculation
-#' @param timeval A numeric with the current time of simulation
-#' @param totaltime A numeric with the total time of simulation
-#' @param gam A numeric with the per capita immigration rate
-#' @param mu A numeric with the per capita extinction rate in no ontogeny model
-#' @param laa A numeric with the per capita anagenesis rate
-#' @param lac A numeric with the per capita cladogenesis rate
-#' @param Apars A named list containing area parameters as created by create_area_params:
-#' \itemize{
-#'   \item{[1]: maximum area}
-#'   \item{[2]: value from 0 to 1 indicating where in the island's history the 
-#'   peak area is achieved}
-#'   \item{[3]: sharpness of peak}
-#'   \item{[4]: total island age}
-#' }
-#' @param Epars A numeric vector:
-#' \itemize{
-#'   \item{[1]: minimum extinction when area is at peak}
-#'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
-#' }
-#' @param island_ontogeny A string describing the type of island ontogeny. 
-#' Can be \code{NULL},
-#' \code{"quadratic"} for a beta function describing area through time,
-#'  or \code{"linear"} for a linear function
-#' @param extcutoff A numeric with the cutoff for extinction rate preventing it from being too 
-#' large and slowing down simulation. Should be big.
-#' @param K A numeric with K (clade-specific carrying capacity)
-#' @param island_spec A matrix containing state of system
-#' @param mainland_n A numeirc with the total number of species present in the mainland
-#' @param t_hor A numeric with the time of horizon for max cladogenesis, immigration and minimum extinction
-update_rates <- function(timeval, totaltime,
-                         gam, mu, laa, lac, Apars = NULL, Epars = NULL,
-                         island_ontogeny = NULL, 
-                         extcutoff,
-                         K, 
-                         island_spec, mainland_n, t_hor = NULL) {
-  # Function to calculate rates at time = timeval. Returns list with each rate.
-  testit::assert(is.numeric(timeval))
-  testit::assert(is.numeric(totaltime))
-  testit::assert(is.numeric(gam))
-  testit::assert(is.numeric(mu))
-  testit::assert(is.numeric(laa))
-  testit::assert(is.numeric(lac))
-  testit::assert(is.null(Apars) || are_area_params(Apars))
-  testit::assert(is.null(Epars) || is.numeric(Epars))
-  testit::assert(is.character(island_ontogeny) || is.null(island_ontogeny))
-  testit::assert(is.numeric(extcutoff))
-  testit::assert(is.numeric(K))
-  testit::assert(is.matrix(island_spec) || is.null(island_spec))
-  testit::assert(is.numeric(mainland_n))
-  testit::assert(is.numeric(t_hor))
-  
-  immig_rate <- get_immig_rate(timeval = timeval,
-                               totaltime = totaltime,
-                               gam = gam,
-                               Apars = Apars,
-                               island_ontogeny = island_ontogeny,
-                               island_spec = island_spec,
-                               K = K,
-                               mainland_n = mainland_n)
-  testit::assert(is.numeric(immig_rate))
-  
-  ext_rate <- get_ext_rate(timeval = timeval,
-                           mu = mu,
-                           Apars = Apars,
-                           Epars = Epars, 
-                           island_ontogeny = island_ontogeny, 
-                           extcutoff = extcutoff,
-                           island_spec = island_spec,
-                           K = K)
-  testit::assert(is.numeric(ext_rate))
-  
-  ana_rate <- get_ana_rate(laa = laa,
-                           island_spec = island_spec)
-  testit::assert(is.numeric(ana_rate))
-  
-  clado_rate <- get_clado_rate(timeval = timeval, 
-                               totaltime = totaltime,
-                               lac = lac,
-                               Apars = Apars,
-                               island_ontogeny = island_ontogeny,
-                               island_spec = island_spec,
-                               K = K)
-  testit::assert(is.numeric(clado_rate))
-  
-  if (is.null(island_ontogeny)) {
-    
-    immig_rate_max <- immig_rate
-    testit::assert(is.numeric(immig_rate_max))
-    ext_rate_max <- ext_rate
-    testit::assert(is.numeric(ext_rate_max))
-    clado_rate_max <- clado_rate
-    testit::assert(is.numeric(clado_rate_max))
-    
-  } else if ((Apars$proportional_peak_t * Apars$total_island_age) > timeval) {
-    
-    ext_rate_max <- ext_rate
-    testit::assert(is.numeric(ext_rate_max))
-    
-    immig_rate_max <- get_immig_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age,
-                                     totaltime = totaltime,
-                                     gam = gam,
-                                     mainland_n = mainland_n,
-                                     Apars = Apars,
-                                     island_ontogeny = island_ontogeny, 
-                                     island_spec = island_spec,
-                                     K = K)
-    testit::assert(is.numeric(immig_rate_max))
-    
-    clado_rate_max <- get_clado_rate(timeval = Apars$proportional_peak_t * Apars$total_island_age, # SHOULD BE GENERALIZED
-                                     totaltime = totaltime,
-                                     lac = lac,
-                                     Apars = Apars,
-                                     island_ontogeny = island_ontogeny, 
-                                     island_spec = island_spec,
-                                     K = K)
-    testit::assert(is.numeric(clado_rate_max)) 
-    
-  } else {
-    # Ontogeny, max rate is t_hor, which in this case is totaltime (from hor)
-    ext_rate_max <- get_ext_rate(timeval = t_hor,
-                                 mu = mu,
-                                 Apars = Apars, 
-                                 Epars = Epars,
-                                 island_ontogeny = island_ontogeny, 
-                                 extcutoff = extcutoff, 
-                                 island_spec = island_spec,
-                                 K = K)
-    
-    testit::assert(is.numeric(ext_rate_max) && ext_rate_max >= 0.0)
-    immig_rate_max <- immig_rate
-    
-    
-    testit::assert(is.numeric(immig_rate_max))
-    
-    clado_rate_max <- clado_rate
-    
-    testit::assert(is.numeric(clado_rate_max)) 
-    
-  }
-  
-  rates <- create_rates(
-    immig_rate = immig_rate,
-    ext_rate = ext_rate,
-    ana_rate = ana_rate,
-    clado_rate = clado_rate,
-    ext_rate_max = ext_rate_max,
-    immig_rate_max = immig_rate_max,
-    clado_rate_max = clado_rate_max
-  )
-  return(rates)
-}
 

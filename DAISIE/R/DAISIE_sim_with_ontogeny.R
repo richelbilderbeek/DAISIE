@@ -1,5 +1,4 @@
-#' Title
-#'
+#' Internal function of the DAISIE simulation
 #' @param time Simulated amount of time
 #' @param mainland_n A numeric stating the number of mainland species, that
 #'   is, the number of species that can potentially colonize the island.
@@ -30,8 +29,6 @@
 #' }
 #' @param island_ontogeny A string describing the type of island ontogeny. Can be \code{NULL},
 #' \code{quadratic} for a beta function describing area through time,
-#' @param initial_species something
-#' @param initial_immigrants something
 #'  or \code{linear} for a linear function
 DAISIE_sim_with_ontogeny <- function(
   time,
@@ -39,13 +36,10 @@ DAISIE_sim_with_ontogeny <- function(
   pars,
   Apars = NULL,
   Epars = NULL,
-  island_ontogeny = NULL,
-  initial_species = 0,
-  initial_immigrants = 0
+  island_ontogeny = NULL
 ) {
   testit::assert(length(pars) == 5)
   testit::assert(is.null(Apars) || are_area_params(Apars))
-  
   
   if (pars[4] == 0) {
     stop('Rate of colonisation is zero. Island cannot be colonised.')
@@ -81,16 +75,11 @@ DAISIE_sim_with_ontogeny <- function(
   mainland_spec <- seq(1, mainland_n, 1)
   maxspecID <- mainland_n
   
-  island_spec <- matrix(ncol = 5, nrow = initial_species)
-  island_spec[1:initial_immigrants, 4] <- "I" 
-  # n_island_species <- length(island_spec[,1])
-  # n_immigrants <- length(which(island_spec[,4] == "I"))
-  
+  island_spec = c()
   stt_table <- matrix(ncol = 4)
   colnames(stt_table) <- c("Time","nI","nA","nC")
   stt_table[1,] <- c(totaltime,0,0,0)
   testit::assert(is.null(Apars) || are_area_params(Apars))
-  
   # Pick t_hor (before timeval, to set Amax t_hor)
   t_hor <- get_t_hor(
     timeval = 0,
@@ -181,5 +170,4 @@ DAISIE_sim_with_ontogeny <- function(
                                  island_spec = island_spec,
                                  mainland_n = mainland_n)
   return(island)
-  }
-
+}
