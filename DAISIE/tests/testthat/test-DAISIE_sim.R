@@ -23,18 +23,19 @@ test_that("A clean classic run should produce no output", {
 test_that("A clean ontogeny run should produce no output", {
   n_mainland_species <- 1000
   island_age <- 4
-  clado_rate <- 2.550687345 # cladogenesis rate
-  ext_rate <- 2.683454548 # extinction rate
-  clade_carr_cap <- 10.0  # clade-level carrying capacity
-  imm_rate <- 0.00933207 # immigration rate
-  ana_rate <- 1.010073119 # anagenesis rate
+  clado_rate <- 0.0001 # cladogenesis rate
+  ext_rate <- 2.683454548 # extinction rate (not used)
+  clade_carr_cap <- 0.05  # clade-level carrying capacity
+  imm_rate <- 0.001 # immigration rate
+  ana_rate <- 0.1 # anagenesis rate
   max_area <- 1000
-  peak_time <- 0.5
+  peak_time <- 0.1
   sharpness <- 1
-  total_island_age <- 5
+  total_island_age <- 10
   mu_min <- 0.5
   mu_max <- 100
   island_ontogeny <- "quadratic"
+  extcutoff <- 1000
   
   expect_silent(
     DAISIE_sim(
@@ -45,7 +46,9 @@ test_that("A clean ontogeny run should produce no output", {
       island_ontogeny = island_ontogeny,
       Apars = c(max_area, peak_time, sharpness, total_island_age),
       Epars = c(mu_min, mu_max),
+      extcutoff = extcutoff,
       plot_sims = FALSE,
       verbose = FALSE
     )
   )
+})

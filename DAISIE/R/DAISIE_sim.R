@@ -172,8 +172,7 @@ DAISIE_sim <- function(
   ...
 ) {
   # @richelbilderbeek
-
-# Dynamic mainland scenario ------------------------------------------------
+  # Dynamic mainland scenario ------------------------------------------------
   if (!is.null(mainland_params)) {
     return(
       DAISIE_sim_with_mainland(
@@ -189,9 +188,8 @@ DAISIE_sim <- function(
       )
     )
   }
-
-# Classic scenario --------------------------------------------------------
-  if (is.null(island_ontogeny)) {
+  # Classic scenario --------------------------------------------------------
+  if (is.null(island_ontogeny) && is.null(mainland_params)) {
     totaltime <- time
     island_replicates  = list()
     
@@ -295,87 +293,90 @@ DAISIE_sim <- function(
           }
         }
       }
-      
-
-# Ontogeny scenario -------------------------------------------------------
-
-      
-      if (!is.null(island_ontogeny)) {
-        
-        if (length(pars) == 10) {
-          stop("Two type model not yet implemented with island ontogeny.")
-        }
-        
-        if (is.null(Apars) || is.null(Epars) || is.null(extcutoff)) {
-          stop("Ontogeny simulation requires Apars, 
+    }
+  }
+  # Ontogeny scenario -------------------------------------------------------
+  
+  
+  
+  if (!is.null(island_ontogeny)) {
+    
+    if (length(pars) == 10) {
+      stop("Two type model not yet implemented with island ontogeny.")
+    }
+    
+    if (is.null(Apars) || is.null(Epars) || is.null(extcutoff)) {
+      stop("Ontogeny simulation requires Apars, 
                Epars and extcutoff to be provided.")
-        }
-        
-        totaltime <- time
-        print("ola")
-        island_replicates  = list()
-        if (divdepmodel == 'IW')
-        {
-          if (length(pars) > 5)
-          {
-            stop('Island-wide carrying capacity model not yet implemented for
+    }
+    
+    totaltime <- time
+    island_replicates  = list()
+    if (divdepmodel == 'IW')
+    {
+      if (length(pars) > 5)
+      {
+        stop('Island-wide carrying capacity model not yet implemented for
                  two types of mainland species')
-          }
-          
-          for (rep in 1:replicates) {
-            island_replicates[[rep]] <- DAISIE_sim_with_ontogeny(
+      }
+      
+      for (rep in 1:replicates) {
+        island_replicates[[rep]] <- DAISIE_sim_with_ontogeny(
+          time = totaltime,
+          mainland_n = M,
+          pars = pars,
+          island_ontogeny = island_ontogeny,
+          Apars = Apars,
+          Epars = Epars
+        )
+        if (verbose == TRUE) {
+          print(paste("Island replicate ", rep, sep = ""))
+        }
+      } 
+      island_replicates = DAISIE_format_IW(
+        island_replicates = island_replicates,
+        time = totaltime,M = M,sample_freq = sample_freq)
+    }
+    
+    if (divdepmodel == 'CS') {
+      
+      if (length(pars) == 5) {
+        
+        for (rep in 1:replicates) {
+          island_replicates[[rep]] <- list() 
+          # Run each clade seperately
+          full_list = list()
+          for (m_spec in 1:M) {
+            full_list[[m_spec]] <- DAISIE_sim_with_ontogeny(
               time = totaltime,
-              mainland_n = M,
+              mainland_n = 1,
               pars = pars,
               island_ontogeny = island_ontogeny,
-              Apars = Apars,
+              Apars = create_area_params(Apars[1],
+                                         Apars[2],
+                                         Apars[3],
+                                         Apars[4]),
               Epars = Epars
             )
-            if (verbose == TRUE) {
-              print(paste("Island replicate ", rep, sep = ""))
-            }
-          } 
-          island_replicates = DAISIE_format_IW(
-            island_replicates = island_replicates,
-            time = totaltime,M = M,sample_freq = sample_freq)
-        }
-        
-        if (divdepmodel == 'CS') {
+          }
           
-          if (length(pars) == 5) {
-            
-            for (rep in 1:replicates) {
-              island_replicates[[rep]] <- list() 
-              # Run each clade seperately
-              full_list = list()
-              for (m_spec in 1:M) {
-                full_list[[m_spec]] <- DAISIE_sim_with_ontogeny(
-                  time = totaltime,
-                  mainland_n = 1,
-                  pars = pars,
-                  island_ontogeny = island_ontogeny,
-                  Apars = Apars,
-                  Epars = Epars
-                )
-              }
-
-              island_replicates[[rep]] <- full_list
-              if (verbose == TRUE) {
-                print(paste("Island replicate ", rep, sep = ""))
-              }
-            }
+          island_replicates[[rep]] <- full_list
+          if (verbose == TRUE) {
+            print(paste("Island replicate ", rep, sep = ""))
           }
         }
       }
-      island_replicates <- DAISIE_format_CS(
-        island_replicates = island_replicates,
-        time = totaltime,
-        M = M,
-        sample_freq = sample_freq,
-        verbose = verbose
-      )
     }
   }
+  island_replicates <- DAISIE_format_CS(
+    island_replicates = island_replicates,
+    time = totaltime,
+    M = M,
+    sample_freq = sample_freq,
+    verbose = verbose
+  )
+  
+  
   if (plot_sims == TRUE) {
     DAISIE_plot_sims(island_replicates)
   }

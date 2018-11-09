@@ -43,13 +43,14 @@ DAISIE_sim_core <- function(
   #### Start Gillespie ####
   while (timeval < totaltime) {
     # Calculate rates
-    rates <- update_rates(timeval = timeval,
+    rates <- update_rates(tiImeval = timeval,
                           totaltime = totaltime,
                           gam = gam,
                           mu = mu,
                           laa = laa,
                           lac = lac,
-                          K = K,
+                          K = K, 
+                          extcutoff = NULL,
                           island_spec = island_spec,
                           mainland_n = mainland_n)
     
