@@ -302,7 +302,6 @@ DAISIE_ONEcolonist = function(time,island_spec,stt_table)
   ### if there are two or more independent colonisations, all species are classed as stac=3 and put within same list item:
   if(number_colonisations > 1)
   {
-    print("trigger")
     descendants = list(stt_table = stt_table, branching_times = NA,stac = 3,missing_species = 0,
                        other_clades_same_ancestor = list())
 
