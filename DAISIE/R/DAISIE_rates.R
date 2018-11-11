@@ -51,7 +51,7 @@ update_rates <- function(timeval, totaltime,
   testit::assert(is.numeric(K))
   testit::assert(is.matrix(island_spec) || is.null(island_spec))
   testit::assert(is.numeric(mainland_n))
-  testit::assert(is.numeric(t_hor))
+  testit::assert(is.numeric(t_hor) || is.null(t_hor))
   
   immig_rate <- get_immig_rate(timeval = timeval,
                                totaltime = totaltime,
@@ -96,7 +96,6 @@ update_rates <- function(timeval, totaltime,
     testit::assert(is.numeric(clado_rate_max))
     
   } else if ((Apars$proportional_peak_t * Apars$total_island_age) > timeval) {
-    
     ext_rate_max <- ext_rate
     testit::assert(is.numeric(ext_rate_max))
     

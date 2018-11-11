@@ -14,8 +14,7 @@ test_that("use", {
       ext_rate = 0.1,
       carr_cap = 4,
       imm_rate = 1.0,
-      ana_rate = 1.0,
-      island_ontogeny = NULL
+      ana_rate = 1.0
     )
   )
   expect_true("stt_table" %in% names(result))
