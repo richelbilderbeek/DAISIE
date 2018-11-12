@@ -56,7 +56,7 @@ DAISIE_create_island <- function(stt_table, totaltime, island_spec, mainland_n) 
         island_clades_info[[i]]$stt_table <- NULL
       }
       island <- list(stt_table = stt_table,
-                     taxon_list = island_clades_info)
+                     taxon_list = island_clades_info, island_spec)
     }
   }
   return(island)
