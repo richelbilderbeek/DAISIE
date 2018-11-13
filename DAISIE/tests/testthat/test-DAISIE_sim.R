@@ -44,7 +44,7 @@ test_that("A clean ontogeny run should produce no output", {
       pars = c(clado_rate, ext_rate, clade_carr_cap, imm_rate, ana_rate),
       replicates = 1, 
       island_ontogeny = island_ontogeny,
-      Apars = c(max_area, peak_time, sharpness, total_island_age),
+      Apars = create_area_params(max_area, peak_time, sharpness, total_island_age),
       Epars = c(mu_min, mu_max),
       extcutoff = extcutoff,
       plot_sims = FALSE,
