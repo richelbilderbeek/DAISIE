@@ -163,8 +163,9 @@ DAISIE_sim <- function(
   island_ontogeny = NULL, # NULL = no effect; "quadratic" = quadratic function; "linear" = linear function
   Apars = NULL,
   Epars = NULL,
-  start_midway = NULL,
+  keep_final_state = FALSE,
   island_spec = NULL,
+  stt_table = NULL,
   verbose = TRUE,
   ...
 ) {
@@ -204,7 +205,9 @@ DAISIE_sim <- function(
         island_ontogeny = island_ontogeny,
         Apars = Apars,
         Epars = Epars,
-        start_midway = start_midway
+        keep_final_state = keep_final_state,
+        island_spec = island_spec,
+        stt_table = stt_table
       )
       if (verbose == TRUE) {
         print(paste("Island replicate ",rep,sep = ""))
@@ -232,8 +235,9 @@ DAISIE_sim <- function(
             island_ontogeny = island_ontogeny,
             Apars = Apars,
             Epars = Epars,
-            start_midway = start_midway,
-            island_spec = island_spec
+            keep_final_state = keep_final_state,
+            island_spec = island_spec,
+            stt_table = stt_table
           )
           
         }
@@ -247,6 +251,7 @@ DAISIE_sim <- function(
     
     if(length(pars) == 10)
     {
+      
       if(is.na(prop_type2_pool))
       {
         stop('prop_type2_pool (fraction of mainland species that belongs to the second subset of species) must be specified when running model with two species types')
@@ -290,7 +295,9 @@ DAISIE_sim <- function(
           #### species of pool2
           for(m_spec in (pool1 + 1):(pool1 + pool2)) 
           { 	
-            full_list[[m_spec]] = DAISIE_sim_core(time = totaltime,mainland_n = 1,pars = c(lac_2,mu_2,K_2,gam_2,laa_2))
+            full_list[[m_spec]] = DAISIE_sim_core(time = totaltime,
+                                                  mainland_n = 1,
+                                                  pars = c(lac_2,mu_2,K_2,gam_2,laa_2))
             full_list[[m_spec]]$type1or2 = 2
           }
           island_replicates[[rep]] = full_list
