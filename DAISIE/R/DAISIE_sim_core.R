@@ -87,6 +87,7 @@ DAISIE_sim_core <- function(
   colnames(stt_table) <- c("Time","nI","nA","nC")
   stt_table[1,1] <- c(totaltime)
   stt_table <- stt_table[nrow(stt_table), ]
+<<<<<<< HEAD
   
   if (is.null(island_spec)) {
   island_spec = c()
@@ -94,6 +95,13 @@ DAISIE_sim_core <- function(
   
   ###########
   
+=======
+  island_spec <- island_spec
+  
+  ###########
+  
+  island_spec = c()
+>>>>>>> 4eba5418c43ad7c5e3d471fa4f6d8533d9f94315
   stt_table <- matrix(ncol = 4)
   colnames(stt_table) <- c("Time","nI","nA","nC")
   stt_table[1,] <- c(totaltime,0,0,0)
@@ -182,6 +190,71 @@ DAISIE_sim_core <- function(
                        stt_table[nrow(stt_table), 2],
                        stt_table[nrow(stt_table), 3],
                        stt_table[nrow(stt_table), 4]))
+<<<<<<< HEAD
+  
+  island <- DAISIE_create_island(stt_table = stt_table,
+                                 totaltime = totaltime,
+                                 island_spec = island_spec,
+                                 mainland_n = mainland_n,
+                                 keep_final_state = keep_final_state)
+  return(island)
+}
+
+
+
+
+
+#' Calculates when the next timestep will be.
+#'
+#' @param rates list of numeric with probabilities of each event
+#' @param timeval current time of simulation
+calc_next_timeval <- function(rates, timeval) {
+  # Calculates when next event will happen
+  testit::assert(are_rates(rates))
+  testit::assert(timeval >= 0)
+  totalrate <- rates$immig_rate_max + rates$ana_rate + rates$clado_rate_max + rates$ext_rate_max
+  dt <- rexp(1, totalrate)
+  timeval <- timeval + dt
+  return(list(timeval = timeval, dt = dt))
+}
+
+#' Updates state of island given sampled event
+#' 
+#' Makes the event happen by updating island species matrix and species IDs.
+#' What event happens is determined by the sampling in the algorithm.
+#' !!!!!!!!!!!!THIS DOCUMENTATION MUST BE CONFIRMED!!!!!!!!!!!!
+#' @param timeval current time of simulation
+#' @param totaltime simulated amount of time
+#' @param possible_event numeric indicating what event will happen.
+#' @param maxspecID current species IDs
+#' @param mainland_spec number of mainland species
+#' @param island_spec A Matrix with species on island (state of system at each time point)
+#' @param stt_table A species-through-time table
+DAISIE_sim_update_state <- function(timeval,
+                                    totaltime,
+                                    possible_event,
+                                    maxspecID,
+                                    mainland_spec,
+                                    island_spec,
+                                    stt_table)
+{ 
+  if (possible_event > 4) {
+    # Nothing happens
+  }
+  
+  ##########################################
+  #IMMIGRATION
+  if (possible_event == 1)
+  {
+    colonist = DDD::sample2(mainland_spec,1)
+    
+    if (length(island_spec[,1]) != 0)
+    {
+      isitthere = which(island_spec[,1] == colonist)
+    } else
+    {
+      isitthere = c()
+=======
   
   island <- DAISIE_create_island(stt_table = stt_table,
                                  totaltime = totaltime,
@@ -270,6 +343,41 @@ DAISIE_sim_update_state <- function(timeval,
     if(typeofspecies == "I")
     {
       island_spec = island_spec[-extinct,]
+>>>>>>> 4eba5418c43ad7c5e3d471fa4f6d8533d9f94315
+    }
+    #remove immigrant
+    
+<<<<<<< HEAD
+    if (length(isitthere) == 0)
+    {
+      island_spec = rbind(island_spec,c(colonist,colonist,timeval,"I",NA,NA,NA))
+=======
+    if(typeofspecies == "A")
+    {
+      island_spec = island_spec[-extinct,]
+>>>>>>> 4eba5418c43ad7c5e3d471fa4f6d8533d9f94315
+    }
+    #remove anagenetic
+    
+<<<<<<< HEAD
+    if (length(isitthere) != 0)
+    {
+      island_spec[isitthere,] = c(colonist,colonist,timeval,"I",NA,NA,NA)
+    }
+  }
+  
+  ##########################################
+  #EXTINCTION
+  if (possible_event == 2)
+  { 	
+    extinct = DDD::sample2(1:length(island_spec[,1]),1)
+    #this chooses the row of species data to remove
+    
+    typeofspecies = island_spec[extinct,4]
+    
+    if(typeofspecies == "I")
+    {
+      island_spec = island_spec[-extinct,]
     }
     #remove immigrant
     
@@ -279,6 +387,8 @@ DAISIE_sim_update_state <- function(timeval,
     }
     #remove anagenetic
     
+=======
+>>>>>>> 4eba5418c43ad7c5e3d471fa4f6d8533d9f94315
     if(typeofspecies == "C")
     {
       #remove cladogenetic
@@ -298,9 +408,15 @@ DAISIE_sim_update_state <- function(timeval,
       if(length(sisters) >= 3)
       {		
         numberofsplits = nchar(island_spec[extinct,5])
+<<<<<<< HEAD
         
         mostrecentspl = substring(island_spec[extinct,5],numberofsplits)
         
+=======
+        
+        mostrecentspl = substring(island_spec[extinct,5],numberofsplits)
+        
+>>>>>>> 4eba5418c43ad7c5e3d471fa4f6d8533d9f94315
         if(mostrecentspl=="B")
         { 
           sistermostrecentspl = "A"
