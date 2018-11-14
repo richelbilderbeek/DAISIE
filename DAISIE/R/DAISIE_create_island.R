@@ -15,10 +15,27 @@ DAISIE_create_island <- function(stt_table,
   
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
   if (length(island_spec[,1]) == 0) {
-    island <- list(stt_table = stt_table,
-                   branching_times = totaltime,
-                   stac = 0,
-                   missing_species = 0)
+    
+    
+    
+    
+    
+    
+    if (keep_final_state == TRUE) {
+      island <- list(stt_table = stt_table,
+                     branching_times = totaltime,
+                     stac = 0,
+                     missing_species = 0, island_spec = island_spec)
+      print("1")
+    } else {
+      island <- list(stt_table = stt_table,
+                     branching_times = totaltime,
+                     stac = 0,
+                     missing_species = 0)
+    
+    }
+    
+    
     
   } else {
     
@@ -61,12 +78,14 @@ DAISIE_create_island <- function(stt_table,
       }
       if (keep_final_state == TRUE) {
         island <- list(stt_table = stt_table,
-                       taxon_list = island_clades_info, island_spec)
+                       taxon_list = island_clades_info, island_spec = island_spec)
+        print("1")
       } else {
         island <- list(stt_table = stt_table,
                        taxon_list = island_clades_info)
       }
     }
   }
+  
   return(island)
 }
