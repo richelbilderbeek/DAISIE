@@ -26,13 +26,11 @@ DAISIE_create_island <- function(stt_table,
                      branching_times = totaltime,
                      stac = 0,
                      missing_species = 0, island_spec = island_spec)
-      print("1")
     } else {
       island <- list(stt_table = stt_table,
                      branching_times = totaltime,
                      stac = 0,
                      missing_species = 0)
-    
     }
     
     
@@ -55,7 +53,6 @@ DAISIE_create_island <- function(stt_table,
     
     if (mainland_n == 1) {
       island <- DAISIE_ONEcolonist(totaltime, island_spec, stt_table)
-      
     } else if (mainland_n > 1) {  
       
       ### number of colonists present
@@ -79,7 +76,6 @@ DAISIE_create_island <- function(stt_table,
       if (keep_final_state == TRUE) {
         island <- list(stt_table = stt_table,
                        taxon_list = island_clades_info, island_spec = island_spec)
-        print("1")
       } else {
         island <- list(stt_table = stt_table,
                        taxon_list = island_clades_info)
