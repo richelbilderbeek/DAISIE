@@ -8,7 +8,8 @@ DAISIE_sim(time, M, pars, replicates, mainland_params = NULL,
   divdepmodel = "CS", prop_type2_pool = NA,
   replicates_apply_type2 = TRUE, sample_freq = 25, plot_sims = TRUE,
   island_ontogeny = NULL, Apars = NULL, Epars = NULL,
-  extcutoff = 1000, verbose = TRUE, ...)
+  keep_final_state = FALSE, island_spec = NULL, stt_table = NULL,
+  verbose = TRUE, ...)
 }
 \arguments{
 \item{time}{Length of the simulation in time units. For example, if an
@@ -71,7 +72,7 @@ plots are produced: STT for all, STT for type 1 and STT for type 2.}
 
 \item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
 \code{quadratic} for a beta function describing area through time,
- or \code{linear} for a linear function. Default is \code{NULL} for no ontogeny.}
+ or \code{linear} for a linear function}
 
 \item{Apars}{A numeric vector:
 \itemize{
@@ -87,9 +88,6 @@ plots are produced: STT for all, STT for type 1 and STT for type 2.}
   \item{[1]: minimum extinction when area is at peak}
   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 }}
-
-\item{extcutoff}{Default=1000 A double used to computed the maximum value 
-of extinction rate possible.}
 
 \item{verbose}{Default=TRUE Give intermediate output, also if everything
 goes OK}

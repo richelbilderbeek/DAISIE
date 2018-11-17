@@ -5,7 +5,8 @@
 \title{Internal function of the DAISIE simulation}
 \usage{
 DAISIE_sim_core(time, mainland_n, pars, Apars = NULL, Epars = NULL,
-  island_ontogeny = NULL, start_midway = NULL, island_spec = NULL)
+  island_ontogeny = NULL, keep_final_state = FALSE,
+  island_spec = NULL, stt_table = NULL)
 }
 \arguments{
 \item{time}{Simulated amount of time}

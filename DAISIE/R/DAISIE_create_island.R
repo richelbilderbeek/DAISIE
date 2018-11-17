@@ -7,14 +7,33 @@
 #'
 #' @return list with the island information, composed stt table, branching times of extant
 #' species, status os species on the island and number of missing species.
-DAISIE_create_island <- function(stt_table, totaltime, island_spec, mainland_n) {
+DAISIE_create_island <- function(stt_table, 
+                                 totaltime, 
+                                 island_spec, 
+                                 mainland_n,
+                                 keep_final_state = FALSE) {
   
   ### if there are no species on the island branching_times = island_age, stac = 0, missing_species = 0 
   if (length(island_spec[,1]) == 0) {
-    island <- list(stt_table = stt_table,
-                   branching_times = totaltime,
-                   stac = 0,
-                   missing_species = 0)
+    
+    
+    
+    
+    
+    
+    if (keep_final_state == TRUE) {
+      island <- list(stt_table = stt_table,
+                     branching_times = totaltime,
+                     stac = 0,
+                     missing_species = 0, island_spec = island_spec)
+    } else {
+      island <- list(stt_table = stt_table,
+                     branching_times = totaltime,
+                     stac = 0,
+                     missing_species = 0)
+    }
+    
+    
     
   } else {
     
@@ -34,7 +53,6 @@ DAISIE_create_island <- function(stt_table, totaltime, island_spec, mainland_n) 
     
     if (mainland_n == 1) {
       island <- DAISIE_ONEcolonist(totaltime, island_spec, stt_table)
-    
     } else if (mainland_n > 1) {  
       
       ### number of colonists present
@@ -55,9 +73,15 @@ DAISIE_create_island <- function(stt_table, totaltime, island_spec, mainland_n) 
                                                       stt_table = NULL)
         island_clades_info[[i]]$stt_table <- NULL
       }
-      island <- list(stt_table = stt_table,
-                     taxon_list = island_clades_info, island_spec)
+      if (keep_final_state == TRUE) {
+        island <- list(stt_table = stt_table,
+                       taxon_list = island_clades_info, island_spec = island_spec)
+      } else {
+        island <- list(stt_table = stt_table,
+                       taxon_list = island_clades_info)
+      }
     }
   }
+  
   return(island)
 }

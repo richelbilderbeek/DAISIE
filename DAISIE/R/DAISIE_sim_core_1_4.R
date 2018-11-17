@@ -346,7 +346,7 @@ DAISIE_ONEcolonist = function(time,island_spec,stt_table)
       }
     }
   }
-
+  descendants$island_spec <- island_spec
 return(descendants)
 }
 
