@@ -4,6 +4,8 @@
 #' @param totaltime simulated amount of time
 #' @param island_spec matrix with species on island (state of system at each time point)
 #' @param mainland_n number of mainland species
+#' @param keep_final_state logical indicating if final state of simulation 
+#' should be returned. Default is \code{FALSE}
 #'
 #' @return list with the island information, composed stt table, branching times of extant
 #' species, status os species on the island and number of missing species.
@@ -52,8 +54,11 @@ DAISIE_create_island <- function(stt_table,
     island_spec[, "Colonisation time (BP)"] <- totaltime - as.numeric(island_spec[, "Colonisation time (BP)"])
     
     if (mainland_n == 1) {
-      island <- DAISIE_ONEcolonist(totaltime, island_spec, stt_table)
-    } else if (mainland_n > 1) {  
+      island <- DAISIE_ONEcolonist(totaltime,
+                                   island_spec,
+                                   stt_table,
+                                   keep_final_state = keep_final_state)
+    } else if (mainland_n > 1) {
       
       ### number of colonists present
       colonists_present <- sort(as.numeric(unique(island_spec[, 'Mainland Ancestor'])))
@@ -70,15 +75,19 @@ DAISIE_create_island <- function(stt_table,
         
         island_clades_info[[i]] <- DAISIE_ONEcolonist(totaltime,
                                                       island_spec = subset_island,
-                                                      stt_table = NULL)
+                                                      stt_table = NULL,
+                                                      keep_final_state = keep_final_state)
         island_clades_info[[i]]$stt_table <- NULL
       }
-      if (keep_final_state == TRUE) {
-        island <- list(stt_table = stt_table,
-                       taxon_list = island_clades_info, island_spec = island_spec)
-      } else {
+      if (keep_final_state == FALSE) {
         island <- list(stt_table = stt_table,
                        taxon_list = island_clades_info)
+
+        print("1")
+      } else {
+        island <- list(stt_table = stt_table,
+                       taxon_list = island_clades_info, island_spec = island_spec)
+        print("2")
       }
     }
   }

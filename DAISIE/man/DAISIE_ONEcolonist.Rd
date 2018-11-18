@@ -4,14 +4,18 @@
 \alias{DAISIE_ONEcolonist}
 \title{Does something}
 \usage{
-DAISIE_ONEcolonist(time, island_spec, stt_table)
+DAISIE_ONEcolonist(time, island_spec, stt_table,
+  keep_final_state = FALSE)
 }
 \arguments{
 \item{time}{simulated amount of time}
 
-\item{island_spec}{something}
+\item{island_spec}{matrix with current state of simulation}
 
 \item{stt_table}{?Species-Through-Time table}
+
+\item{keep_final_state}{logical indicating if final state of simulation 
+should be returned. Default is \code{FALSE}}
 }
 \value{
 a list with these elements:
