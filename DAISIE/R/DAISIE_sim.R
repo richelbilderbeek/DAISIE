@@ -171,11 +171,13 @@ DAISIE_sim <- function(
   Apars = NULL,
   Epars = NULL,
   keep_final_state = FALSE,
-  island_spec = NULL,
-  stt_table = NULL,
+  stored_data = NULL,
   verbose = TRUE,
   ...
 ) {
+  
+  #TODO: TEST island_replicates INPUT!
+  
   # @richelbilderbeek
   if (!is.null(mainland_params)) {
     return(
@@ -227,28 +229,60 @@ DAISIE_sim <- function(
   if(divdepmodel == 'CS')
   {
     if(length(pars) == 5)
-    { 
-      for(rep in 1:replicates)
-      {
-        island_replicates[[rep]] = list() 
-        # Run each clade seperately
-        full_list = list()
-        for(m_spec in 1:M) 
-        { 	
-          full_list[[m_spec]] <- DAISIE_sim_core(
-            time = totaltime,
-            mainland_n = 1,
-            pars = pars,
-            island_ontogeny = island_ontogeny,
-            Apars = Apars,
-            Epars = Epars,
-            keep_final_state = keep_final_state,
-            island_spec = island_spec,
-            stt_table = stt_table
-          )
+    {
+      
+      # Midway simulation
+      if (!is.null(stored_data)) {
+        for (rep in 1:replicates)
+        {
+          # 
+          stored_data$
+          island_replicates[[rep]] = list() 
+          # Run each clade seperately
+          full_list = list()
           
+          
+          
+          for (m_spec in 1:M) 
+          { 	
+            full_list[[m_spec]] <- DAISIE_sim_core(
+              time = totaltime,
+              mainland_n = 1,
+              pars = pars,
+              island_ontogeny = island_ontogeny,
+              Apars = Apars,
+              Epars = Epars,
+              keep_final_state = keep_final_state,
+              island_spec = island_spec,
+              stt_table = stt_table
+            )
+          }
         }
+      } else {
         
+        # Simulation from empty island
+        for(rep in 1:replicates)
+        {
+          island_replicates[[rep]] = list() 
+          # Run each clade seperately
+          full_list = list()
+          
+          for(m_spec in 1:M) 
+          { 	
+            full_list[[m_spec]] <- DAISIE_sim_core(
+              time = totaltime,
+              mainland_n = 1,
+              pars = pars,
+              island_ontogeny = island_ontogeny,
+              Apars = Apars,
+              Epars = Epars,
+              keep_final_state = keep_final_state,
+              island_spec = NULL,
+              stt_table = NULL
+            )
+            
+          }
+        }
         island_replicates[[rep]] = full_list
         if (verbose == TRUE) {
           print(paste("Island replicate ",rep,sep = ""))
