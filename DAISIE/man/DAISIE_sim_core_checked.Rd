@@ -23,10 +23,6 @@ DAISIE_sim_core_checked(sim_time, n_mainland_species, clado_rate, ext_rate,
 \item{imm_rate}{immigration rate}
 
 \item{ana_rate}{anagenesis rate}
-
-\item{island_ontogeny}{a string describing the type of island ontogeny. Can be \code{NULL},
-\code{"quadratic"} for a beta function describing area through time,
- or \code{"linear"} for a linear function}
 }
 \value{
 a list with these elements:

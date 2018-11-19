@@ -82,12 +82,10 @@ DAISIE_create_island <- function(stt_table,
       if (keep_final_state == FALSE) {
         island <- list(stt_table = stt_table,
                        taxon_list = island_clades_info)
-
-        print("1")
+        
       } else {
         island <- list(stt_table = stt_table,
                        taxon_list = island_clades_info, island_spec = island_spec)
-        print("2")
       }
     }
   }

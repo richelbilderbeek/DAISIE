@@ -74,8 +74,15 @@
 #'   \item{[1]: minimum extinction when area is at peak}
 #'   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 #' }
-#' @param verbose Default=TRUE Give intermediate output, also if everything
-#' goes OK
+#' @param verbose \code{Default=TRUE} Give intermediate output, also if everything
+#' goes OK.
+#' @param keep_final_state logical indicating if final state of simulation 
+#' should be returned. Default is \code{FALSE}
+#' @param island_spec matrix storing state of system at time t. Use to start
+#' simulation with a colonized island. Default is \code{NULL}
+#' @param stt_table species through time table as returned by \code{DAISIE_sim}.
+#' Like \code{island_spec}, it is used to start the simulation with a colonized
+#' island. Default is \code{NULL}
 #' @param ...  Any arguments to pass on to plotting functions.
 #' @return Each simulated dataset is an element of the list, which can be
 #' called using [[x]]. For example if the object is called island_replicates,

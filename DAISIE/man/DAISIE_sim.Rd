@@ -89,8 +89,18 @@ plots are produced: STT for all, STT for type 1 and STT for type 2.}
   \item{[2]: extinction rate when current area is 0.10 of maximum area}
 }}
 
-\item{verbose}{Default=TRUE Give intermediate output, also if everything
-goes OK}
+\item{keep_final_state}{logical indicating if final state of simulation 
+should be returned. Default is \code{FALSE}}
+
+\item{island_spec}{matrix storing state of system at time t. Use to start
+simulation with a colonized island. Default is \code{NULL}}
+
+\item{stt_table}{species through time table as returned by \code{DAISIE_sim}.
+Like \code{island_spec}, it is used to start the simulation with a colonized
+island. Default is \code{NULL}}
+
+\item{verbose}{\code{Default=TRUE} Give intermediate output, also if everything
+goes OK.}
 
 \item{...}{Any arguments to pass on to plotting functions.}
 }

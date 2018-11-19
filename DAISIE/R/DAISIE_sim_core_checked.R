@@ -8,9 +8,6 @@
 #' @param carr_cap carrying capacity
 #' @param imm_rate immigration rate
 #' @param ana_rate anagenesis rate
-#' @param island_ontogeny a string describing the type of island ontogeny. Can be \code{NULL},
-#' \code{"quadratic"} for a beta function describing area through time,
-#'  or \code{"linear"} for a linear function
 #' @return a list with these elements:
 #' \describe{
 #'   \item{stt_table}{a species-through-time table}
