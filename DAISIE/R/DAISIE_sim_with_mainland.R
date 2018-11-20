@@ -33,6 +33,8 @@ DAISIE_sim_with_mainland <- function(
     island_ontogeny = NULL,
     Apars = NULL,
     Epars = NULL,
-    verbose = FALSE
+    verbose = FALSE,
+    keep_final_state = FALSE,
+    stored_data = NULL
   )
 }

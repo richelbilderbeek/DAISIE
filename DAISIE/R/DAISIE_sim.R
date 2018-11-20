@@ -235,14 +235,20 @@ DAISIE_sim <- function(
       if (!is.null(stored_data)) {
         for (rep in 1:replicates)
         {
-          # 
-          stored_data$
-          island_replicates[[rep]] = list() 
+          
+          n_colonized_replicates <- length(stored_data[[rep]]) - 1
+          
+          colonized_island_spec <- list()
+          
+          for (k in 1:n_colonized_replicates) {
+            colonized_island_spec[[k]] <- stored_data[[rep]][[k + 1]]$island_spec
+          }
+          
+          island_replicates[[rep]] = list()
+          
           # Run each clade seperately
           full_list = list()
-          
-          
-          
+
           for (m_spec in 1:M) 
           { 	
             full_list[[m_spec]] <- DAISIE_sim_core(
@@ -256,6 +262,10 @@ DAISIE_sim <- function(
               island_spec = island_spec,
               stt_table = stt_table
             )
+          }
+          island_replicates[[rep]] = full_list
+          if (verbose == TRUE) {
+            print(paste("Island replicate ",rep,sep = ""))
           }
         }
       } else {
@@ -282,12 +292,12 @@ DAISIE_sim <- function(
             )
             
           }
+          island_replicates[[rep]] = full_list
+          if (verbose == TRUE) {
+            print(paste("Island replicate ",rep,sep = ""))
+          }
         }
-        island_replicates[[rep]] = full_list
-        if (verbose == TRUE) {
-          print(paste("Island replicate ",rep,sep = ""))
-        }
-      } 
+      }
     }
     
     if(length(pars) == 10)

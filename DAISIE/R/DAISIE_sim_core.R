@@ -82,16 +82,21 @@ DAISIE_sim_core <- function(
   testit::assert((totaltime <= Apars$total_island_age) || is.null(Apars))
   
   #### Start Gillespie ####
+  
+  # Start output and tracking objects MAKE THIS GENERATE STT FROM ISLAND_SPEC
   if (is.null(stt_table)) {
     island_spec = c()
-    stt_table <- matrix(ncol = 4)
-    colnames(stt_table) <- c("Time","nI","nA","nC")
-    stt_table[1,] <- c(totaltime,0,0,0)
+    stt_table <- matrix(ncol = 5)
+    colnames(stt_table) <- c("Time","nI","nA","nC", "present")
+    stt_table[1,] <- c(totaltime,0,0,0,0)
   } else {
-    stt_table <- stt_table # Remove this later
-    colnames(stt_table) <- c("Time","nI","nA","nC")
-    stt_table[1,1] <- c(totaltime)
-    stt_table <- stt_table[nrow(stt_table), ]
+    stt_table <- matrix(stt_table[nrow(stt_table), ], nrow = 1, ncol = 5)
+    colnames(stt_table) <- c("Time","nI","nA","nC", "present")
+    stt_table[1, 1] <- totaltime
+    stt_table[1, 2] <- length(which(island_spec[, 4] == "I"))
+    stt_table[1, 3] <- length(which(island_spec[, 4] == "A"))
+    stt_table[1, 4] <- length(which(island_spec[, 4] == "C"))
+    stt_table[1, 5] <- sum(stt_table[1, 1:4])
   }
   
   mainland_spec <- seq(1, mainland_n, 1)
