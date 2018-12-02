@@ -1,4 +1,4 @@
-DAISIE_format_CS = function(island_replicates,time,M,sample_freq, verbose = TRUE)
+DAISIE_format_CS = function(island_replicates,time,M,sample_freq, start_midway = FALSE, verbose = TRUE)
 {
   totaltime <- time
   several_islands = list()
@@ -35,8 +35,9 @@ DAISIE_format_CS = function(island_replicates,time,M,sample_freq, verbose = TRUE
     
     colnames(stt_all) = c("Time","nI","nA","nC","present")
     stt_all[,"Time"] = rev(seq(from = 0,to = totaltime,length.out = sample_freq + 1))
-    stt_all[1,2:5] = c(0,0,0,0) 
-    
+    if (start_midway == FALSE) {
+      stt_all[1,2:5] = c(0,0,0,0)
+    }
     for(i in 2:nrow(stt_all))
     { 
       the_age = stt_all[i,"Time"]	

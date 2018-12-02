@@ -176,7 +176,14 @@ DAISIE_sim <- function(
   ...
 ) {
   
-  #TODO: TEST island_replicates INPUT!
+  #TODO: TEST island_replicates INPUT! SANITIZE STORED_DATA INPUT! ASSERT + TEST
+  if (!is.null(stored_data)) {
+    start_midway <- TRUE
+  } else {
+    start_midway <- FALSE
+  }
+  
+  
   
   # @richelbilderbeek
   if (!is.null(mainland_params)) {
@@ -264,8 +271,8 @@ DAISIE_sim <- function(
             )
           }
           
-          # Run empty clades that didn't colonize
-          for (m_spec in 1:n_colonized_replicates) 
+          # Run empty clades that didn't get colonists
+          for (m_spec in (n_colonized_replicates + 1):1000) 
           { 	
             full_list[[m_spec]] <- DAISIE_sim_core(
               time = totaltime,
@@ -303,7 +310,7 @@ DAISIE_sim <- function(
               Apars = Apars,
               Epars = Epars,
               keep_final_state = keep_final_state,
-              island_spec = NULL,
+              island_spec = NULL
             )
             
           }

@@ -82,14 +82,15 @@ DAISIE_sim_core <- function(
   
   #### Start Gillespie ####
   
-  # Start output and tracking objects MAKE THIS GENERATE STT FROM ISLAND_SPEC
+  # Start output and tracking objects
   if (is.null(island_spec)) {
     island_spec = c()
     stt_table <- matrix(ncol = 4)
     colnames(stt_table) <- c("Time","nI","nA","nC")
     stt_table[1,] <- c(totaltime,0,0,0)
   } else {
-    stt_table <- matrix(stt_table[nrow(stt_table), ], nrow = 1, ncol = 4)
+    # stt_table <- matrix(stt_table[nrow(stt_table), ], nrow = 1, ncol = 4)
+    stt_table <- matrix(ncol = 4)
     colnames(stt_table) <- c("Time","nI","nA","nC")
     stt_table[1, 1] <- totaltime
     stt_table[1, 2] <- length(which(island_spec[, 4] == "I"))
