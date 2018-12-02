@@ -215,11 +215,10 @@ DAISIE_sim <- function(
         Apars = Apars,
         Epars = Epars,
         keep_final_state = keep_final_state,
-        island_spec = island_spec,
-        stt_table = stt_table
+        island_spec = island_spec
       )
       if (verbose == TRUE) {
-        print(paste("Island replicate ",rep,sep = ""))
+        print(paste("Island replicate ", rep, sep = ""))
       }
     } 
     island_replicates = DAISIE_format_IW(island_replicates = island_replicates,
@@ -244,12 +243,14 @@ DAISIE_sim <- function(
             colonized_island_spec[[k]] <- stored_data[[rep]][[k + 1]]$island_spec
           }
           
-          island_replicates[[rep]] = list()
+          
+          island_replicates = list()
           
           # Run each clade seperately
           full_list = list()
-
-          for (m_spec in 1:M) 
+          
+          # Run midway clades
+          for (m_spec in 1:n_colonized_replicates) 
           { 	
             full_list[[m_spec]] <- DAISIE_sim_core(
               time = totaltime,
@@ -259,10 +260,25 @@ DAISIE_sim <- function(
               Apars = Apars,
               Epars = Epars,
               keep_final_state = keep_final_state,
-              island_spec = island_spec,
-              stt_table = stt_table
+              island_spec = colonized_island_spec[[m_spec]] 
             )
           }
+          
+          # Run empty clades that didn't colonize
+          for (m_spec in 1:n_colonized_replicates) 
+          { 	
+            full_list[[m_spec]] <- DAISIE_sim_core(
+              time = totaltime,
+              mainland_n = 1,
+              pars = pars,
+              island_ontogeny = island_ontogeny,
+              Apars = Apars,
+              Epars = Epars,
+              keep_final_state = keep_final_state,
+              island_spec = NULL
+            )
+          }
+          
           island_replicates[[rep]] = full_list
           if (verbose == TRUE) {
             print(paste("Island replicate ",rep,sep = ""))
@@ -288,7 +304,6 @@ DAISIE_sim <- function(
               Epars = Epars,
               keep_final_state = keep_final_state,
               island_spec = NULL,
-              stt_table = NULL
             )
             
           }
