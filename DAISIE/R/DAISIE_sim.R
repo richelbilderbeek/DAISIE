@@ -386,6 +386,7 @@ DAISIE_sim <- function(
       time = totaltime,
       M = M,
       sample_freq = sample_freq,
+      start_midway = start_midway,
       verbose = verbose
     )
   }

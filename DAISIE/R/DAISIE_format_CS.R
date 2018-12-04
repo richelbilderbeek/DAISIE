@@ -37,11 +37,16 @@ DAISIE_format_CS = function(island_replicates,time,M,sample_freq, start_midway =
     stt_all[,"Time"] = rev(seq(from = 0,to = totaltime,length.out = sample_freq + 1))
     if (start_midway == FALSE) {
       stt_all[1,2:5] = c(0,0,0,0)
+    } else if (start_midway == TRUE) {
+      for(x in 1:M) 
+      {
+      stt_all[1,2:5] = stt_list[[x]][max(which(stt_list[[x]][,"Time"] >= totaltime)),2:4]
+      }
     }
     for(i in 2:nrow(stt_all))
     { 
-      the_age = stt_all[i,"Time"]	
-      
+      the_age = stt_all[i,"Time"]
+      print(the_age)
       store_richness_time_slice = matrix(nrow = M,ncol = 3)
       colnames(store_richness_time_slice) = c("I","A","C")
       for(x in 1:M) 
