@@ -6,7 +6,7 @@
 \usage{
 DAISIE_sim_core(time, mainland_n, pars, Apars = NULL, Epars = NULL,
   island_ontogeny = NULL, keep_final_state = FALSE,
-  island_spec = NULL, stt_table = NULL)
+  island_spec = NULL)
 }
 \arguments{
 \item{time}{Simulated amount of time}
@@ -49,9 +49,6 @@ this value is set to the number of mainland species.}
 should be returned. Default is \code{FALSE}}
 
 \item{island_spec}{A matrix with species on island (state of system at each time point)}
-
-\item{stt_table}{A species-through-time table
-or \code{linear} for a linear function}
 }
 \description{
 Internal function of the DAISIE simulation

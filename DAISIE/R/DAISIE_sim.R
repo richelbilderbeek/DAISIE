@@ -78,12 +78,10 @@
 #' goes OK.
 #' @param keep_final_state logical indicating if final state of simulation 
 #' should be returned. Default is \code{FALSE}
-#' @param island_spec matrix storing state of system at time t. Use to start
-#' simulation with a colonized island. Default is \code{NULL}
-#' @param stt_table species through time table as returned by \code{DAISIE_sim}.
-#' Like \code{island_spec}, it is used to start the simulation with a colonized
-#' island. Default is \code{NULL}
+#' @param stored_data output of DAISIE_sim function when run with keep_final_state.
+#' If not \code{NULL}
 #' @param ...  Any arguments to pass on to plotting functions.
+#'
 #' @return Each simulated dataset is an element of the list, which can be
 #' called using [[x]]. For example if the object is called island_replicates,
 #' the 1st replicate can be called using island_replicates[[1]] Each of the
@@ -222,14 +220,16 @@ DAISIE_sim <- function(
         Apars = Apars,
         Epars = Epars,
         keep_final_state = keep_final_state,
-        island_spec = island_spec
+        island_spec = NULL
       )
       if (verbose == TRUE) {
         print(paste("Island replicate ", rep, sep = ""))
       }
     } 
     island_replicates = DAISIE_format_IW(island_replicates = island_replicates,
-                                         time = totaltime,M = M,sample_freq = sample_freq)
+                                         time = totaltime,
+                                         M = M,
+                                         sample_freq = sample_freq)
   }
   
   if(divdepmodel == 'CS')

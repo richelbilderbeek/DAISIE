@@ -46,7 +46,6 @@ DAISIE_format_CS = function(island_replicates,time,M,sample_freq, start_midway =
     for(i in 2:nrow(stt_all))
     { 
       the_age = stt_all[i,"Time"]
-      print(the_age)
       store_richness_time_slice = matrix(nrow = M,ncol = 3)
       colnames(store_richness_time_slice) = c("I","A","C")
       for(x in 1:M) 
