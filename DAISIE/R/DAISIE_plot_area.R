@@ -97,16 +97,16 @@ DAISIE_plot_extinction <- function(totaltime,
   
   ext_rate <- c()
   for (i in seq_along(axis)) {
-    ext_rate[i] <- DAISIE::get_ext_rate(timeval = axis[i],
-                                   totaltime = totaltime,
-                                   Apars = Apars,
-                                   Epars = Epars,
-                                   mu = NA, 
-                                   K = K, 
-                                   extcutoff = 1100, 
-                                   island_spec = matrix(ncol = 1),
-                                   island_ontogeny = island_ontogeny
-                                   )
+    ext_rate[i] <- DAISIE::get_ext_rate(
+      timeval = axis[i],
+      Apars = Apars,
+      Epars = Epars,
+      mu = NA, 
+      K = K, 
+      extcutoff = 1100, 
+      island_spec = matrix(ncol = 1),
+      island_ontogeny = island_ontogeny
+    )
   }
   
   ext_rate_time <- data.frame(Extinction = ext_rate[removed_timepoints:length(ext_rate)], Time = axis[removed_timepoints:length(axis)])
@@ -179,8 +179,8 @@ DAISIE_plot_immigration <- function(totaltime,
   Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
   Immigration <- NULL; rm(Immigration) # nolint, fixes warning: no visible binding for global variable
   plot(ggplot2::ggplot(data = immig_rate_time, ggplot2::aes(x = Time, y = Immigration)) +
-    ggplot2::geom_line(size = 1) +
-    ggplot2::ylim(0, 0.002))
+    ggplot2::geom_line(size = 1) )
+    # ggplot2::ylim(0, 0.01))
   invisible(immig_rate_time)
 }
 
@@ -242,7 +242,6 @@ DAISIE_plot_cladogenesis <- function(totaltime,
   Time <- NULL; rm(Time) # nolint, fixes warning: no visible binding for global variable
   Cladogenesis <- NULL; rm(Cladogenesis) # nolint, fixes warning: no visible binding for global variable
   plot(ggplot2::ggplot(data = clado_rate_time, ggplot2::aes(x = Time, y = Cladogenesis)) +
-         ggplot2::geom_line(size = 1) +
-         ggplot2::ylim(0, 5))
+         ggplot2::geom_line(size = 1))
   invisible(clado_rate_time)
 }
